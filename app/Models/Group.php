@@ -27,20 +27,15 @@ class Group extends Model
      * @param array $where
      * 获取数据列表
      */
-    public static function getList($fields = [], $where = []){
+    public static function getList($where = []){
         $where = array_merge($where, [
             'status' => 1
         ]);
 
-        return self::query()->get();
+        return self::query()->where($where);
     }
 
     public function medias(){
-        $data = $this->belongsToMany(Media::class, 'm_media_group', 'group_id', 'media_id');
-        return $data;
-    }
-
-    public function medias2(){
-        return $this->hasMany(MediaGroup::class);
+        return $this->belongsToMany(Media::class, 'm_media_group');
     }
 }

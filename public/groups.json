@@ -1,0 +1,91 @@
+{
+    "data": [
+        {
+            "id": 7,
+            "title": "Popular Games",
+            "component": "horizontal_3",
+            "more": 1,
+            "title_show": 1,
+            "img": "images\/1.png",
+            "sort": 0,
+            "medias": [
+                {
+                    "id": 1,
+                    "title": "aqer",
+                    "title_sub": "qwerqwerq",
+                    "is_direction": 0,
+                    "duration": 1,
+                    "publishtime": "2021-08-05 00:00:00",
+                    "cp": "Inlogic",
+                    "score": 0,
+                    "class": 4,
+                    "url": "http:\/\/www.baidu.com",
+                    "img": [
+                        {
+                            "clarity": "4k",
+                            "f_16x9": "http:\/\/4k_f_16x9.jpg",
+                            "b_16x9": "http:\/\/4k_b_16x9.jpg",
+                            "f_7x10": "http:\/\/4k_f_7x10.jpg",
+                            "b_7x10": "http:\/\/4k_b_7x10.jpg"
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "title": "aqer2",
+                    "title_sub": "qwerqwerq2",
+                    "is_direction": 0,
+                    "duration": 1,
+                    "publishtime": "2021-08-05 00:00:00",
+                    "cp": "Inlogic",
+                    "score": 0,
+                    "class": 6,
+                    "url": "http:\/\/www.baidu.com",
+                    "img": []
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "title": "Top Game",
+            "component": "horizontal_4",
+            "more": null,
+            "title_show": null,
+            "img": null,
+            "sort": 0,
+            "medias": []
+        }
+    ],
+    "links": {
+        "first": "http:\/\/init.metaxplay.com\/groups\/2?page=1",
+        "last": "http:\/\/init.metaxplay.com\/groups\/2?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http:\/\/init.metaxplay.com\/groups\/2?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http:\/\/init.metaxplay.com\/groups\/2",
+        "per_page": 15,
+        "to": 2,
+        "total": 2
+    }
+}

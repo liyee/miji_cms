@@ -11,24 +11,32 @@ class Group extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
     {
-        //        return parent::toArray($request);
+        $group_num = $request->input('group_num', 5);
+        $media_num = $request->input('media_num', 10);
+
+        $id = $this->id;
         $data = [
+            'id' => $id,
             'title' => $this->title,
-            'component' => $this->component,
-            'more' => $this->more,
-            'title_show' => $this->title_show,
             'img' => $this->img,
             'sort' => $this->sort,
-            'medias' => $this->whenPivotLoaded('m_media_group', function (){
-                $pivot = $this->pivot;
-                return $pivot->media_id;
-            })
         ];
+
+        if ($this->img) $data['img'] = $this->img;
+        if ($this->component) $data['component'] = $this->component;
+        if ($this->more) $data['more'] = $this->more;
+        if ($this->title_show) $data['title_show'] = $this->title_show;
+        if ($this->img) $data['img'] = $this->img;
+        if ($this->parent_id == 0) {
+            $data['groups'] = Group::collection(\App\Models\Group::where(['parent_id' => $id])->limit($group_num)->get());
+        } else {
+            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $media_num));
+        }
 
         return $data;
     }

@@ -20,26 +20,41 @@ Route::get('/', function () {
 Route::get('/users/test', [\App\Http\Controllers\UsersController::class, 'test']);
 Route::get('/users/index', [\App\Http\Controllers\UsersController::class, 'index']);
 
-Route::get('/nav1', function () {
-    return new \App\Http\Resources\GroupCollection(\App\Models\Group::all());
-});
-
-Route::get('/group/{id}//item/{item}/version/{version}/memory/{memory}', function ($id) {
-    return new \App\Http\Resources\Group(\App\Models\Group::find($id));
-});
-Route::get('/groups', function () {
-    $filds = ['id', 'title', 'component', 'more', 'title_show', 'img', 'sort'];
-    return \App\Http\Resources\Group::collection(\App\Models\Group::getList($filds)->keyBy->id);
-});
-
+//1.媒资详情
 Route::get('/media/{id}', function ($id = 0) {
-    return new \App\Http\Resources\Media(\App\Models\Media::getOne($id));
+    return new \App\Http\Resources\Media(\App\Models\Media::getOne($id), 1);
 });
 
-Route::get('/medias', function () {
-    return new \App\Http\Resources\MediaCollection(\App\Models\Media::paginate());
+//2.更多媒资
+Route::get('/medias/{group_id}', function ($group_id = 0) {
+    return \App\Http\Resources\Media::collection(\App\Models\Media::getListByGroup($group_id));
 });
 
-Route::get('/category', function () {
-    return new \App\Http\Resources\Category(\App\Models\Category::find(7));
+//3.媒资分组列表
+Route::get('/groups/{nav}/{size?}', function ($nav = 0, $size = 3) {
+    return \App\Http\Resources\Group::collection(\App\Models\Group::getList(['parent_id' => $nav])->paginate($size));
 });
+
+//4.剧集详情
+Route::get('/serie/{id}', function ($id = 0) {
+    return new \App\Http\Resources\Media(\App\Models\Media::getOne($id, 1), 2);
+});
+
+//5.活动列表
+Route::get('/activity/{id}', function ($id = 0) {
+    return \App\Http\Resources\Media::collection(\App\Models\Media::getList($id));
+});
+
+//6.首屏数据
+Route::get('/home', function () {
+    return \App\Http\Resources\Group::collection(\App\Models\Group::query()->where(['parent_id' => 0])->get(['id','title','sort','parent_id']));
+});
+
+//1-1.媒资详情-测试
+Route::get('/media-test/{id}', function ($id = 0) {
+    return new \App\Http\Resources\Media(\App\Models\Media::getOne($id), 2, 1);
+});
+
+//Route::get('/group/{id}/pt/{pt}/version/{version}/memory/{memory}/clarity/{clarity}', function ($id) {
+//    return new \App\Http\Resources\Group(\App\Models\Group::find($id));
+//});

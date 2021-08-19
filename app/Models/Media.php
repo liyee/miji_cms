@@ -69,15 +69,61 @@ class Media extends Model
      * @param array $where
      * 获取媒资详情
      */
-    public static function getOne($id)
+    public static function getOne($id, $type = 0, $status = 4, $parent_id = 0)
     {
-        $fields = ['title', 'title_sub', 'duration', 'updatetime', 'publishtime', 'cp_id', 'score', 'click_num', 'language', 'class', 'intro', 'url', 'video_url'];
-        return self::find($id, $fields);
+        $where = [
+            'status' => $status,
+            'parent_id' => $parent_id,
+            'type' => $type
+        ];
+        return self::query()->where($where)->find($id);
     }
 
-    public function cps()
+    /**
+     * @param int $groupid
+     * @param int $parent_id
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * 媒资列表-根据分组id
+     */
+    public static function getList($id = 0)
     {
-        return $this->belongsTo(Cp::class, 'cp_id', 'id');
+        $data = self::query()->where('parent_id', $id)->get();
+
+        return  $data;
+    }
+
+    /**
+     * @param int $parent_id
+     * @return mixed
+     * 获取连续剧具体媒资id
+     */
+    public static function getListBySerie($parent_id = 0)
+    {
+        return self::where('parent_id', $parent_id)->orderBy('sort')->pluck('id');
+    }
+
+    /**
+     * @param int $groupid
+     * @param int $parent_id
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * 媒资列表-根据分组id
+     */
+    public static function getListByGroup($groupid = 0, $limit = 9999)
+    {
+        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])
+            ->rightJoin('m_media_group as G', 'G.media_id', '=', 'M.id')
+            ->where('G.group_id', $groupid)
+            ->orderBy('M.sort')
+            ->orderBy('M.id')
+            ->limit($limit)
+            ->get();
+
+        return $data;
+    }
+
+    public function cp()
+    {
+        return $this->hasOne(Cp::class, 'id', 'cp_id');
     }
 
     public function languages()
@@ -95,4 +141,20 @@ class Media extends Model
         return $this->belongsTo(Category::class, 'class', 'id');
     }
 
+    /**
+     * 媒资图片
+     */
+    public function imgs()
+    {
+        return $this->hasMany(MediaImg::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * 媒资字幕: 一对多
+     */
+    public function subtitles()
+    {
+        return $this->hasMany(MediaSubtitle::class);
+    }
 }

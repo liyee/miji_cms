@@ -89,7 +89,7 @@ class MediaController extends AdminController
         $grid->column('keyword', __('Keyword'))->hide();
         $grid->column('area', __('Area'))->hide();
         $grid->column('items', __('Item'))->display(function ($items) {
-            return $items['name'] . '(' . $items['customer'] . ')';
+//            return $items['name'] . '(' . $items['customer'] . ')';
         });
         $grid->column('status', __('Status'));
         $grid->column('updated_at', __('Updated at'))->hide();

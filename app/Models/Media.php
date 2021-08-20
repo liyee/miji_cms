@@ -89,7 +89,7 @@ class Media extends Model
     {
         $data = self::query()->where('parent_id', $id)->get();
 
-        return  $data;
+        return $data;
     }
 
     /**
@@ -108,11 +108,12 @@ class Media extends Model
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      * 媒资列表-根据分组id
      */
-    public static function getListByGroup($groupid = 0, $limit = 9999)
+    public static function getListByGroup($groupid = 0, $iosCode = 'US', $limit = 999)
     {
         $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])
             ->rightJoin('m_media_group as G', 'G.media_id', '=', 'M.id')
             ->where('G.group_id', $groupid)
+            ->whereRaw('find_in_set(\''.$iosCode.'\', `M`.`area`)')
             ->orderBy('M.sort')
             ->orderBy('M.id')
             ->limit($limit)

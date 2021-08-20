@@ -26,8 +26,10 @@ Route::get('/media/{id}', function ($id = 0) {
 });
 
 //2.更多媒资
-Route::get('/medias/{group_id}', function ($group_id = 0) {
-    return \App\Http\Resources\Media::collection(\App\Models\Media::getListByGroup($group_id));
+Route::get('/medias/{group_id}', function (\Illuminate\Http\Request $request ,$group_id = 0) {
+    $ip = $request->ip();
+    $iosCode = \App\Libraries\IpHelp::getCountryCode($ip);
+    return \App\Http\Resources\Media::collection(\App\Models\Media::getListByGroup($group_id, $iosCode));
 });
 
 //3.媒资分组列表

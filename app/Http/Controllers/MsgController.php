@@ -10,6 +10,7 @@ class MsgController extends Controller
 
     //
     public function push(Request $request){
+        $request->ip();
         $email = $request->input('email');
         $content = $request->input('content');
 

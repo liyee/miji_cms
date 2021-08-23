@@ -32,7 +32,7 @@ class Group extends JsonResource
         if ($this->more) $data['more'] = $this->more;
         if ($this->title_show) $data['title_show'] = $this->title_show;
         if ($this->img) $data['img'] = $this->img;
-        if ($this->parent_id == 0) {
+        if ($this->depth == 1) {
             $data['groups'] = Group::collection(\App\Models\Group::where(['parent_id' => $id])->limit($group_num)->get());
         } else {
             $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());

@@ -50,9 +50,9 @@ Route::get('/activity/{id}', function (Request $request, $id = 0) {
 });
 
 //6.首屏数据
-Route::get('/home/{pn}/{pt}', function () {
-    $aa = config('cacheKey.cp_list');
-    return \App\Http\Resources\Group::collection(\App\Models\Group::query()->where(['parent_id' => 0])->get(['id','title','sort','parent_id']));
+Route::get('/home/{pn}/{pt}', function ($pn, $pt) {
+    $parent_id = \App\Models\Group::getParentId($pn, $pt);
+    return \App\Http\Resources\Group::collection(\App\Models\Group::where(['parent_id' => $parent_id])->get(['id', 'title', 'sort', 'parent_id', 'depth']));
 });
 
 //1-1.媒资详情-测试

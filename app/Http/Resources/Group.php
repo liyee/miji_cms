@@ -35,7 +35,8 @@ class Group extends JsonResource
         if ($this->parent_id == 0) {
             $data['groups'] = Group::collection(\App\Models\Group::where(['parent_id' => $id])->limit($group_num)->get());
         } else {
-            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $media_num));
+            $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
+            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $iosCode, $media_num));
         }
 
         return $data;

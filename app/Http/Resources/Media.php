@@ -26,6 +26,9 @@ class Media extends JsonResource
             return [];
         }
         $clarity = $request->input('clarity', '720p');
+        $pn = $request->input('pn', 0);
+        $pt = $request->input('pt', 0);
+        $memory = $request->input('memory', 1);
 
         $addition = [];
         switch ($this->use) {
@@ -37,15 +40,15 @@ class Media extends JsonResource
                     'intro' => $this->intro,
                     'video_url' => $this->video_url,
                     'is_adv' => $this->is_adv,
-                    'subtitle' => Subtitles::collection($this->subtitles)
+                    'subtitle' => Subtitles::collection($this->subtitles),
+                    'mode' => $this->mode,
                 ];
                 break;
             case 2://剧集详情
+                $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
                 $addition = [
-                    'is_serie' => $this->is_serie,
-//                    'serie_num' => $this->serie_num,
                     'serie_end' => $this->serie_end,
-                    'series' => \App\Models\Media::getListBySerie($this->id)
+                    'series' => \App\Models\Media::getListBySerie($this->id, $customer_id, $memory)
                 ];
                 break;
             default:

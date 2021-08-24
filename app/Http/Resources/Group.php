@@ -18,6 +18,9 @@ class Group extends JsonResource
     {
         $group_num = $request->input('group_num', 5);
         $media_num = $request->input('media_num', 10);
+        $pn = $request->input('pn', 0);
+        $pt = $request->input('pt', 0);
+        $memory = $request->input('memory', 1);
 
         $id = $this->id;
         $data = [
@@ -36,7 +39,8 @@ class Group extends JsonResource
             $data['groups'] = Group::collection(\App\Models\Group::where(['parent_id' => $id])->limit($group_num)->get());
         } else {
             $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
-            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $iosCode, $media_num));
+            $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
+            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $iosCode, $media_num, $customer_id, $memory));
         }
 
         return $data;

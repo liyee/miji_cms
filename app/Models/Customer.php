@@ -20,15 +20,15 @@ class Customer extends Model
     /**
      * 获取项目列表数据
      */
-    public static function getList($pn, $pt)
+    public static function getCustomerId($pn, $pt)
     {
         $key = config('cacheKey.cp_list');
 
         $value = Cache::remember($key, 3600, function () {
             $list = [];
-            $data = self::query()->where('status', 1)->get(['id', 'name', 'item'])->toArray();
+            $data = self::query()->where('status', 1)->get(['id', 'name', 'tag'])->toArray();
             array_walk($data, function ($val) use (&$list) {
-                $list[$val['name'] . '_' . $val['item']] = $val['id'];
+                $list[$val['name'] . '_' . $val['tag']] = $val['id'];
             });
 
             return $list;

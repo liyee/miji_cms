@@ -18,7 +18,7 @@ class ConfigController extends AdminController
      * @var string
      */
     protected $title = 'Config';
-    protected $type = ['1' => 'Language', 2 => 'Pay Mark', 3 => 'Feature Content Mark', 4 => 'Clarity Mark', 5 => 'Operation Mark', 6 => 'Component'];
+    protected $type = ['1' => 'Language', 2 => 'Pay Mark', 3 => 'Feature Content Mark', 4 => 'Clarity Mark', 5 => 'Operation Mark', 6 => 'Component', 7 => 'Mode', 8 => 'Memory'];
     protected $status = [0 => 0, 1 => 1, 2 => 2];
 
     /**
@@ -29,6 +29,7 @@ class ConfigController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Config());
+
         $grid->disableFilter();
         $grid->selector(function (Grid\Tools\Selector $selector) {
             $selector->select('type', 'Type', $this->type);

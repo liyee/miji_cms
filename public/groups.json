@@ -3,11 +3,11 @@
         {
             "id": 7,
             "title": "Popular Games",
+            "img": "images\/1.png",
+            "sort": 0,
             "component": "horizontal_3",
             "more": 1,
             "title_show": 1,
-            "img": "images\/1.png",
-            "sort": 0,
             "medias": [
                 {
                     "id": 1,
@@ -15,6 +15,7 @@
                     "title_sub": "qwerqwerq",
                     "is_direction": 0,
                     "duration": 1,
+                    "type": 0,
                     "publishtime": "2021-08-05 00:00:00",
                     "cp": "Inlogic",
                     "score": 0,
@@ -31,34 +32,60 @@
                     ]
                 },
                 {
-                    "id": 2,
-                    "title": "aqer2",
-                    "title_sub": "qwerqwerq2",
+                    "id": 3,
+                    "title": "tv1",
+                    "title_sub": "tv1_sub",
                     "is_direction": 0,
                     "duration": 1,
+                    "type": 1,
                     "publishtime": "2021-08-05 00:00:00",
                     "cp": "Inlogic",
                     "score": 0,
                     "class": 6,
                     "url": "http:\/\/www.baidu.com",
-                    "img": []
+                    "img": [],
+                    "updatetime": null,
+                    "click_num": null,
+                    "language": null,
+                    "intro": null,
+                    "video_url": null,
+                    "is_adv": null,
+                    "subtitle": [],
+                    "mode": null
+                },
+                {
+                    "id": 2,
+                    "title": "aqer2",
+                    "title_sub": "qwerqwerq2",
+                    "is_direction": 0,
+                    "duration": 1,
+                    "type": 0,
+                    "publishtime": "2021-08-05 00:00:00",
+                    "cp": "Inlogic",
+                    "score": 0,
+                    "class": 6,
+                    "url": "http:\/\/www.baidu.com",
+                    "img": [],
+                    "is_serie": null,
+                    "serie_end": null,
+                    "series": []
                 }
             ]
         },
         {
-            "id": 8,
-            "title": "Top Game",
+            "id": 12,
+            "title": "TRending Videos",
+            "img": "",
+            "sort": 1,
             "component": "horizontal_4",
-            "more": null,
-            "title_show": null,
-            "img": null,
-            "sort": 0,
+            "more": 1,
+            "title_show": 1,
             "medias": []
         }
     ],
     "links": {
-        "first": "http:\/\/init.metaxplay.com\/groups\/2?page=1",
-        "last": "http:\/\/init.metaxplay.com\/groups\/2?page=1",
+        "first": "http:\/\/init.metaxplay.com\/groups\/1\/2?page=1",
+        "last": "http:\/\/init.metaxplay.com\/groups\/1\/2?page=1",
         "prev": null,
         "next": null
     },
@@ -73,7 +100,7 @@
                 "active": false
             },
             {
-                "url": "http:\/\/init.metaxplay.com\/groups\/2?page=1",
+                "url": "http:\/\/init.metaxplay.com\/groups\/1\/2?page=1",
                 "label": "1",
                 "active": true
             },
@@ -83,8 +110,8 @@
                 "active": false
             }
         ],
-        "path": "http:\/\/init.metaxplay.com\/groups\/2",
-        "per_page": 15,
+        "path": "http:\/\/init.metaxplay.com\/groups\/1\/2",
+        "per_page": "2",
         "to": 2,
         "total": 2
     }

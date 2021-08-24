@@ -5,6 +5,7 @@
         "title_sub": "qwerqwerq",
         "is_direction": 0,
         "duration": 1,
+        "type": 0,
         "publishtime": "2021-08-05 00:00:00",
         "cp": "Inlogic",
         "score": 0,
@@ -24,6 +25,17 @@
         "language": "2",
         "intro": null,
         "video_url": null,
-        "is_adv": 1
+        "is_adv": 1,
+        "subtitle": [
+            {
+                "language": "en",
+                "url": "http:\/\/en.log"
+            },
+            {
+                "language": "fr",
+                "url": "http:\/\/fr.log"
+            }
+        ],
+        "mode": "5"
     }
 }

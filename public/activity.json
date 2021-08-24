@@ -1,9 +1,9 @@
 {
     "data": [
         {
-            "id": 12,
-            "title": "activity01_01",
-            "title_sub": "activity01_01_sub",
+            "id": 14,
+            "title": "activity01_03",
+            "title_sub": "activity01_03_sub",
             "is_direction": 0,
             "duration": 1,
             "type": 0,
@@ -15,9 +15,9 @@
             "img": []
         },
         {
-            "id": 13,
-            "title": "activity01_02",
-            "title_sub": "activity01_02_sub",
+            "id": 16,
+            "title": "activity01_04",
+            "title_sub": "activity01_04_sub",
             "is_direction": 0,
             "duration": 1,
             "type": 0,
@@ -33,52 +33,8 @@
             "intro": null,
             "video_url": null,
             "is_adv": 1,
-            "subtitle": []
-        },
-        {
-            "id": 14,
-            "title": "activity01_03",
-            "title_sub": "activity01_03_sub",
-            "is_direction": 0,
-            "duration": 1,
-            "type": 0,
-            "publishtime": "2021-08-05 00:00:00",
-            "cp": "Inlogic",
-            "score": 0,
-            "class": 6,
-            "url": "http:\/\/www.baidu.com",
-            "img": [],
-            "is_serie": null,
-            "serie_end": 0,
-            "series": []
-        },
-        {
-            "id": 16,
-            "title": "activity01_04",
-            "title_sub": "activity01_04_sub",
-            "is_direction": 0,
-            "duration": 1,
-            "type": 0,
-            "publishtime": "2021-08-05 00:00:00",
-            "cp": "Inlogic",
-            "score": 0,
-            "class": 6,
-            "url": "http:\/\/www.baidu.com",
-            "img": []
-        },
-        {
-            "id": 17,
-            "title": "activity01_05",
-            "title_sub": "activity01_05_sub",
-            "is_direction": 0,
-            "duration": 1,
-            "type": 0,
-            "publishtime": "2021-08-05 00:00:00",
-            "cp": "Inlogic",
-            "score": 0,
-            "class": 6,
-            "url": "http:\/\/www.baidu.com",
-            "img": []
+            "subtitle": [],
+            "mode": null
         }
     ]
 }

@@ -35,18 +35,6 @@ class Group extends Model
         return self::query()->where($where);
     }
 
-    /**
-     * @param $pn
-     * @param $pt
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
-     * 通过客户信息获取对应的栏目信息
-     */
-    public static function getParentId($pn, $pt){
-        $pt_id = Customer::getList($pn, $pt);
-        $data = self::query()->where('pt_id', $pt_id)->first(['id']);
-        return  $data->id;
-    }
-
     public function medias(){
         return $this->belongsToMany(Media::class, 'm_media_group');
     }

@@ -80,14 +80,46 @@ class Media extends Model
     }
 
     /**
+     * @param $id
+     * @param int $type
+     * @param int $status
+     * @param int $parent_id
+     * 获取单条媒资信息
+     */
+    public static function getOne2($id, $type = 0, $status = 4, $parent_id = 0, $customer_id = 0, $memory = 1)
+    {
+        $one = self::query()->from('m_media as M')->select(['M.*', 'A.*'])
+            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+            ->where([
+                'M.id' => $id,
+                'M.type' => $type,
+                'M.status' => $status,
+                'M.parent_id' => $parent_id,
+                'A.customer_id' => $customer_id,
+            ])
+            ->where('M.memory', '<=', $memory)
+            ->first();
+
+        return $one;
+    }
+
+    /**
      * @param int $groupid
      * @param int $parent_id
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      * 媒资列表-根据分组id
      */
-    public static function getList($id = 0, $iosCode = 'US')
+    public static function getList($parent_id = 0, $iosCode = 'US', $customer_id = 0, $memory = 1)
     {
-        $data = self::query()->where('parent_id', $id)->whereRaw('find_in_set(\'' . $iosCode . '\', `area`)')->get();
+        $data = self::query()->from('m_media as M')
+            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+            ->where([
+                'M.parent_id' => $parent_id,
+                'A.customer_id' => $customer_id
+            ])
+            ->where('M.memory', '<=', $memory)
+            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
+            ->get(['M.*']);
 
         return $data;
     }
@@ -97,9 +129,18 @@ class Media extends Model
      * @return mixed
      * 获取连续剧具体媒资id
      */
-    public static function getListBySerie($parent_id = 0)
+    public static function getListBySerie($parent_id = 0, $customer_id = 0, $memory = 1)
     {
-        return self::where('parent_id', $parent_id)->orderBy('sort')->pluck('id');
+        $data = self::query()->from('m_media as M')
+            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+            ->where([
+                'M.parent_id' => $parent_id,
+                'A.customer_id' => $customer_id
+                ])
+            ->where('M.memory', '<=', $memory)
+            ->orderBy('M.sort')->pluck('M.id');
+
+        return  $data;
     }
 
     /**
@@ -108,11 +149,14 @@ class Media extends Model
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      * 媒资列表-根据分组id
      */
-    public static function getListByGroup($groupid = 0, $iosCode = 'US', $limit = 999)
+    public static function getListByGroup($groupid = 0, $iosCode = 'US', $limit = 999, $customer_id = 0, $memory = 1)
     {
         $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])
             ->rightJoin('m_media_group as G', 'G.media_id', '=', 'M.id')
+            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where('G.group_id', $groupid)
+            ->where('A.customer_id', $customer_id)
+            ->where('M.memory', '<=', $memory)
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
             ->orderBy('M.sort')
             ->orderBy('M.id')

@@ -76,15 +76,11 @@ class MediaController extends AdminController
         });
         $grid->column('intro', __('Intro'))->hide();
         $grid->column('img_original', __('Img original'));
-        $grid->column('img_input', __('Img input'))->image('/uploads');
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
         $grid->column('tag', __('Tag'))->hide();
         $grid->column('keyword', __('Keyword'))->hide();
         $grid->column('area', __('Area'))->hide();
-        $grid->column('items', __('Item'))->display(function ($items) {
-//            return $items['name'] . '(' . $items['customer'] . ')';
-        });
         $grid->column('status', __('Status'));
         $grid->column('updated_at', __('Updated at'))->hide();
         $grid->column('created_at', __('Created at'))->hide();
@@ -122,7 +118,6 @@ class MediaController extends AdminController
 //        $show->field('clarity_mark', __('Clarity Mark'));
 //        $show->field('operation_mark', __('Operation Mark'));
         $show->field('img_original', __('Img original'));
-        $show->field('img_input', __('Img input'));
         $show->field('title_original', __('Title original'));
         $show->field('uuid', __('Uuid'));
         $show->field('sort', __('Sort'));
@@ -130,7 +125,6 @@ class MediaController extends AdminController
         $show->field('tag', __('Tag'));
         $show->field('keyword', __('Keyword'));
         $show->field('area', __('Area'));
-        $show->field('item_id', __('Item'));
         $show->field('status', __('Status'));
         $show->field('updated_at', __('Updated at'));
         $show->field('created_at', __('Created at'));
@@ -145,39 +139,53 @@ class MediaController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Media());
-
         $class = $_GET['class'] ?? 0;
-        $form->text('title', __('Title'));
-        $form->text('title_sub', __('Title sub'));
-        $form->number('duration', __('Duration'))->default(60)->required();
-        $form->number('serie_num', __('Serie num'))->default(1)->required();
-        $form->switch('serie_end', __('Serie end'))->states([
-            'on' => ['value' => 1, 'text' => 'Yes', 'color' => 'success'],
-            'off' => ['value' => 0, 'text' => 'No', 'color' => 'danger'],
-        ])->default(1);
-        $form->date('updatetime', __('Updatetime'))->required();
-        $form->date('publishtime', __('Publishtime'))->required();
-        $form->select('cp_id', __('Cp'))->options(Cp::select())->required();
-        $form->select('language', __('Language'))->options(Config::select(1))->required();
-        $form->select('class', 'Class')->options(Category::selectOptions())->default($class);
-        $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
-        $form->text('intro', __('Intro'));
+
+        $form = new Form(new Media());
+        $form->tab('Basic info', function ($form) use ($class) {
+            $form->text('title', __('Title'));
+            $form->text('title_sub', __('Title sub'));
+            $form->number('duration', __('Duration'))->default(60)->required();
+            $form->number('serie_num', __('Serie num'))->default(1)->required();
+            $form->switch('serie_end', __('Serie end'))->states([
+                'on' => ['value' => 1, 'text' => 'Yes', 'color' => 'success'],
+                'off' => ['value' => 0, 'text' => 'No', 'color' => 'danger'],
+            ])->default(1);
+            $form->date('updatetime', __('Updatetime'))->required();
+            $form->date('publishtime', __('Publishtime'))->required();
+            $form->select('cp_id', __('Cp'))->options(Cp::select())->required();
+            $form->select('language', __('Language'))->options(Config::select(1))->required();
+            $form->select('class', 'Class')->options(Category::selectOptions())->default($class);
+            $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
+            $form->text('intro', __('Intro'));
+            $form->image('img_original', __('Img original'))->removable();
+            $form->text('title_original', __('Title original'))->required();
+            $form->number('sort', __('Sort'))->default(0);
+            $form->url('url', __('Url'))->required();
+            $form->text('tag', __('Tag'));
+            $form->text('keyword', __('Keyword'));
+            $form->listbox('area', __('Area'))->options(Region::select())->required();
+            $form->radio('status', __('Status'))->options([0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE', 4 => 'PUBLISH', 5 => 'UNPUBLISH'])->default(1);
+        })->tab('Images', function ($form){
+            $form->column(1/2, function ($form) {
+                $form->hasMany('imgs', function ($form){
+                    $form->select('config', 'Clarity')->options(Config::select(4));
+                    $form->image('f_16x9', 'Foreground(16x9)')->removable();
+                    $form->image('b_16x9', 'Background(16x9)')->removable();
+                    $form->image('f_7x10', 'Foreground(7x10)')->removable();
+                    $form->image('b_7x10', 'Background(7x10)')->removable();
+                });
+            });
+
+        });
+
+        return $form;
+
 //        $form->multipleSelect('pay_mark', __('Pay Mark'))->options('/admin/api/configs/2');
 //        $form->multipleSelect('feature_content_mark', __('Feature Content Mark'))->options('/admin/api/configs/3');
 //        $form->select('clarity_mark', __('Clarity Mark'))->options('/admin/api/configs/4');
 //        $form->select('operation_mark', __('Operation Mark'))->options('/admin/api/configs/5');
-        $form->image('img_original', __('Img original'))->removable();
-        $form->image('img_input', __('Img input'))->removable()->required();
-        $form->text('title_original', __('Title original'))->required();
-        $form->number('sort', __('Sort'))->default(0);
-        $form->url('url', __('Url'))->required();
-        $form->text('tag', __('Tag'));
-        $form->text('keyword', __('Keyword'));
-        $form->listbox('area', __('Area'))->options(Region::select())->required();
-        $form->select('item_id', __('Item'))->options('/admin/api/customers');
-        $form->radio('status', __('Status'))->options([0 => 'DELETE', 1 => 'Untested', 2 => 'TEST COMPLETE', '3'=>'TEST FAILURE'])->default(1);
 
-        return $form;
+
     }
 }

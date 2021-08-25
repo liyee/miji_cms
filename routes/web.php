@@ -38,7 +38,10 @@ Route::get('/medias/{group_id}', function (Request $request, $group_id = 0) {
     $iosCode = \App\Libraries\IpHelp::getCountryCode($ip);
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
     $memory = $request->input('memory', 1);
-    return \App\Http\Resources\Media::collection(\App\Models\Media::getListByGroup($group_id, $iosCode, 999, $customer_id, $memory));
+
+    return new \App\Http\Resources\Group(\App\Models\Group::find($group_id));
+
+//    return \App\Http\Resources\Media::collection(\App\Models\Media::getListByGroup($group_id, $iosCode, 999, $customer_id, $memory));
 });
 
 //3.媒资分组列表

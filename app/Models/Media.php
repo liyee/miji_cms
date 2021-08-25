@@ -173,12 +173,7 @@ class Media extends Model
 
     public function languages()
     {
-        return $this->belongsTo(Config::class, 'language', 'id');
-    }
-
-    public function items()
-    {
-        return $this->belongsTo(Customer::class, 'item_id', 'id');
+        return $this->belongsTo(Config::class, 'language', 'value');
     }
 
     public function categorie()
@@ -191,7 +186,7 @@ class Media extends Model
      */
     public function imgs()
     {
-        return $this->hasMany(MediaImg::class);
+        return $this->hasMany(MediaImg::class, 'media_id');
     }
 
     /**

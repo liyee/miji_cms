@@ -16,9 +16,9 @@ class Region extends Model
         $key = config('cacheKey.region_select');
         $value = Cache::remember($key, 3600, function () {
             $select = [];
-            $data = self::where('status', 1)->get(['id', 'name'])->toArray();
+            $data = self::where('status', 1)->get(['code', 'name'])->toArray();
             array_walk($data, function ($val) use (&$select){
-                $select[$val['id']] = $val['name'];
+                $select[$val['code']] = $val['name'];
             });
 
             return $select;

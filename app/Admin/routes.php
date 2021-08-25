@@ -12,9 +12,6 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index')->name('home');
 
-    $router->get('api/customers', 'CustomerController@customers');
-    $router->get('api/categories', 'CategoryController@categories');
-
     $router->resource('users', UserController::class);
     $router->resource('cps', CpController::class);
     $router->resource('medias', MediaController::class);

@@ -72,11 +72,4 @@ class CategoryController extends AdminController
 
         return $form;
     }
-
-    public function categories(Request $request)
-    {
-        $q = $request->get('q', 0);
-        $data = Category::where([['parent_id', $q]])->get(['id', 'title as text']);
-        return $data;
-    }
 }

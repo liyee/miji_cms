@@ -86,10 +86,4 @@ class CpController extends AdminController
 
         return $form;
     }
-
-    public function cps(Request $request)
-    {
-        $q = $request->get('q');
-        return Cp::where('name', 'like', "%$q%")->get(['id','name as text']);
-    }
 }

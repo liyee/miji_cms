@@ -75,21 +75,4 @@ class CustomerController extends AdminController
 
         return $form;
     }
-
-    public function customers(Request $request)
-    {
-        $data = [];
-        $q = $request->get('q');
-        $list = Customer::where('name', 'like', "%$q%")->get(['id', 'name', 'customer'])->toArray();
-
-        array_walk($list, function ($val, $key) use (&$data) {
-            $data[] = [
-                'id' => $val['id'],
-                'text' => $val['name'] . '(' . $val['customer'] . ')'
-            ];
-//            $data[$val['id']] = $val['name'] . '(' . $val['customer'] . ')';
-        });
-
-        return $data;
-    }
 }

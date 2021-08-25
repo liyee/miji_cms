@@ -86,9 +86,4 @@ class ConfigController extends AdminController
 
         return $form;
     }
-
-    public function configs($type, $q = null)
-    {
-        return Config::where([['name', 'like', "%$q%"], ['type', $type], ['status', 1]])->get(['name as text', 'value as id']);
-    }
 }

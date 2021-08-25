@@ -181,7 +181,7 @@ class Media extends Model
         return $this->belongsTo(Customer::class, 'item_id', 'id');
     }
 
-    public function categories()
+    public function categorie()
     {
         return $this->belongsTo(Category::class, 'class', 'id');
     }

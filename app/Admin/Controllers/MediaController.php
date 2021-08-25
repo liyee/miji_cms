@@ -4,7 +4,10 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Form\NewForm;
 use App\Models\Category;
+use App\Models\Config;
+use App\Models\Cp;
 use App\Models\Media;
+use App\Models\Region;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -31,7 +34,7 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
         $childIds = Category::getchild($class);
 
-        $grid->model()->whereIn('class', $childIds);
+        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0);
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
         });
@@ -50,40 +53,31 @@ class MediaController extends AdminController
             $tools->append(new NewForm());
         });
 
-        $grid->column('id', __('Id'))->hide();
+        $grid->column('id', __('Id'));
         $grid->column('title', __('Title'));
         $grid->column('title_sub', __('Title sub'))->hide();
         $grid->column('duration', __('Duration'));
-        $grid->column('drama_num', __('Drama num'));
-        $grid->column('drama_end', __('Drama end'));
+        $grid->column('serie_num', __('Serie num'));
+        $grid->column('serie_end', __('Serie end'))->display(function ($serie_end) {
+            return $serie_end ? 'Yes' : 'No';
+        });
         $grid->column('updatetime', __('Updatetime'));
-        $grid->column('publishtime', __('Publishtime'));
-        $grid->column('cps', 'Cp')->display(function ($cps) {
-            return $cps['name'];
+        $grid->column('publishtime', __('Publishtime'))->hide();
+        $grid->column('cp', 'Cp')->display(function ($cp) {
+            return $cp['name'];
         });
         $grid->column('score', __('Score'));
         $grid->column('click_num', __('Click num'))->hide();
         $grid->column('languages', __('Language'))->display(function ($languages) {
             return $languages['name'];
         });
-        $grid->column('class', __('Class'));
-        $grid->column('class_sub', __('Class sub'));
-        $grid->column('intro', __('Intro'))->hide();
-        $grid->column('pay_mark', __('Pay Mark'))->display(function ($pay_mark_val) {
-            $val = '';
-            foreach ($pay_mark_val as $k => $v) {
-                if ($k > 0) $val .= ',' . $v;
-            }
-            return $val;
+        $grid->column('categorie', __('Class sub'))->display(function ($categorie) {
+            return $categorie['title'];
         });
-        $grid->column('feature_content_mark', __('Feature Content Mark'))->hide();
-        $grid->column('clarity_mark', __('Clarity Mark'))->hide();
-        $grid->column('operation_mark', __('Operation Mark'))->hide();
+        $grid->column('intro', __('Intro'))->hide();
         $grid->column('img_original', __('Img original'));
         $grid->column('img_input', __('Img input'))->image('/uploads');
         $grid->column('title_original', __('Title original'))->hide();
-        $grid->column('uuid', __('Uuid'))->hide();
-        $grid->column('sort', __('Sort'))->integer();
         $grid->column('url', __('Url'))->hide();
         $grid->column('tag', __('Tag'))->hide();
         $grid->column('keyword', __('Keyword'))->hide();
@@ -123,10 +117,10 @@ class MediaController extends AdminController
         $show->field('class', __('Class'));
         $show->field('class_sub', __('Class sub'));
         $show->field('intro', __('Intro'));
-        $show->field('pay_mark', __('Pay Mark'));
-        $show->field('feature_content_mark', __('Feature Content Mark'));
-        $show->field('clarity_mark', __('Clarity Mark'));
-        $show->field('operation_mark', __('Operation Mark'));
+//        $show->field('pay_mark', __('Pay Mark'));
+//        $show->field('feature_content_mark', __('Feature Content Mark'));
+//        $show->field('clarity_mark', __('Clarity Mark'));
+//        $show->field('operation_mark', __('Operation Mark'));
         $show->field('img_original', __('Img original'));
         $show->field('img_input', __('Img input'));
         $show->field('title_original', __('Title original'));
@@ -156,19 +150,23 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
         $form->text('title', __('Title'));
         $form->text('title_sub', __('Title sub'));
-        $form->number('duration', __('Duration'))->default(0)->required();
-        $form->number('drama_num', __('Drama num'))->default(0)->required();
-        $form->switch('drama_end', __('Drama end'));
-        $form->datetime('updatetime', __('Updatetime'))->required();
-        $form->datetime('publishtime', __('Publishtime'))->required();
-        $form->select('cp_id', __('Cp'))->options('/admin/api/cps')->required();
-        $form->select('language', __('Language'))->options('/admin/api/configs/1')->required();
+        $form->number('duration', __('Duration'))->default(60)->required();
+        $form->number('serie_num', __('Serie num'))->default(1)->required();
+        $form->switch('serie_end', __('Serie end'))->states([
+            'on' => ['value' => 1, 'text' => 'Yes', 'color' => 'success'],
+            'off' => ['value' => 0, 'text' => 'No', 'color' => 'danger'],
+        ])->default(1);
+        $form->date('updatetime', __('Updatetime'))->required();
+        $form->date('publishtime', __('Publishtime'))->required();
+        $form->select('cp_id', __('Cp'))->options(Cp::select())->required();
+        $form->select('language', __('Language'))->options(Config::select(1))->required();
         $form->select('class', 'Class')->options(Category::selectOptions())->default($class);
+        $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
         $form->text('intro', __('Intro'));
-        $form->multipleSelect('pay_mark', __('Pay Mark'))->options('/admin/api/configs/2');
-        $form->multipleSelect('feature_content_mark', __('Feature Content Mark'))->options('/admin/api/configs/3');
-        $form->select('clarity_mark', __('Clarity Mark'))->options('/admin/api/configs/4');
-        $form->select('operation_mark', __('Operation Mark'))->options('/admin/api/configs/5');
+//        $form->multipleSelect('pay_mark', __('Pay Mark'))->options('/admin/api/configs/2');
+//        $form->multipleSelect('feature_content_mark', __('Feature Content Mark'))->options('/admin/api/configs/3');
+//        $form->select('clarity_mark', __('Clarity Mark'))->options('/admin/api/configs/4');
+//        $form->select('operation_mark', __('Operation Mark'))->options('/admin/api/configs/5');
         $form->image('img_original', __('Img original'))->removable();
         $form->image('img_input', __('Img input'))->removable()->required();
         $form->text('title_original', __('Title original'))->required();
@@ -176,9 +174,9 @@ class MediaController extends AdminController
         $form->url('url', __('Url'))->required();
         $form->text('tag', __('Tag'));
         $form->text('keyword', __('Keyword'));
-        $form->listbox('area', __('Area'))->options('/admin/api/regions')->required();
+        $form->listbox('area', __('Area'))->options(Region::select())->required();
         $form->select('item_id', __('Item'))->options('/admin/api/customers');
-        $form->switch('status', __('Status'));
+        $form->radio('status', __('Status'))->options([0 => 'DELETE', 1 => 'Untested', 2 => 'TEST COMPLETE', '3'=>'TEST FAILURE'])->default(1);
 
         return $form;
     }

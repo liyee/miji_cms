@@ -79,22 +79,4 @@ class RegionController extends AdminController
 
         return $form;
     }
-
-    public function regions(Request $request)
-    {
-        $q = $request->get('q');
-        $cacheKey = 'region_' . $q;
-        $value = Cache::remember($cacheKey, 3600, function () use ($q) {
-            $list = Region::where([['name', 'like', "%$q%"], ['status', 1]])->get(['id', 'name'])->toArray();
-
-            array_walk($list, function ($val, $key) use (&$data) {
-                $data[$val['id']] = $val['name'];
-            });
-
-            return json_encode($data);
-        });
-
-        return json_decode($value, true);
-
-    }
 }

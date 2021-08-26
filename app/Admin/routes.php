@@ -20,4 +20,5 @@ Route::group([
     $router->resource('regions', RegionController::class);
     $router->resource('customers', CustomerController::class);
     $router->resource('categories', CategoryController::class);
+    $router->resource('activities', ActivityController::class);
 });

@@ -38,4 +38,8 @@ class Group extends Model
     public function medias(){
         return $this->belongsToMany(Media::class, 'm_media_group');
     }
+
+    public function activity(){
+        return $this->hasOne(Activity::class);
+    }
 }

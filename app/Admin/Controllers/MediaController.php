@@ -12,6 +12,8 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Tab;
+use Illuminate\Database\Eloquent\Model;
 
 class MediaController extends AdminController
 {
@@ -166,18 +168,19 @@ class MediaController extends AdminController
             $form->text('keyword', __('Keyword'));
             $form->listbox('area', __('Area'))->options(Region::select())->required();
             $form->radio('status', __('Status'))->options([0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE', 4 => 'PUBLISH', 5 => 'UNPUBLISH'])->default(1);
-        })->tab('Images', function ($form){
-            $form->column(1/2, function ($form) {
-                $form->hasMany('imgs', function ($form){
+        })->tab('Images', function ($form) {
+            $form->column(1 / 2, function ($form) {
+                $form->hasMany('imgs', function ($form) {
                     $form->select('config', 'Clarity')->options(Config::select(4));
+                    $form->select('type', 'Type')->options([1 => 'General', 2 => 'Activity']);
                     $form->image('f_16x9', 'Foreground(16x9)')->removable();
                     $form->image('b_16x9', 'Background(16x9)')->removable();
                     $form->image('f_7x10', 'Foreground(7x10)')->removable();
                     $form->image('b_7x10', 'Background(7x10)')->removable();
                 });
             });
-
         });
+
 
         return $form;
 

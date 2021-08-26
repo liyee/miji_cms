@@ -78,7 +78,7 @@ class CpController extends AdminController
     {
         $form = new Form(new Cp());
 
-        $form->text('name', __('Name'));
+        $form->text('name', __('Name'))->setWidth(3);
         $form->text('category', __('Category'));
         $form->text('des', __('Des'));
         $form->text('country', __('Country'));

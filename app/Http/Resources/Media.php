@@ -29,6 +29,7 @@ class Media extends JsonResource
         $pn = $request->input('pn', 0);
         $pt = $request->input('pt', 0);
         $memory = $request->input('memory', 1);
+        $act = $request->input('act', 0);
 
         $addition = [];
         switch ($this->use) {
@@ -66,7 +67,7 @@ class Media extends JsonResource
             'score' => $this->score,
             'class' => $this->class,
             'url' => $this->url,
-            'img' => MediaImg::collection($this->imgs->where('config', $clarity)),
+            'img' => MediaImg::collection($this->imgs->where('config', $clarity)->where('act', $act))
         ];
 
         return array_merge($base, $addition);

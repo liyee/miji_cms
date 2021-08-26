@@ -32,16 +32,7 @@ Route::get('/media/{id}', function (Request $request, $id = 0) {
 
 //2.更多媒资
 Route::get('/medias/{group_id}', function (Request $request, $group_id = 0) {
-    $ip = $request->ip();
-    $pn = $request->input('pn', 0);
-    $pt = $request->input('pt', 0);
-    $iosCode = \App\Libraries\IpHelp::getCountryCode($ip);
-    $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-    $memory = $request->input('memory', 1);
-
     return new \App\Http\Resources\Group(\App\Models\Group::find($group_id));
-
-//    return \App\Http\Resources\Media::collection(\App\Models\Media::getListByGroup($group_id, $iosCode, 999, $customer_id, $memory));
 });
 
 //3.媒资分组列表

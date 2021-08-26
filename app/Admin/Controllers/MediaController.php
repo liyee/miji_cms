@@ -12,7 +12,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Encore\Admin\Widgets\Tab;
+use Encore\Admin\Widgets\Table;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaController extends AdminController
@@ -169,26 +169,18 @@ class MediaController extends AdminController
             $form->listbox('area', __('Area'))->options(Region::select())->required();
             $form->radio('status', __('Status'))->options([0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE', 4 => 'PUBLISH', 5 => 'UNPUBLISH'])->default(1);
         })->tab('Images', function ($form) {
-            $form->column(1 / 2, function ($form) {
-                $form->hasMany('imgs', function ($form) {
-                    $form->select('config', 'Clarity')->options(Config::select(4));
-                    $form->select('type', 'Type')->options([1 => 'General', 2 => 'Activity']);
-                    $form->image('f_16x9', 'Foreground(16x9)')->removable();
-                    $form->image('b_16x9', 'Background(16x9)')->removable();
-                    $form->image('f_7x10', 'Foreground(7x10)')->removable();
-                    $form->image('b_7x10', 'Background(7x10)')->removable();
-                });
+            $form->hasMany('imgs', function ($form) {
+                $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2);
+                $form->select('type', 'Type')->options([1 => 'General', 2 => 'Activity'])->setWidth(2);
+                $form->image('f_16x9', 'Foreground(16x9)')->removable()->setWidth(3);
+                $form->image('b_16x9', 'Background(16x9)')->removable()->setWidth(3);
+                $form->image('f_7x10', 'Foreground(7x10)')->removable()->setWidth(3);
+                $form->image('b_7x10', 'Background(7x10)')->removable()->setWidth(3);
             });
         });
 
+        $form->hasMany();
 
         return $form;
-
-//        $form->multipleSelect('pay_mark', __('Pay Mark'))->options('/admin/api/configs/2');
-//        $form->multipleSelect('feature_content_mark', __('Feature Content Mark'))->options('/admin/api/configs/3');
-//        $form->select('clarity_mark', __('Clarity Mark'))->options('/admin/api/configs/4');
-//        $form->select('operation_mark', __('Operation Mark'))->options('/admin/api/configs/5');
-
-
     }
 }

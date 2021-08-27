@@ -68,7 +68,6 @@ class Media extends JsonResource
             'score' => $this->score,
             'class' => $this->class,
             'url' => $this->url,
-//            'img' => MediaImg::collection($this->imgs->wherein('config', ['720p', $clarity])->where('act', $act))
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
 

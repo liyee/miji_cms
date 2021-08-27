@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Encore\Admin\Traits\ModelTree;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 
 class Category extends Model
@@ -30,13 +32,30 @@ class Category extends Model
     }
 
     /**
+     * @return mixed
+     * 获取列表数据
+     */
+    public static function getList()
+    {
+        $key = config('cacheKey.category_list');
+
+        $value = Cache::remember($key, 300, function () {
+            $data = DB::table('m_category')->get(['id', 'parent_id', 'depth'])->toArray();
+            $id = array_column($data, 'id');
+            return array_combine($id, $data);
+        });
+
+        return $value;
+    }
+
+    /**
      * @param int $nodeIds
      * 获取所有子项id数据
      */
     public static function getchild($nodeId = 0)
     {
-        $list = self::get(['id', 'parent_id'])->toArray();
-        $recursion = self::recursion($list, $nodeId);
+        $list = self::getList();
+        self::recursion($list, $nodeId);
         return array_merge(self::$childIds, [(int)$nodeId]);
     }
 
@@ -47,6 +66,7 @@ class Category extends Model
     {
         $data = [];
         foreach ($list as $item) {
+            if (is_object($item)) $item = (array)$item;
             if ($item['parent_id'] == $nodeid) {
                 self::$childIds[] = $item['id'];
                 $arr['id'] = $item['id'];
@@ -62,10 +82,27 @@ class Category extends Model
     }
 
     /**
-     * @param array $data
-     * 数据批量插入
+     * @param $sub
+     * @param int $depth
+     * @return array
+     * 推荐位所用
      */
-    public function batchInsert($data = []){
+    public static function getDepth($sub, $depth = 2)
+    {
+        $data = [];
+        $list = self::getList();
+        switch ($list[$sub]->depth) {
+            case 1:
+                self::recursion($list, $sub);
+                $data = self::$childIds;
+                break;
+            case 2:
+                self::recursion($list, $list[$sub]->parent_id);
+                $data = self::$childIds;
+                break;
+            default:
+        }
 
+        return $data;
     }
 }

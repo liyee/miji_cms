@@ -58,7 +58,20 @@ Route::get('/activity/{id}', function (Request $request, $id = 0) {
 
 //6.首屏数据
 Route::get('/home/{projectid}', function ($projectid) {
-    return \App\Http\Resources\Group::collection(\App\Models\Group::where(['parent_id' => $projectid])->get(['id', 'title', 'sort', 'parent_id', 'depth','activity_id']));
+    return \App\Http\Resources\Group::collection(\App\Models\Group::where(['parent_id' => $projectid])->get(['id', 'title', 'sort', 'parent_id', 'depth', 'activity_id']));
+});
+
+//7.推荐媒资
+Route::get('/recommend/{id}', function (Request $request, $id) {
+    $pn = $request->input('pn', 0);
+    $pt = $request->input('pt', 0);
+    $memory = $request->input('memory', 1);
+    $one = \App\Models\Media::getOne($id);
+    $sub = $one->class_sub;
+    $childIds = \App\Models\Category::getDepth($sub);
+    $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
+    $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
+    return \App\Http\Resources\Media::collection(\App\Models\Media::getRecommend($id, array_merge($childIds, [$sub]), $iosCode, $customer_id, $memory));
 });
 
 //1-1.媒资详情-测试

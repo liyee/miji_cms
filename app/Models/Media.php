@@ -120,7 +120,7 @@ class Media extends Model
             ])
             ->where('M.memory', '<=', $memory)
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
-            ->get(['M.*','act']);
+            ->get(['M.*', 'act']);
 
         return $data;
     }
@@ -137,11 +137,11 @@ class Media extends Model
             ->where([
                 'M.parent_id' => $parent_id,
                 'A.customer_id' => $customer_id
-                ])
+            ])
             ->where('M.memory', '<=', $memory)
             ->orderBy('M.sort')->pluck('M.id');
 
-        return  $data;
+        return $data;
     }
 
     /**
@@ -166,6 +166,36 @@ class Media extends Model
             ->get();
 
         return $data;
+    }
+
+    /**
+     * @param array $sub
+     * @param string $iosCode
+     * @param $customer_id
+     * @param int $memory
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * 随机获取推荐数据
+     */
+    public static function getRecommend($id, $sub = [], $iosCode = 'US', $customer_id, $memory = 1)
+    {
+        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])
+            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+            ->where('A.customer_id', $customer_id)
+            ->where('M.memory', '<=', $memory)
+            ->where('M.status', 4)
+            ->whereIn('class_sub', $sub)
+            ->where('M.id', '!=', $id)
+            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
+            ->orderByRaw('rand()')
+            ->limit(6)
+            ->get();
+
+        return $data;
+
+
+//        $list = self::query()->whereIn('class_sub', $sub)->where('status', 4)->orderByRaw('rand()')->limit(5)->get();
+//
+//        return $list;
     }
 
     public function cp()

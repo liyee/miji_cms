@@ -6,4 +6,5 @@ return[
     'region_select' => 'region_select', // 区域下拉框
     'activities' => 'activities', // 活动列表 activities
     'activity_select' => 'activity_select', // 活动下拉列表
+    'category_list' => 'category_select', // 类别列表
 ];

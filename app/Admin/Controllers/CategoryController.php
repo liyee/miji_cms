@@ -66,9 +66,20 @@ class CategoryController extends AdminController
 
         $form->text('title', __('Title'));
         $form->select('parent_id', __('Parent'))->options(Category::selectOptions());
+        $form->hidden('depth');
         $form->text('des', __('Des'));
         $form->text('sort', __('Sort'));
         $form->switch('status', __('Status'))->default(1);
+
+        $form->saving(function (Form $form) {
+            $parent_id = $form->parent_id;
+            if ($parent_id == 0){
+                $form->depth = 0;
+            }else{
+                $parentInfo = Category::query()->find($parent_id);
+                $form->depth = $parentInfo->depth + 1;
+            }
+        });
 
         return $form;
     }

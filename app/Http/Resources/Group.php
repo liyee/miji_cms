@@ -23,9 +23,11 @@ class Group extends JsonResource
         $memory = $request->input('memory', 1);
 
         $id = $this->id;
+        $act = $this->activity_id;
         $data = [
             'id' => $id,
             'title' => $this->title,
+            'act' => $act,
             'img' => $this->img,
             'sort' => $this->sort,
         ];
@@ -40,7 +42,7 @@ class Group extends JsonResource
         } else {
             $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
             $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $iosCode, $media_num, $customer_id, $memory));
+            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $iosCode, $media_num, $customer_id, $memory, $act));
         }
 
         return $data;

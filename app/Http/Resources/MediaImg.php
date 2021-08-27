@@ -16,6 +16,7 @@ class MediaImg extends JsonResource
     {
         $domain = env('APP_URL') . '/uploads/';
         return [
+            'id' => $this->id,
             'f_16x9' => $domain . $this->f_16x9,
             'b_16x9' => $domain . $this->b_16x9,
             'f_7x10' => $domain . $this->f_7x10,

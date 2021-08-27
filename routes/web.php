@@ -31,12 +31,12 @@ Route::get('/media/{id}', function (Request $request, $id = 0) {
 });
 
 //2.更多媒资
-Route::get('/medias/{group_id}', function (Request $request, $group_id = 0) {
+Route::get('/group/{group_id}', function (Request $request, $group_id = 0) {
     return new \App\Http\Resources\Group(\App\Models\Group::find($group_id));
 });
 
 //3.媒资分组列表
-Route::get('/groups/{nav}/{size?}', function ($nav = 0, $size = 3) {
+Route::get('/nav/{nav}/{size?}', function ($nav = 0, $size = 3) {
     return \App\Http\Resources\Group::collection(\App\Models\Group::getList(['parent_id' => $nav])->paginate($size));
 });
 
@@ -50,14 +50,15 @@ Route::get('/activity/{id}', function (Request $request, $id = 0) {
     $pn = $request->input('pn', 0);
     $pt = $request->input('pt', 0);
     $memory = $request->input('memory', 1);
+    $act = $request->input('act', 0);
     $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-    return \App\Http\Resources\Media::collection(\App\Models\Media::getList($id, $iosCode, $customer_id, $memory));
+    return \App\Http\Resources\Media::collection(\App\Models\Media::getList($id, $iosCode, $customer_id, $memory, $act));
 });
 
 //6.首屏数据
 Route::get('/home/{projectid}', function ($projectid) {
-    return \App\Http\Resources\Group::collection(\App\Models\Group::where(['parent_id' => $projectid])->get(['id', 'title', 'sort', 'parent_id', 'depth']));
+    return \App\Http\Resources\Group::collection(\App\Models\Group::where(['parent_id' => $projectid])->get(['id', 'title', 'sort', 'parent_id', 'depth','activity_id']));
 });
 
 //1-1.媒资详情-测试

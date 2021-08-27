@@ -30,6 +30,7 @@ class Media extends JsonResource
         $pt = $request->input('pt', 0);
         $memory = $request->input('memory', 1);
         $act = $request->input('act', 0);
+        $act = $this->act ?? $act;
 
         $addition = [];
         switch ($this->use) {
@@ -67,9 +68,24 @@ class Media extends JsonResource
             'score' => $this->score,
             'class' => $this->class,
             'url' => $this->url,
-            'img' => MediaImg::collection($this->imgs->where('config', $clarity)->where('act', $act))
+//            'img' => MediaImg::collection($this->imgs->wherein('config', ['720p', $clarity])->where('act', $act))
+            'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
 
         return array_merge($base, $addition);
+    }
+
+    public function getImg($imgs, $act = 0)
+    {
+        if (count($imgs) != 2){
+            return  $imgs;
+        }
+
+        foreach ($imgs as $key=>$img) {
+            if ($img->act != $act) {
+                unset($imgs[$key]);
+            }
+        }
+        return  $imgs;
     }
 }

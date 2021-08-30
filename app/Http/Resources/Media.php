@@ -67,9 +67,15 @@ class Media extends JsonResource
             'cp' => $this->cp->name,
             'score' => $this->score,
             'class' => $this->class,
-            'url' => $this->url,
+//            'url' => $this->url,
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
+
+        if ($this->url) {
+            $base['url'] = $this->url . '?mode=' . $this->mode;
+        }else{
+            $base['url'] = $this->url . '&mode=' . $this->mode;
+        }
 
         return array_merge($base, $addition);
     }
@@ -82,15 +88,15 @@ class Media extends JsonResource
      */
     public function getImg($imgs, $act = 0)
     {
-        if (count($imgs) != 2){
-            return  $imgs;
+        if (count($imgs) != 2) {
+            return $imgs;
         }
 
-        foreach ($imgs as $key=>$img) {
+        foreach ($imgs as $key => $img) {
             if ($img->act != $act) {
                 unset($imgs[$key]);
             }
         }
-        return  $imgs;
+        return $imgs;
     }
 }

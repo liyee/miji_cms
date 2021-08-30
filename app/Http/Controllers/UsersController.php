@@ -13,15 +13,18 @@ class UsersController extends Controller
     //
     public function test()
     {
-        Cache::put('a', '1112');
-        $val = Cache::get('a');
-        return $val;
+        $url = 'http://www.baidu.com?name=qq';
+        echo strpos($url, '?');
+
+
+//        Cache::put('a', '1112');
+//        $val = Cache::get('a');
+//        return $val;
     }
 
     public function store(Request $request)
     {
         $media = Media::query()->find(1);
-        $a =  $media;
         $result = ProcessJob::dispatch($media);
         return $result;
     }

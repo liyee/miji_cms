@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessJob;
 use App\Models\Config;
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -14,6 +16,14 @@ class UsersController extends Controller
         Cache::put('a', '1112');
         $val = Cache::get('a');
         return $val;
+    }
+
+    public function store(Request $request)
+    {
+        $media = Media::query()->find(1);
+        $a =  $media;
+        $result = ProcessJob::dispatch($media);
+        return $result;
     }
 
     /**

@@ -20,6 +20,7 @@ Route::get('/', function () {
 
 Route::get('/users/test', [\App\Http\Controllers\UsersController::class, 'test']);
 Route::get('/users/index', [\App\Http\Controllers\UsersController::class, 'index']);
+Route::get('/users/store', [\App\Http\Controllers\UsersController::class, 'store']);
 
 //1.媒资详情
 Route::get('/media/{id}', function (Request $request, $id = 0) {

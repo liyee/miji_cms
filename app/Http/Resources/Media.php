@@ -74,6 +74,12 @@ class Media extends JsonResource
         return array_merge($base, $addition);
     }
 
+    /**
+     * @param $imgs
+     * @param int $act
+     * @return mixed
+     * 过滤图片
+     */
     public function getImg($imgs, $act = 0)
     {
         if (count($imgs) != 2){

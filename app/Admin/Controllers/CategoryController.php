@@ -73,14 +73,22 @@ class CategoryController extends AdminController
 
         $form->saving(function (Form $form) {
             $parent_id = $form->parent_id;
-            if ($parent_id == 0){
+            if ($parent_id == 0) {
                 $form->depth = 0;
-            }else{
+            } else {
                 $parentInfo = Category::query()->find($parent_id);
                 $form->depth = $parentInfo->depth + 1;
             }
         });
 
         return $form;
+    }
+
+    public function classSub(Request $request)
+    {
+        $provinceId = $request->get('q');
+        $id = Category::getTop(Category::getList(),1);
+
+        $aa = $id;
     }
 }

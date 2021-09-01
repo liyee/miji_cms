@@ -56,7 +56,19 @@ class MediaController extends AdminController
         });
 
         $grid->column('id', __('Id'));
-        $grid->column('title', __('Title'));
+        $grid->column('title', __('Title'))->expand(function ($model) {
+            if ($model->type > 0) {
+                $child = Media::query()->where(['parent_id' => $model->id])->get(['id', 'title', 'title_sub'])->toArray();
+                $childNew = array_map(function ($value) {
+                    $id = $value['id'];
+                    $value['action'] = '<a href="medias/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
+                    return $value;
+                }, $child);
+
+                return new Table(['Id', 'Title', 'title_sub', 'Action'], $childNew);
+            }
+            return new Table();
+        });
         $grid->column('title_sub', __('Title sub'))->hide();
         $grid->column('duration', __('Duration'));
         $grid->column('serie_num', __('Serie num'));
@@ -144,6 +156,7 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
 
         $form = new Form(new Media());
+
         $form->tab('Basic info', function ($form) use ($class) {
             $form->text('title', __('Title'));
             $form->text('title_sub', __('Title sub'));
@@ -157,8 +170,12 @@ class MediaController extends AdminController
             $form->date('publishtime', __('Publishtime'))->required();
             $form->select('cp_id', __('Cp'))->options(Cp::select())->required();
             $form->select('language', __('Language'))->options(Config::select(1))->required();
-            $form->select('class', 'Class')->options(Category::selectOptions())->default($class);
-            $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
+//            $form->select('class', 'Class')->options(Category::selectOptions(function (){
+//                return Category::query()->where('parent_id', 0);
+//            }))->default($class);
+            $form->hidden('class');
+
+            $form->select('class_sub', 'Class sub')->options(Category::selectOptions());
             $form->text('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
             $form->text('title_original', __('Title original'))->required();
@@ -180,6 +197,11 @@ class MediaController extends AdminController
         });
 
         $form->hasMany();
+
+        $form->saving(function (Form $form){
+            $class_sub = $form->class_sub;
+            $form->class = Category::getTop(Category::getList(), $class_sub);
+        });
 
         return $form;
     }

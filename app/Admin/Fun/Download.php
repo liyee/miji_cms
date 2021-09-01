@@ -3,20 +3,18 @@
 
 namespace App\Admin\Fun;
 
+use App\Models\Media;
+
 class Download
 {
-    protected $url;
-    protected $name;
-    protected $args;
+    protected $info;
 
     /**
      * Download constructor.
      */
-    public function __construct($url, $name, ...$args)
+    public function __construct($info = [])
     {
-        $this->url = $url;
-        $this->name = $name;
-        $this->args = $args;
+        $this->info = $info;
     }
 
     /**
@@ -32,8 +30,18 @@ class Download
      */
     protected function getList()
     {
-        $cp_name = 'App\\Admin\\Fun\\' . $this->name;
+        $name = $this->info['name'];
+        $cp_name = 'App\\Admin\\Fun\\' . $this->info['name'];
         $cp = new $cp_name;
-        return $cp->getList($this->url, $this->args);
+        $data = $cp->getList($this->info);
+        $mediaHava = Media::query()->where('uuid', 'like', $name . '_%')->pluck('uuid')->toArray();
+        $dataNew = array_filter($data, function ($val) use ($mediaHava) {
+            if (!in_array($val['uuid'], $mediaHava)) {
+                return $val;
+            }
+        });
+        if ($dataNew){
+            Media::query()->insert($dataNew);
+        }
     }
 }

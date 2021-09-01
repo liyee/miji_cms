@@ -11,6 +11,8 @@ Route::group([
     'as'            => config('admin.route.prefix') . '.',
 ], function (Router $router) {
     $router->get('/', 'HomeController@index')->name('home');
+    $router->get('/test', 'HomeController@test')->name('test');
+    $router->get('api/class_sub', 'CategoryController@classSub');
 
     $router->resource('users', UserController::class);
     $router->resource('cps', CpController::class);
@@ -21,4 +23,5 @@ Route::group([
     $router->resource('customers', CustomerController::class);
     $router->resource('categories', CategoryController::class);
     $router->resource('activities', ActivityController::class);
+    $router->resource('publish', PublishController::class);
 });

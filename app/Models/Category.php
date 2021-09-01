@@ -32,6 +32,33 @@ class Category extends Model
     }
 
     /**
+     * @param $nodeId
+     * @return mixed
+     * 获取顶级数据分类
+     */
+    public static function getTop($list, $nodeId)
+    {
+        $key = config('cacheKey.category_list') . '_' . $nodeId;
+        if (Cache::has($key)){
+            return  Cache::get($key);
+        }else{
+            $top = self::top($list, $nodeId);
+            Cache::put($key, $top);
+            return $top;
+        }
+    }
+
+    public static function top($list, $nodeId){
+        $id = $nodeId;
+        $nodeInfo = $list[$nodeId];
+        if ($nodeInfo->parent_id > 0) {
+            $id = self::getTop($list, $nodeInfo->parent_id);
+        }
+
+        return $id;
+    }
+
+    /**
      * @return mixed
      * 获取列表数据
      */

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions\Form;
 
+use App\Jobs\ProcessJob;
 use Encore\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,13 +13,12 @@ class Download extends RowAction
     public function handle(Model $model)
     {
         // $model ...
-        $line = $model->toArray();
-        $msg = 'Download Fail.';
-        if (in_array($line['name'], ['yesAuto', 'wangbo'])){
-            $downLoad = new \App\Admin\Fun\Download($line['url'], $line['name'], $line['apikey'], $line['apisecret']);
-            $downLoad->init();
-            $msg = 'Download Success.';
-        }
+        ProcessJob::dispatch(json_encode([
+            'type' => 'download',
+            'info' => $model->toArray()
+        ]));
+
+        $msg = 'Download is in progress.';
 
         return $this->response()->success($msg)->refresh();
     }

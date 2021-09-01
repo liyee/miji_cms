@@ -6,6 +6,7 @@ use App\Jobs\ProcessJob;
 use App\Models\Config;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 
 class UsersController extends Controller
@@ -13,10 +14,6 @@ class UsersController extends Controller
     //
     public function test()
     {
-        $url = 'http://www.baidu.com?name=qq';
-        echo strpos($url, '?');
-
-
 //        Cache::put('a', '1112');
 //        $val = Cache::get('a');
 //        return $val;
@@ -24,9 +21,10 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        $media = Media::query()->find(1);
-        $result = ProcessJob::dispatch($media);
-        return $result;
+        ProcessJob::dispatch(json_encode([
+            'type' => 1,
+            'name' => 'wangbo'
+        ]));
     }
 
     /**

@@ -75,9 +75,9 @@ class Media extends JsonResource
 
         if (isset($addition['url'])){
             if (strstr($this->url, '?')) {
-                $base['url'] = $this->url . '&matax_mode=' . $this->mode;
+                $addition['url'] = $this->url . '&matax_mode=' . $this->mode;
             } else {
-                $base['url'] = $this->url . '?matax_mode=' . $this->mode;
+                $addition['url'] = $this->url . '?matax_mode=' . $this->mode;
             }
         }
 

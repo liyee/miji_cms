@@ -41,7 +41,6 @@ class MediaController extends AdminController
             $filter->disableIdFilter(); // 去掉默认的id过滤器
         });
 
-
         $grid->actions(function ($actions) {
             $actions->disableDelete(); // 去掉删除
         });
@@ -56,9 +55,11 @@ class MediaController extends AdminController
         });
 
         $grid->column('id', __('Id'));
-        $grid->column('title', __('Title'))->expand(function ($model) {
-            if ($model->type > 0) {
-                $child = Media::query()->where(['parent_id' => $model->id])->get(['id', 'title', 'title_sub'])->toArray();
+        $grid->column('title', __('Title'))->display(function ($title) {
+            return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;
+        })->expand(function () {
+            if ($this->type > 0) {
+                $child = Media::query()->where(['parent_id' => $this->id])->get(['id', 'title', 'title_sub'])->toArray();
                 $childNew = array_map(function ($value) {
                     $id = $value['id'];
                     $value['action'] = '<a href="medias/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
@@ -198,7 +199,7 @@ class MediaController extends AdminController
 
         $form->hasMany();
 
-        $form->saving(function (Form $form){
+        $form->saving(function (Form $form) {
             $class_sub = $form->class_sub;
             $form->class = Category::getTop(Category::getList(), $class_sub);
         });

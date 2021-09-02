@@ -21,6 +21,10 @@ class MediaImg extends JsonResource
             'b_16x9' => $domain . $this->b_16x9,
             'f_7x10' => $domain . $this->f_7x10,
             'b_7x10' => $domain . $this->b_7x10,
+            'f_1x1' => $domain . $this->f_1x1,
+            'b_1x1' => $domain . $this->b_1x1,
+            'f_4x1' => $domain . $this->f_4x1,
+            'b_4x1' => $domain . $this->b_4x1,
         ];
     }
 }

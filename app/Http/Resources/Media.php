@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Media extends JsonResource
@@ -66,7 +67,8 @@ class Media extends JsonResource
             'publishtime' => $this->publishtime,
             'cp' => $this->cp->name,
             'score' => $this->score,
-            'class' => $this->class,
+            'class' => Category::getNameById($this->class),
+            'class_sub' => Category::getNameById($this->class_sub),
 //            'url' => $this->url,
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];

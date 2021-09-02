@@ -26,8 +26,7 @@ class PublishController extends AdminController
     {
         $grid = new Grid(new Media());
 
-        $grid->model()->whereIn('status', ['']);
-
+//        $grid->model()->whereIn('status', ['']);
         $grid->column('id', __('Id'));
         $grid->column('title', __('Title'));
         $grid->column('title_sub', __('Title sub'));
@@ -44,7 +43,7 @@ class PublishController extends AdminController
         $grid->column('class_sub', __('Class sub'));
         $grid->column('intro', __('Intro'))->hide();
         $grid->column('video_url', __('Video url'));
-        $grid->column('img_original', __('Img original'));
+        $grid->column('img_original', __('Img original'))->image();
         $grid->column('title_original', __('Title original'));
         $grid->column('uuid', __('Uuid'));
         $grid->column('url', __('Url'));

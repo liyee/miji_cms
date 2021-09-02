@@ -39,16 +39,17 @@ class Category extends Model
     public static function getTop($list, $nodeId)
     {
         $key = config('cacheKey.category_list') . '_' . $nodeId;
-        if (Cache::has($key)){
-            return  Cache::get($key);
-        }else{
+        if (Cache::has($key)) {
+            return Cache::get($key);
+        } else {
             $top = self::top($list, $nodeId);
             Cache::put($key, $top);
             return $top;
         }
     }
 
-    public static function top($list, $nodeId){
+    public static function top($list, $nodeId)
+    {
         $id = $nodeId;
         $nodeInfo = $list[$nodeId];
         if ($nodeInfo->parent_id > 0) {
@@ -67,7 +68,7 @@ class Category extends Model
         $key = config('cacheKey.category_list');
 
         $value = Cache::remember($key, 300, function () {
-            $data = DB::table('m_category')->get(['id', 'parent_id', 'depth'])->toArray();
+            $data = DB::table('m_category')->get(['id', 'title', 'parent_id', 'depth'])->toArray();
             $id = array_column($data, 'id');
             return array_combine($id, $data);
         });
@@ -131,5 +132,19 @@ class Category extends Model
         }
 
         return $data;
+    }
+
+    /**
+     * @param int $id
+     * @return mixed|string
+     * 根据id获取类别名称
+     */
+    public static function getNameById($id = 0)
+    {
+        $list = self::getList();
+        if (isset($list[$id])){
+            return $list[$id]->title;
+        }
+        return '';
     }
 }

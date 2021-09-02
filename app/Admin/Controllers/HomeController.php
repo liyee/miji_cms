@@ -56,7 +56,7 @@ class HomeController extends Controller
         $content->row('hello world');
 
         // 直接渲染视图输出，Since v1.6.12
-        $content->view('dashboard', ['data' => 'foo']);
+//        $content->view('dashboard', ['data' => 'foo']);
 
         return $content;
     }

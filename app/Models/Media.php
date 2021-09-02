@@ -153,7 +153,7 @@ class Media extends Model
     public static function getListByGroup($groupid = 0, $iosCode = 'US', $limit = 999, $customer_id = 0, $memory = 1, $act)
     {
         $additional = "$act as act";
-        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])->selectRaw($additional)
+        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])->selectRaw($additional)
             ->rightJoin('m_media_group as G', 'G.media_id', '=', 'M.id')
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where('G.group_id', $groupid)
@@ -178,7 +178,7 @@ class Media extends Model
      */
     public static function getRecommend($id, $sub = [], $iosCode = 'US', $customer_id, $memory = 1)
     {
-        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])
+        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where('A.customer_id', $customer_id)
             ->where('M.memory', '<=', $memory)
@@ -191,11 +191,6 @@ class Media extends Model
             ->get();
 
         return $data;
-
-
-//        $list = self::query()->whereIn('class_sub', $sub)->where('status', 4)->orderByRaw('rand()')->limit(5)->get();
-//
-//        return $list;
     }
 
     public function cp()

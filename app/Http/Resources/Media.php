@@ -41,7 +41,7 @@ class Media extends JsonResource
                     'click_num' => $this->click_num,
                     'language' => $this->language,
                     'intro' => $this->intro,
-                    'video_url' => $this->video_url,
+                    'url' => $this->url,
                     'is_adv' => $this->is_adv,
                     'subtitle' => Subtitles::collection($this->subtitles),
                     'mode' => $this->mode,
@@ -69,14 +69,16 @@ class Media extends JsonResource
             'score' => $this->score,
             'class' => Category::getNameById($this->class),
             'class_sub' => Category::getNameById($this->class_sub),
-//            'url' => $this->url,
+            'url_jump' => $this->url_jump,
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
 
-        if ($this->url) {
-            $base['url'] = $this->url . '?mode=' . $this->mode;
-        }else{
-            $base['url'] = $this->url . '&mode=' . $this->mode;
+        if (isset($addition['url'])){
+            if (strstr($this->url, '?')) {
+                $base['url'] = $this->url . '&matax_mode=' . $this->mode;
+            } else {
+                $base['url'] = $this->url . '?matax_mode=' . $this->mode;
+            }
         }
 
         return array_merge($base, $addition);

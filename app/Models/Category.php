@@ -143,7 +143,8 @@ class Category extends Model
     {
         $list = self::getList();
         if (isset($list[$id])){
-            return $list[$id]->title;
+            $item = $list[$id];
+            return $item->title;
         }
         return '';
     }

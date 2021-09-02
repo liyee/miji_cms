@@ -88,7 +88,7 @@ class Media extends Model
      */
     public static function getOne2($id, $type = 0, $status = 4, $parent_id = 0, $customer_id = 0, $memory = 1)
     {
-        $one = self::query()->from('m_media as M')->select(['M.*', 'A.*'])
+        $one = self::query()->from('m_media as M')->select(['M.*', 'A.customer_id', 'A.mode'])
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
                 'M.id' => $id,

@@ -194,6 +194,10 @@ class MediaController extends AdminController
                 $form->image('b_16x9', 'Background(16x9)')->removable()->setWidth(3);
                 $form->image('f_7x10', 'Foreground(7x10)')->removable()->setWidth(3);
                 $form->image('b_7x10', 'Background(7x10)')->removable()->setWidth(3);
+                $form->image('f_1x1', 'Foreground(1x1)')->removable()->setWidth(3);
+                $form->image('b_1x1', 'Background(1x1)')->removable()->setWidth(3);
+                $form->image('f_4x1', 'Foreground(4x1)')->removable()->setWidth(3);
+                $form->image('b_4x1', 'Background(4x1)')->removable()->setWidth(3);
             });
         });
 

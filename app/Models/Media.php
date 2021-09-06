@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Media extends Model
 {
@@ -199,6 +201,23 @@ class Media extends Model
             ->get();
 
         return $data;
+    }
+
+    public static function selectBytype($type = 1)
+    {
+        $key = config('cacheKey.media_select') . $type;
+
+        $value = Cache::remember($key, 30, function () use ($type) {
+            $data = self::where(['type' => $type])->get(['id', 'title'])->toArray();
+            $list = [];
+            array_walk($data, function ($val){
+                $list[$val->id] = $val->title;
+            });
+
+            return $list;
+        });
+
+        return $value;
     }
 
     public function cp()

@@ -88,7 +88,7 @@ class GroupController extends AdminController
             $form->switch('more', __('Show more'))->default(1);
             $form->switch('title_show', __('Show title'))->default(1);
             $form->image('img', __('Img'))->removable();
-            $form->select('activity_id', 'Activity')->options(Activity::getName(0, 2));
+            $form->select('activity_id', 'Activity')->default(0)->options(Activity::getName(0, 2));
             $form->text('des', __('Des'));
             $form->number('sort', __('Sort'))->default(1);
             $form->switch('status', __('Status'));
@@ -102,6 +102,8 @@ class GroupController extends AdminController
                 $parentInfo = Group::query()->find($parent_id);
                 $form->depth = $parentInfo->depth + 1;
             }
+
+            if (!$form->activity_id) $form->activity_id = 0;
         });
 
         return $form;

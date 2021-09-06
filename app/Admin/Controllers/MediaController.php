@@ -25,6 +25,7 @@ class MediaController extends AdminController
      * @var string
      */
     protected $title = 'Media';
+    protected $type = [0 => 'Default', 1 => 'Serie', 2 => 'Activity'];
 
     /**
      * Make a grid builder.
@@ -162,6 +163,11 @@ class MediaController extends AdminController
         $form->tab('Basic info', function ($form) use ($class) {
             $form->text('title', __('Title'));
             $form->text('title_sub', __('Title sub'));
+            $form->radio('type', __('Type'))->options($this->type)->default(0)->when(1, function (Form $form){
+                $form->select('parent_id', 'Serie')->options(Media::selectBytype(1));
+            })->when(2, function (Form $form){
+                $form->select('parent_id', 'Activity')->options(Media::selectBytype(2));
+            });
             $form->number('duration', __('Duration'))->default(60)->required();
             $form->number('serie_num', __('Serie num'))->default(1)->required();
             $form->switch('serie_end', __('Serie end'))->states([
@@ -172,9 +178,6 @@ class MediaController extends AdminController
             $form->date('publishtime', __('Publishtime'))->required();
             $form->select('cp_id', __('Cp'))->options(Cp::select())->required();
             $form->select('language', __('Language'))->options(Config::select(1))->required();
-//            $form->select('class', 'Class')->options(Category::selectOptions(function (){
-//                return Category::query()->where('parent_id', 0);
-//            }))->default($class);
             $form->hidden('class');
             $form->select('class_sub', 'Class sub')->options(Category::selectOptions());
             $form->text('intro', __('Intro'));

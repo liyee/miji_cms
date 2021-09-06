@@ -11,4 +11,5 @@ return[
     'category_list' => 'category_select', // 类别列表
     'category_top_' => 'category_top_', // _顶级分类|类别
     'group_num' => 'group_num', // 分组没个数
+    'media_select' => 'media_select_', // 区分剧集和活动信息 30s
 ];

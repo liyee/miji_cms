@@ -180,6 +180,7 @@ class MediaController extends AdminController
             $form->select('cp_id', __('Cp'))->options(Cp::select())->required();
             $form->select('language', __('Language'))->options(Config::select(1))->required();
             $form->hidden('class');
+            $form->hidden('uuid');
             $form->select('class_sub', 'Class sub')->options(Category::selectOptions());
             $form->text('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
@@ -217,6 +218,7 @@ class MediaController extends AdminController
             $class_sub = $form->class_sub;
             $form->class = Category::getTop(Category::getList(), $class_sub);
             if (!$form->parent_id) $form->parent_id = 0;
+            if (!$form->uuid) $form->uuid = uniqid();
         });
 
         return $form;

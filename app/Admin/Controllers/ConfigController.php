@@ -36,7 +36,7 @@ class ConfigController extends AdminController
         });
 
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
+        $grid->column('name', __('Name'))->sortable();
         $grid->column('value', __('Value'));
         $grid->column('description', __('Description'));
         $grid->column('type', __('Type'))->using($this->type);

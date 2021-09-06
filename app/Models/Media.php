@@ -208,7 +208,7 @@ class Media extends Model
         $key = config('cacheKey.media_select') . $type;
 
         $value = Cache::remember($key, 30, function () use ($type) {
-            $data = self::where(['type' => $type])->get(['id', 'title'])->toArray();
+            $data = self::where(['type' => $type, 'parent_id' => 0])->get(['id', 'title'])->toArray();
             $list = [];
             array_walk($data, function ($val) use (&$list){
                 $list[$val['id']] = $val['title'];

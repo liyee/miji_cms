@@ -210,8 +210,9 @@ class Media extends Model
         $value = Cache::remember($key, 30, function () use ($type) {
             $data = self::where(['type' => $type])->get(['id', 'title'])->toArray();
             $list = [];
-            array_walk($data, function ($val){
-                $list[$val->id] = $val->title;
+            array_walk($data, function ($val) use (&$list){
+                $list[$val['id']] = $val['title'];
+
             });
 
             return $list;

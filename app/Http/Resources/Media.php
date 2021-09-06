@@ -42,7 +42,7 @@ class Media extends JsonResource
                     'language' => $this->language,
                     'intro' => $this->intro,
                     'url' => $this->url,
-                    'is_adv' => $this->is_adv,
+                    'adv_freq' => $this->adv_freq,
                     'subtitle' => Subtitles::collection($this->subtitles),
                     'mode' => $this->mode,
                 ];
@@ -67,6 +67,7 @@ class Media extends JsonResource
             'publishtime' => $this->publishtime,
             'cp' => $this->cp->name,
             'score' => $this->score,
+            'is_adv' => $this->is_adv,
             'class' => Category::getNameById($this->class),
             'class_sub' => Category::getNameById($this->class_sub),
             'url_jump' => $this->url_jump,

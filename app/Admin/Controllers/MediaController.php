@@ -39,7 +39,7 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
         $childIds = Category::getchild($class);
 
-        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0)->whereIn('status', [1, 3]);
+        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0)->whereIn('status', [1, 3])->orderBy('updated_at', 'desc');
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
         });

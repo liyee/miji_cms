@@ -23,6 +23,7 @@ class CategoryController extends AdminController
     public function index(Content $content)
     {
         $tree = new Tree(new Category());
+        $tree->disableSave();
         $tree->branch(function ($branch) {
             return "<a href='medias?class=" . $branch['id'] . "' class='dd-nodrag'>{$branch['title']}</a>";
         });

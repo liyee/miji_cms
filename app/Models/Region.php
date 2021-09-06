@@ -26,4 +26,16 @@ class Region extends Model
 
         return $value;
     }
+
+    /**
+     * 根据code获取下拉框数据
+     */
+    public static function selectByCode($code){
+        $select = self::select();
+        $code = array_flip($code);
+
+        $intersect = array_intersect_key($select, $code);
+
+        return $intersect;
+    }
 }

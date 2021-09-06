@@ -23,5 +23,6 @@ Route::group([
     $router->resource('customers', CustomerController::class);
     $router->resource('categories', CategoryController::class);
     $router->resource('activities', ActivityController::class);
+    $router->resource('complete', CompleteController::class);
     $router->resource('publish', PublishController::class);
 });

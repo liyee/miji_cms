@@ -16,6 +16,7 @@ class Group extends JsonResource
      */
     public function toArray($request)
     {
+        if (!$this->resource) return [];
         $group_num = $request->input('group_num', 5);
         $media_num = $request->input('media_num', 10);
         $pn = $request->input('pn', 0);

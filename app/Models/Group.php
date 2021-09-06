@@ -28,13 +28,13 @@ class Group extends Model
      * 获取数据列表
      */
     public static function getList($where = []){
-        $where = array_merge($where, [
-            'status' => 1
-        ]);
-
         return self::query()->where($where);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * 对应多条媒资
+     */
     public function medias(){
         return $this->belongsToMany(Media::class, 'm_media_group');
     }

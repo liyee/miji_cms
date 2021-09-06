@@ -26,13 +26,14 @@ class CustomerController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Customer());
+        $grid->disableBatchActions();
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
-        $grid->column('customer', __('Customer'));
-        $grid->column('des', __('Des'));
-        $grid->column('sort', __('Sort'));
-        $grid->column('created_at', __('Created at'));
+        $grid->column('tag', __('Tag'));
+        $grid->column('des', __('Des'))->hide();
+        $grid->column('sort', __('Sort'))->hide();
+        $grid->column('created_at', __('Created at'))->hide();
         $grid->column('updated_at', __('Updated at'));
 
         return $grid;
@@ -50,7 +51,7 @@ class CustomerController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
-        $show->field('customer', __('Customer'));
+        $show->field('tag', __('Tag'));
         $show->field('des', __('Des'));
         $show->field('sort', __('Sort'));
         $show->field('created_at', __('Created at'));
@@ -69,7 +70,7 @@ class CustomerController extends AdminController
         $form = new Form(new Customer());
 
         $form->text('name', __('Name'));
-        $form->text('customer', __('Customer'));
+        $form->text('tag', __('Tag'));
         $form->text('des', __('Des'));
         $form->switch('sort', __('Sort'));
 

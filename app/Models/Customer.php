@@ -20,9 +20,9 @@ class Customer extends Model
     /**
      * 获取项目列表数据
      */
-    public static function getCustomerId($pn, $pt)
+    public static function getCustomerId($pn = 0, $pt = 0)
     {
-        $key = config('cacheKey.cp_list');
+        $key = config('cacheKey.customer_list');
 
         $value = Cache::remember($key, 3600, function () {
             $list = [];
@@ -34,6 +34,6 @@ class Customer extends Model
             return $list;
         });
 
-        return isset($value[$pn . '_' . $pt]) ? $value[$pn . '_' . $pt] : 0;
+        return isset($value[$pn . '_' . $pt]) ? $value[$pn . '_' . $pt] : $value;
     }
 }

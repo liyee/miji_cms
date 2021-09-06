@@ -3,9 +3,11 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Form\NewForm;
+use App\Libraries\Status;
 use App\Models\Category;
 use App\Models\Config;
 use App\Models\Cp;
+use App\Models\Customer;
 use App\Models\Media;
 use App\Models\Region;
 use Encore\Admin\Controllers\AdminController;
@@ -36,7 +38,7 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
         $childIds = Category::getchild($class);
 
-        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0);
+        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0)->whereIn('status', [1, 3]);
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
         });
@@ -49,7 +51,6 @@ class MediaController extends AdminController
             $batch->disableDelete();
         });
 
-        $grid->disableCreateButton();
         $grid->tools(function (Grid\Tools $tools) {
             $tools->append(new NewForm());
         });
@@ -96,7 +97,7 @@ class MediaController extends AdminController
         $grid->column('tag', __('Tag'))->hide();
         $grid->column('keyword', __('Keyword'))->hide();
         $grid->column('area', __('Area'))->hide();
-        $grid->column('status', __('Status'));
+        $grid->column('status', __('Status'))->using(Status::getList(1));;
         $grid->column('updated_at', __('Updated at'))->hide();
         $grid->column('created_at', __('Created at'))->hide();
 
@@ -175,7 +176,6 @@ class MediaController extends AdminController
 //                return Category::query()->where('parent_id', 0);
 //            }))->default($class);
             $form->hidden('class');
-
             $form->select('class_sub', 'Class sub')->options(Category::selectOptions());
             $form->text('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
@@ -185,7 +185,8 @@ class MediaController extends AdminController
             $form->text('tag', __('Tag'));
             $form->text('keyword', __('Keyword'));
             $form->listbox('area', __('Area'))->options(Region::select())->required();
-            $form->radio('status', __('Status'))->options([0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE', 4 => 'PUBLISH', 5 => 'UNPUBLISH'])->default(1);
+            $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High']);
+            $form->radio('status', __('Status'))->options(Status::getList(1))->default(1);
         })->tab('Images', function ($form) {
             $form->hasMany('imgs', function ($form) {
                 $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2);
@@ -198,6 +199,12 @@ class MediaController extends AdminController
                 $form->image('b_1x1', 'Background(1x1)')->removable()->setWidth(3);
                 $form->image('f_4x1', 'Foreground(4x1)')->removable()->setWidth(3);
                 $form->image('b_4x1', 'Background(4x1)')->removable()->setWidth(3);
+            });
+        })->tab('Mode', function ($form) {
+            $form->hasMany('modes', function ($form) {
+                $form->select('customer_id', 'Customer')->options(array_flip(Customer::getCustomerId()));
+                $form->select('mode', 'Mode')->options(Config::select(7));
+                $form->switch('status', 'Status');
             });
         });
 

@@ -21,7 +21,7 @@ class Status
                 return [0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE'];
                 break;
             case 2:
-                return [2 => 'TEST COMPLETE', 4 => 'PUBLISH'];
+                return [2 => 'TEST COMPLETE', 4 => 'PUBLISH', 5 => 'UNPUBLISH'];
                 break;
             case 3:
                 return [2 => 'TEST COMPLETE', 3 => 'TEST FAILURE'];

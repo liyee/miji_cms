@@ -28,17 +28,17 @@ Route::get('/media/{id}', function (Request $request, $id = 0) {
     $pt = $request->input('pt', 0);
     $memory = $request->input('memory', 1);
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-    return new \App\Http\Resources\Media(\App\Models\Media::getOne2($id, 0, 4, 0, $customer_id, $memory), 1);
+    return new \App\Http\Resources\Media(\App\Models\Media::getOne2($id, 0, 2, 0, $customer_id, $memory), 1);
 });
 
 //2.更多媒资
 Route::get('/group/{group_id}', function (Request $request, $group_id = 0) {
-    return new \App\Http\Resources\Group(\App\Models\Group::find($group_id));
+    return new \App\Http\Resources\Group(\App\Models\Group::query()->where(['status' => 1])->find($group_id));
 });
 
 //3.媒资分组列表
 Route::get('/nav/{nav}/{size?}', function ($nav = 0, $size = 3) {
-    return \App\Http\Resources\Group::collection(\App\Models\Group::getList(['parent_id' => $nav])->paginate($size));
+    return \App\Http\Resources\Group::collection(\App\Models\Group::getList(['parent_id' => $nav, 'status' => 1])->paginate($size));
 });
 
 //4.剧集详情
@@ -59,7 +59,7 @@ Route::get('/activity/{id}', function (Request $request, $id = 0) {
 
 //6.首屏数据
 Route::get('/home/{projectid}', function ($projectid) {
-    return \App\Http\Resources\Group::collection(\App\Models\Group::where(['parent_id' => $projectid])->get(['id', 'title', 'sort', 'parent_id', 'depth', 'activity_id']));
+    return \App\Http\Resources\Group::collection(\App\Models\Group::where(['parent_id' => $projectid, 'status' => 1])->get(['id', 'title', 'sort', 'parent_id', 'depth', 'activity_id']));
 });
 
 //7.推荐媒资

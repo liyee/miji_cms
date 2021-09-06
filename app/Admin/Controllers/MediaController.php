@@ -98,7 +98,7 @@ class MediaController extends AdminController
         $grid->column('tag', __('Tag'))->hide();
         $grid->column('keyword', __('Keyword'))->hide();
         $grid->column('area', __('Area'))->hide();
-        $grid->column('status', __('Status'))->using(Status::getList(1));;
+        $grid->column('status', __('Status'))->using(Status::getList(1));
         $grid->column('updated_at', __('Updated at'))->hide();
         $grid->column('created_at', __('Created at'))->hide();
 
@@ -163,11 +163,12 @@ class MediaController extends AdminController
         $form->tab('Basic info', function ($form) use ($class) {
             $form->text('title', __('Title'));
             $form->text('title_sub', __('Title sub'));
-            $form->radio('type', __('Type'))->options($this->type)->default(0)->when(1, function (Form $form){
+            $form->text('title_original', __('Title original'))->required();
+            $form->radio('type', __('Type'))->options($this->type)->when(1, function (Form $form) {
                 $form->select('parent_id', 'Serie')->options(Media::selectBytype(1));
-            })->when(2, function (Form $form){
+            })->when(2, function (Form $form) {
                 $form->select('parent_id', 'Activity')->options(Media::selectBytype(2));
-            });
+            })->default(0);
             $form->number('duration', __('Duration'))->default(60)->required();
             $form->number('serie_num', __('Serie num'))->default(1)->required();
             $form->switch('serie_end', __('Serie end'))->states([
@@ -182,7 +183,6 @@ class MediaController extends AdminController
             $form->select('class_sub', 'Class sub')->options(Category::selectOptions());
             $form->text('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
-            $form->text('title_original', __('Title original'))->required();
             $form->number('sort', __('Sort'))->default(0);
             $form->url('url', __('Url'))->required();
             $form->text('tag', __('Tag'));
@@ -216,6 +216,7 @@ class MediaController extends AdminController
         $form->saving(function (Form $form) {
             $class_sub = $form->class_sub;
             $form->class = Category::getTop(Category::getList(), $class_sub);
+            if (!$form->parent_id) $form->parent_id = 0;
         });
 
         return $form;

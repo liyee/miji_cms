@@ -182,13 +182,15 @@ class Media extends Model
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      * 随机获取推荐数据
      */
-    public static function getRecommend($id, $sub = [], $iosCode = 'US', $customer_id, $memory = 1)
+    public static function getRecommend($id, $sub = [], $iosCode = 'US', $customer_id, $memory = 1, $status = 2)
     {
         $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
-            ->where('A.customer_id', $customer_id)
+            ->where([
+                'A.customer_id' => $customer_id,
+                'M.status' => $status
+            ])
             ->where('M.memory', '<=', $memory)
-            ->where('M.status', 4)
             ->whereIn('class_sub', $sub)
             ->where('M.id', '!=', $id)
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
@@ -227,7 +229,8 @@ class Media extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      * 媒资模式
      */
-    public function modes(){
+    public function modes()
+    {
         return $this->hasMany(MediaAttr::class);
     }
 
@@ -244,7 +247,8 @@ class Media extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      * 对应多个分组
      */
-    public function groups(){
+    public function groups()
+    {
         return $this->belongsToMany(Group::class, 'm_media_group');
     }
 }

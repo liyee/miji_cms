@@ -185,7 +185,7 @@ class MediaController extends AdminController
             $form->text('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
             $form->number('sort', __('Sort'))->default(0);
-            $form->url('url', __('Url'))->required();
+            $form->text('url', __('Url'))->required();
             $form->text('tag', __('Tag'));
             $form->text('keyword', __('Keyword'));
             $form->listbox('area', __('Area'))->options(Region::select())->required();
@@ -194,7 +194,7 @@ class MediaController extends AdminController
         })->tab('Images', function ($form) {
             $form->hasMany('imgs', function ($form) {
                 $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2);
-                $form->select('type', 'Type')->options([1 => 'General', 2 => 'Activity'])->setWidth(2);
+                $form->select('act', 'Type')->options([1 => 'General', 2 => 'Activity'])->setWidth(2);
                 $form->image('f_16x9', 'Foreground(16x9)')->removable()->setWidth(3);
                 $form->image('b_16x9', 'Background(16x9)')->removable()->setWidth(3);
                 $form->image('f_7x10', 'Foreground(7x10)')->removable()->setWidth(3);
@@ -211,8 +211,6 @@ class MediaController extends AdminController
                 $form->switch('status', 'Status');
             });
         });
-
-        $form->hasMany();
 
         $form->saving(function (Form $form) {
             $class_sub = $form->class_sub;

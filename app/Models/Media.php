@@ -207,7 +207,7 @@ class Media extends Model
     {
         $key = config('cacheKey.media_select') . $type;
 
-        $value = Cache::remember($key, 30, function () use ($type) {
+        $value = Cache::remember($key, 0, function () use ($type) {
             $data = self::where(['type' => $type, 'parent_id' => 0])->get(['id', 'title'])->toArray();
             $list = [];
             array_walk($data, function ($val) use (&$list){
@@ -251,7 +251,7 @@ class Media extends Model
      */
     public function modes()
     {
-        return $this->hasMany(MediaAttr::class);
+        return $this->hasMany(MediaAttr::class, 'media_id');
     }
 
     /**

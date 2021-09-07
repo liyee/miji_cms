@@ -159,6 +159,9 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
 
         $form = new Form(new Media());
+        $form->tools(function (Form\Tools $tools){
+            $tools->disableDelete();
+        });
 
         $form->tab('Basic info', function ($form) use ($class) {
             $form->text('title', __('Title'));
@@ -182,7 +185,7 @@ class MediaController extends AdminController
             $form->hidden('class');
             $form->hidden('uuid');
             $form->select('class_sub', 'Class sub')->options(Category::selectOptions());
-            $form->text('intro', __('Intro'));
+            $form->textarea('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
             $form->number('sort', __('Sort'))->default(0);
             $form->text('url', __('Url'))->required();

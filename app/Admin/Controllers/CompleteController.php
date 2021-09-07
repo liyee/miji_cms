@@ -82,8 +82,6 @@ class CompleteController extends AdminController
         $grid->column('intro', __('Intro'))->hide();
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
-        $grid->column('tag', __('Tag'))->hide();
-        $grid->column('keyword', __('Keyword'))->hide();
         $grid->column('area', __('Area'))->hide();
         $grid->column('status', __('Status'))->using(Status::getList(2));
         $grid->column('updated_at', __('Updated at'))->hide();
@@ -120,9 +118,6 @@ class CompleteController extends AdminController
         $show->field('url_jump', __('Url jump'));
         $show->field('img_original', __('Img original'));
         $show->field('title_original', __('Title original'));
-        $show->field('uuid', __('Uuid'));
-        $show->field('tag', __('Tag'));
-        $show->field('keyword', __('Keyword'));
         $show->field('area', __('Area'));
         $show->field('region', __('Region'));
         $show->field('is_adv', __('Is adv'));
@@ -171,7 +166,7 @@ class CompleteController extends AdminController
         $form->text('title_original', __('Title original'));
         $form->text('tag', __('Tag'));
         $form->text('keyword', __('Keyword'));
-        $form->listbox('region', __('Region'))->options(function ($id) {
+        $form->listbox('region', __('Region'))->options(function () {
             return Region::selectByCode($this->area);
         });
         $form->radio('is_adv', __('Is adv'))->options([0 => 'OFF', 1 => 'ON'])->when(1, function (Form $form) {
@@ -181,7 +176,6 @@ class CompleteController extends AdminController
         $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->readOnly();
         $form->number('parent_id', __('Parent id'));
         $form->number('sort', __('Sort'));
-        $form->text('expand', __('Expand'));
         $form->text('remark', __('Remark'));
         $form->radio('status', __('Status'))->options(Status::getList(2));
 

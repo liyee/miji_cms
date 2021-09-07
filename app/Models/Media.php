@@ -67,6 +67,23 @@ class Media extends Model
     }
 
     /**
+     * @param $value
+     * @return false|string[]
+     * region-Region
+     */
+    public function getRegionAttribute($value)
+    {
+        $res = explode(',', $value);
+        return $res;
+    }
+
+    public function setRegionAttribute($value)
+    {
+        $val = implode(',', array_filter($value));
+        $this->attributes['region'] = $val;
+    }
+
+    /**
      * @param $id
      * @param array $fields
      * @param array $where
@@ -123,7 +140,7 @@ class Media extends Model
                 'A.customer_id' => $customer_id
             ])
             ->where('M.memory', '<=', $memory)
-            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
+            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
             ->get(['M.*', 'act']);
 
         return $data;
@@ -167,7 +184,7 @@ class Media extends Model
                 'M.status' => $status
             ])
             ->where('M.memory', '<=', $memory)
-            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
+            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
             ->orderBy('M.sort')
             ->orderBy('M.id')
             ->limit($limit)
@@ -195,7 +212,7 @@ class Media extends Model
             ->where('M.memory', '<=', $memory)
             ->whereIn('class_sub', $sub)
             ->where('M.id', '!=', $id)
-            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`area`)')
+            ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
             ->orderByRaw('rand()')
             ->limit(6)
             ->get();
@@ -210,7 +227,7 @@ class Media extends Model
         $value = Cache::remember($key, 0, function () use ($type) {
             $data = self::where(['type' => $type, 'parent_id' => 0])->get(['id', 'title'])->toArray();
             $list = [];
-            array_walk($data, function ($val) use (&$list){
+            array_walk($data, function ($val) use (&$list) {
                 $list[$val['id']] = $val['title'];
 
             });

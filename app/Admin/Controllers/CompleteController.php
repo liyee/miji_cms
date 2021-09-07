@@ -24,7 +24,7 @@ class CompleteController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Media';
+    protected $title = 'Test Complete';
 
     /**
      * Make a grid builder.
@@ -68,7 +68,7 @@ class CompleteController extends AdminController
         })->hide();
         $grid->column('updatetime', __('Updatetime'));
         $grid->column('publishtime', __('Publishtime'))->hide();
-        $grid->column('cp', 'Cp')->display(function ($cp) {
+        $grid->column('cp', 'CP')->display(function ($cp) {
             return $cp['name'];
         });
         $grid->column('score', __('Score'))->hide();
@@ -76,7 +76,7 @@ class CompleteController extends AdminController
         $grid->column('languages', __('Language'))->display(function ($languages) {
             return $languages['name'];
         });
-        $grid->column('categorie', __('Class sub'))->display(function ($categorie) {
+        $grid->column('categorie', __('Class'))->display(function ($categorie) {
             return $categorie['title'];
         });
         $grid->column('intro', __('Intro'))->hide();
@@ -114,13 +114,8 @@ class CompleteController extends AdminController
         $show->field('score', __('Score'));
         $show->field('click_num', __('Click num'));
         $show->field('language', __('Language'));
-        $show->field('class', __('Class'));
         $show->field('class_sub', __('Class sub'));
         $show->field('intro', __('Intro'));
-        $show->field('pay_mark', __('Pay mark'));
-        $show->field('con_mark', __('Con mark'));
-        $show->field('cla_mark', __('Cla mark'));
-        $show->field('ope_mark', __('Ope mark'));
         $show->field('url', __('Url'));
         $show->field('url_jump', __('Url jump'));
         $show->field('img_original', __('Img original'));
@@ -134,11 +129,8 @@ class CompleteController extends AdminController
         $show->field('is_direction', __('Is direction'));
         $show->field('adv_freq', __('Adv freq'));
         $show->field('memory', __('Memory'));
-        $show->field('type', __('Type'));
         $show->field('parent_id', __('Parent id'));
         $show->field('sort', __('Sort'));
-        $show->field('expand', __('Expand'));
-        $show->field('remark', __('Remark'));
         $show->field('status', __('Status'));
         $show->field('updated_at', __('Updated at'));
         $show->field('created_at', __('Created at'));
@@ -182,11 +174,11 @@ class CompleteController extends AdminController
         $form->listbox('region', __('Region'))->options(function ($id) {
             return Region::selectByCode($this->area);
         });
-        $form->switch('is_adv', __('Is adv'))->default(1);
+        $form->radio('is_adv', __('Is adv'))->options([0 => 'OFF', 1 => 'ON'])->when(1, function (Form $form) {
+            $form->number('adv_freq', __('Adv freq'))->default(5);
+        })->default(1);
         $form->switch('is_direction', __('Is direction'));
-        $form->number('adv_freq', __('Adv freq'));
         $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->readOnly();
-        $form->switch('type', __('Type'));
         $form->number('parent_id', __('Parent id'));
         $form->number('sort', __('Sort'));
         $form->text('expand', __('Expand'));

@@ -24,7 +24,7 @@ class MediaController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Media';
+    protected $title = 'Waiting For Test';
     protected $type = [0 => 'Default', 1 => 'Serie', 2 => 'Activity'];
 
     /**
@@ -80,7 +80,7 @@ class MediaController extends AdminController
         });
         $grid->column('updatetime', __('Updatetime'));
         $grid->column('publishtime', __('Publishtime'))->hide();
-        $grid->column('cp', 'Cp')->display(function ($cp) {
+        $grid->column('cp', 'CP')->display(function ($cp) {
             return $cp['name'];
         });
         $grid->column('score', __('Score'));
@@ -88,11 +88,11 @@ class MediaController extends AdminController
         $grid->column('languages', __('Language'))->display(function ($languages) {
             return $languages['name'];
         });
-        $grid->column('categorie', __('Class sub'))->display(function ($categorie) {
+        $grid->column('categorie', __('Class'))->display(function ($categorie) {
             return $categorie['title'];
         });
         $grid->column('intro', __('Intro'))->hide();
-        $grid->column('img_original', __('Img original'));
+        $grid->column('img_original', __('Img original'))->image();
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
         $grid->column('tag', __('Tag'))->hide();

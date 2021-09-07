@@ -66,6 +66,13 @@ class CompleteController extends AdminController
         $grid->column('serie_end', __('Serie end'))->display(function ($serie_end) {
             return $serie_end ? 'Yes' : 'No';
         })->hide();
+        $grid->column('groups', __('Group'))->display(function ($val) {
+            if (!$val) return '';
+            $valNew = array_map(function ($val) {
+                return '[' . $val['id'] . '] ' . $val['title'];
+            }, $val);
+            return implode('<br/>', $valNew);
+        });
         $grid->column('updatetime', __('Updatetime'));
         $grid->column('publishtime', __('Publishtime'))->hide();
         $grid->column('cp', 'CP')->display(function ($cp) {
@@ -82,7 +89,9 @@ class CompleteController extends AdminController
         $grid->column('intro', __('Intro'))->hide();
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
-        $grid->column('area', __('Area'))->hide();
+        $grid->column('region', __('Region'))->hide()->display(function ($val) {
+            return implode(',', $val);
+        });
         $grid->column('status', __('Status'))->using(Status::getList(2));
         $grid->column('updated_at', __('Updated at'))->hide();
         $grid->column('created_at', __('Created at'))->hide();

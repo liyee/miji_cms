@@ -10,7 +10,7 @@ use Encore\Admin\Show;
 
 class PublishController extends AdminController
 {
-    /**
+    /**再次
      * Title for current resource.
      *
      * @var string
@@ -42,20 +42,11 @@ class PublishController extends AdminController
         $grid->column('click_num', __('Click num'));
         $grid->column('language', __('Language'));
         $grid->column('class', __('Class'));
-        $grid->column('class_sub', __('Class sub'));
         $grid->column('intro', __('Intro'));
-        $grid->column('pay_mark', __('Pay mark'));
-        $grid->column('con_mark', __('Con mark'));
-        $grid->column('cla_mark', __('Cla mark'));
-        $grid->column('ope_mark', __('Ope mark'));
         $grid->column('url', __('Url'));
         $grid->column('url_jump', __('Url jump'));
         $grid->column('img_original', __('Img original'));
         $grid->column('title_original', __('Title original'));
-        $grid->column('uuid', __('Uuid'));
-        $grid->column('tag', __('Tag'));
-        $grid->column('keyword', __('Keyword'));
-        $grid->column('area', __('Area'));
         $grid->column('region', __('Region'));
         $grid->column('is_adv', __('Is adv'));
         $grid->column('is_direction', __('Is direction'));
@@ -64,7 +55,6 @@ class PublishController extends AdminController
         $grid->column('type', __('Type'));
         $grid->column('parent_id', __('Parent id'));
         $grid->column('sort', __('Sort'));
-        $grid->column('expand', __('Expand'));
         $grid->column('remark', __('Remark'));
         $grid->column('status', __('Status'));
         $grid->column('updated_at', __('Updated at'));

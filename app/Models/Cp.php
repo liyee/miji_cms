@@ -18,7 +18,7 @@ class Cp extends Model
 
     public static function select(){
         $key = config('cacheKey.cp_select');
-        $value = Cache::remember($key, 3600, function () {
+        $value = Cache::remember($key, 0, function () {
             $select = [];
             $data = self::where('status', 1)->get(['id', 'name'])->toArray();
             array_walk($data, function ($val) use (&$select){

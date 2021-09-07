@@ -17,7 +17,7 @@ class CpController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Cp';
+    protected $title = 'CP';
 
     /**
      * Make a grid builder.

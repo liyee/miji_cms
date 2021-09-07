@@ -72,9 +72,11 @@ class MediaController extends AdminController
             }
             return new Table();
         });
+
         $grid->column('title_sub', __('Title sub'))->hide();
-        $grid->column('duration', __('Duration'));
+        $grid->column('img_original', __('Img original'))->image();
         $grid->column('serie_num', __('Serie num'));
+        $grid->column('duration', __('Duration'));
         $grid->column('serie_end', __('Serie end'))->display(function ($serie_end) {
             return $serie_end ? 'Yes' : 'No';
         });
@@ -83,7 +85,7 @@ class MediaController extends AdminController
         $grid->column('cp', 'CP')->display(function ($cp) {
             return $cp['name'];
         });
-        $grid->column('score', __('Score'));
+        $grid->column('score', __('Score'))->hide();
         $grid->column('click_num', __('Click num'))->hide();
         $grid->column('languages', __('Language'))->display(function ($languages) {
             return $languages['name'];
@@ -91,13 +93,17 @@ class MediaController extends AdminController
         $grid->column('categorie', __('Class'))->display(function ($categorie) {
             return $categorie['title'];
         });
-        $grid->column('intro', __('Intro'))->hide();
-        $grid->column('img_original', __('Img original'))->image();
+        $grid->column('intro', __('Intro'))->hide();//->popover('bottom');
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
         $grid->column('tag', __('Tag'))->hide();
         $grid->column('keyword', __('Keyword'))->hide();
-        $grid->column('area', __('Area'))->hide();
+        $grid->column('area', __('Area'))->hide()->display(function ($val){
+            $valNew = implode(',', $val);
+            $valArr = str_split($valNew, '63');
+            return implode('<br/>', $valArr);
+
+        });
         $grid->column('status', __('Status'))->using(Status::getList(1));
         $grid->column('updated_at', __('Updated at'))->hide();
         $grid->column('created_at', __('Created at'))->hide();

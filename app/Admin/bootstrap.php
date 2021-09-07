@@ -17,9 +17,13 @@
  * Admin::js('/packages/prettydocs/js/main.js');
  *
  */
+use Encore\Admin\Grid\Column;
+use App\Admin\Extensions\Popover;
 
 Encore\Admin\Form::forget(['map', 'editor']);
-\Encore\Admin\Grid\Column::extend('sub', function ($model, $color){
+Column::extend('sub', function ($model, $color){
     $aa = $model;
     return "<span style='color: $color'></span>";
 });
+Column::extend('popover', Popover::class);
+

@@ -6,7 +6,7 @@ namespace App\Libraries;
 
 class Status
 {
-    static $list = [0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE', 4 => 'PUBLISH', 5 => 'UNPUBLISH'];
+    static $list = [0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE', 4 => 'REQUIRE TEST AGIN', 5 => 'UNPUBLISH'];
 
     /**
      * 更具当前状态获取状态列表
@@ -18,10 +18,10 @@ class Status
                 return [0 => 'DELETE', 1 => 'UNTESTED'];
                 break;
             case 1:
-                return [0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE'];
+                return [0 => 'DELETE', 1 => 'UNTESTED', 2 => 'TEST COMPLETE', 3 => 'TEST FAILURE', 4 => 'REQUIRE TEST AGIN'];
                 break;
             case 2:
-                return [2 => 'TEST COMPLETE', 4 => 'PUBLISH', 5 => 'UNPUBLISH'];
+                return [2 => 'TEST COMPLETE', 4 => 'REQUIRE TEST AGIN'];
                 break;
             case 3:
                 return [2 => 'TEST COMPLETE', 3 => 'TEST FAILURE'];

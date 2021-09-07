@@ -34,7 +34,7 @@ class CompleteController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Media());
-        $grid->model()->whereIn('status', [2]);
+        $grid->model()->whereIn('status', [2])->orderBy('updated_at', 'desc');
         $grid->disableCreateButton();
         $grid->actions(function ($actions) {
             $actions->disableDelete(); // 去掉删除

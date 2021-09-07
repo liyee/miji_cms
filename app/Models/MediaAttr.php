@@ -9,7 +9,7 @@ class MediaAttr extends Model
 {
     use HasFactory;
     protected $table = 'm_media_attr';
-    protected $fillable = ['customer_id'];
+    protected $fillable = ['customer_id', 'mode', 'status'];
 
     public function media(){
         return $this->belongsTo(Media::class, 'media_id');

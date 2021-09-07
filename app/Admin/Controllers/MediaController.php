@@ -39,7 +39,7 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
         $childIds = Category::getchild($class);
 
-        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0)->whereIn('status', [1, 3])->orderBy('updated_at', 'desc');
+        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0)->whereIn('status', [1, 3, 4])->orderBy('updated_at', 'desc');
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
         });
@@ -193,8 +193,8 @@ class MediaController extends AdminController
             $form->radio('status', __('Status'))->options(Status::getList(1))->default(1);
         })->tab('Images', function ($form) {
             $form->hasMany('imgs', function ($form) {
-                $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2);
-                $form->select('act', 'Type')->options([1 => 'General', 2 => 'Activity'])->setWidth(2);
+                $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2)->required();
+                $form->select('act', 'Type')->options([1 => 'General', 2 => 'Activity'])->setWidth(2)->required();
                 $form->image('f_16x9', 'Foreground(16x9)')->removable()->setWidth(3);
                 $form->image('b_16x9', 'Background(16x9)')->removable()->setWidth(3);
                 $form->image('f_7x10', 'Foreground(7x10)')->removable()->setWidth(3);
@@ -206,8 +206,8 @@ class MediaController extends AdminController
             });
         })->tab('Mode', function ($form) {
             $form->hasMany('modes', function ($form) {
-                $form->select('customer_id', 'Customer')->options(array_flip(Customer::getCustomerId()));
-                $form->select('mode', 'Mode')->options(Config::select(7));
+                $form->select('customer_id', 'Customer')->options(array_flip(Customer::getCustomerId()))->required();
+                $form->select('mode', 'Mode')->options(Config::select(7))->required()->default(5);
                 $form->switch('status', 'Status');
             });
         });

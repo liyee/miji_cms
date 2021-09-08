@@ -2,11 +2,13 @@
 
 namespace App\Admin\Controllers;
 
+use App\Libraries\Status;
 use App\Models\Media;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
 
 class PublishController extends AdminController
 {
@@ -27,38 +29,61 @@ class PublishController extends AdminController
         $id = request('group_id', 0);
         $grid = new Grid(new Media());
         $grid->disableCreateButton();
-        $grid->model()->from('m_media as M')->rightJoin('m_media_group as G', 'M.id', '=', 'G.media_id')->where(['G.status' => 1, 'G.group_id' => $id]);
+        $grid->batchActions(function ($batch) {
+            $batch->disableDelete();
+        });
+
+        $grid->model()->from('m_media as M')->rightJoin('m_media_group as G', 'M.id', '=', 'G.media_id')->where(['G.status' => 1, 'G.group_id' => $id])->whereIn('M.status', [2])->select(['M.*','G.status']);
 
         $grid->column('id', __('Id'));
-        $grid->column('title', __('Title'));
-        $grid->column('title_sub', __('Title sub'));
-        $grid->column('duration', __('Duration'));
+        $grid->column('title', __('Title'))->display(function ($title) {
+            return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;
+        })->expand(function () {
+            if ($this->type > 0) {
+                $child = Media::query()->where(['parent_id' => $this->id])->get(['id', 'title', 'title_sub'])->toArray();
+                $childNew = array_map(function ($value) {
+                    $id = $value['id'];
+                    $value['action'] = '<a href="medias/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
+                    return $value;
+                }, $child);
+
+                return new Table(['Id', 'Title', 'title_sub', 'Action'], $childNew);
+            }
+            return new Table();
+        });
+
+        $grid->column('title_sub', __('Title sub'))->hide();
+        $grid->column('img_original', __('Img original'))->image();
         $grid->column('serie_num', __('Serie num'));
-        $grid->column('serie_end', __('Serie end'));
+        $grid->column('duration', __('Duration'));
+        $grid->column('serie_end', __('Serie end'))->display(function ($serie_end) {
+            return $serie_end ? 'Yes' : 'No';
+        });
         $grid->column('updatetime', __('Updatetime'));
-        $grid->column('publishtime', __('Publishtime'));
-        $grid->column('cp_id', __('Cp id'));
-        $grid->column('score', __('Score'));
-        $grid->column('click_num', __('Click num'));
-        $grid->column('language', __('Language'));
-        $grid->column('class', __('Class'));
-        $grid->column('intro', __('Intro'));
-        $grid->column('url', __('Url'));
-        $grid->column('url_jump', __('Url jump'));
-        $grid->column('img_original', __('Img original'));
-        $grid->column('title_original', __('Title original'));
-        $grid->column('region', __('Region'));
-        $grid->column('is_adv', __('Is adv'));
-        $grid->column('is_direction', __('Is direction'));
-        $grid->column('adv_freq', __('Adv freq'));
-        $grid->column('memory', __('Memory'));
-        $grid->column('type', __('Type'));
-        $grid->column('parent_id', __('Parent id'));
-        $grid->column('sort', __('Sort'));
-        $grid->column('remark', __('Remark'));
-        $grid->column('status', __('Status'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('created_at', __('Created at'));
+        $grid->column('publishtime', __('Publishtime'))->hide();
+        $grid->column('cp', 'CP')->display(function ($cp) {
+            return $cp['name'];
+        });
+        $grid->column('score', __('Score'))->hide();
+        $grid->column('click_num', __('Click num'))->hide();
+        $grid->column('languages', __('Language'))->display(function ($languages) {
+            return $languages['name'];
+        });
+        $grid->column('categorie', __('Class'))->display(function ($categorie) {
+            return $categorie['title'];
+        });
+        $grid->column('intro', __('Intro'))->hide();//->popover('bottom');
+        $grid->column('title_original', __('Title original'))->hide();
+        $grid->column('url', __('Url'))->hide();
+        $grid->column('keyword', __('Keyword'))->hide();
+        $grid->column('area', __('Area'))->hide()->display(function ($val) {
+            $valNew = implode(',', $val);
+            $valArr = str_split($valNew, '63');
+            return implode('<br/>', $valArr);
+
+        });
+
+        $grid->column('updated_at', __('Updated at'))->hide();
 
         return $grid;
     }
@@ -72,6 +97,9 @@ class PublishController extends AdminController
     protected function detail($id)
     {
         $show = new Show(Media::findOrFail($id));
+        $show->panel()->tools(function ($tools) {
+            $tools->disableDelete();
+        });
 
         $show->field('id', __('Id'));
         $show->field('title', __('Title'));
@@ -134,7 +162,7 @@ class PublishController extends AdminController
         $form->date('updatetime', __('Updatetime'))->default(date('Y-m-d'));
         $form->date('publishtime', __('Publishtime'))->default(date('Y-m-d'));
         $form->number('cp_id', __('Cp id'));
-        $form->number('score', __('Score'));
+        $form->decimal('score', __('Score'));
         $form->number('click_num', __('Click num'));
         $form->text('language', __('Language'));
         $form->number('class', __('Class'));

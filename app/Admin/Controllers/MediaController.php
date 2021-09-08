@@ -85,7 +85,6 @@ class MediaController extends AdminController
         $grid->column('cp', 'CP')->display(function ($cp) {
             return $cp['name'];
         });
-        $grid->column('score', __('Score'))->hide();
         $grid->column('click_num', __('Click num'))->hide();
         $grid->column('languages', __('Language'))->display(function ($languages) {
             return $languages['name'];
@@ -98,7 +97,7 @@ class MediaController extends AdminController
         $grid->column('url', __('Url'))->hide();
         $grid->column('tag', __('Tag'))->hide();
         $grid->column('keyword', __('Keyword'))->hide();
-        $grid->column('area', __('Area'))->hide()->display(function ($val){
+        $grid->column('area', __('Area'))->hide()->display(function ($val) {
             $valNew = implode(',', $val);
             $valArr = str_split($valNew, '63');
             return implode('<br/>', $valArr);
@@ -120,6 +119,9 @@ class MediaController extends AdminController
     protected function detail($id)
     {
         $show = new Show(Media::findOrFail($id));
+        $show->panel()->tools(function ($tools) {
+            $tools->disableDelete();
+        });
 
         $show->field('id', __('Id'));
         $show->field('title', __('Title'));
@@ -136,19 +138,15 @@ class MediaController extends AdminController
         $show->field('class', __('Class'));
         $show->field('class_sub', __('Class sub'));
         $show->field('intro', __('Intro'));
-//        $show->field('pay_mark', __('Pay Mark'));
-//        $show->field('feature_content_mark', __('Feature Content Mark'));
-//        $show->field('clarity_mark', __('Clarity Mark'));
-//        $show->field('operation_mark', __('Operation Mark'));
-        $show->field('img_original', __('Img original'));
+        $show->field('img_original', __('Img original'))->image();
         $show->field('title_original', __('Title original'));
-        $show->field('uuid', __('Uuid'));
         $show->field('sort', __('Sort'));
         $show->field('url', __('Url'));
-        $show->field('tag', __('Tag'));
-        $show->field('keyword', __('Keyword'));
-        $show->field('area', __('Area'));
-        $show->field('status', __('Status'));
+        $show->field('area', __('Area'))->as(function ($val){
+            if (!$val) return '';
+            return implode(',', $val);
+        });
+        $show->field('status', __('Status'))->using([0 => 'OFF', 1 => 'ON']);
         $show->field('updated_at', __('Updated at'));
         $show->field('created_at', __('Created at'));
 
@@ -165,7 +163,7 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
 
         $form = new Form(new Media());
-        $form->tools(function (Form\Tools $tools){
+        $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
         });
 
@@ -198,7 +196,7 @@ class MediaController extends AdminController
             $form->text('tag', __('Tag'));
             $form->text('keyword', __('Keyword'));
             $form->listbox('area', __('Area'))->options(Region::select())->required();
-            $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High']);
+            $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->required();
             $form->radio('status', __('Status'))->options(Status::getList(1))->default(1);
         })->tab('Images', function ($form) {
             $form->hasMany('imgs', function ($form) {

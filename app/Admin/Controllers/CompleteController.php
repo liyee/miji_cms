@@ -108,6 +108,9 @@ class CompleteController extends AdminController
     protected function detail($id)
     {
         $show = new Show(Media::findOrFail($id));
+        $show->panel()->tools(function ($tools) {
+            $tools->disableDelete();
+        });
 
         $show->field('id', __('Id'));
         $show->field('title', __('Title'));
@@ -163,7 +166,7 @@ class CompleteController extends AdminController
         $form->date('updatetime', __('Updatetime'))->default(date('Y-m-d'));
         $form->date('publishtime', __('Publishtime'))->default(date('Y-m-d'));
         $form->select('cp_id', __('Cp'))->options(Cp::select())->readOnly();
-        $form->number('score', __('Score'));
+        $form->decimal('score', __('Score'));
         $form->number('click_num', __('Click num'));
         $form->select('language', __('Language'))->options(Config::select(1))->required();
         $form->hidden('class');

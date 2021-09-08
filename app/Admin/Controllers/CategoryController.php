@@ -28,7 +28,7 @@ class CategoryController extends AdminController
             return "<a href='medias?class=" . $branch['id'] . "' class='dd-nodrag'>{$branch['title']}</a>";
         });
 
-        return $content->header('媒资类别')->body($tree);
+        return $content->header('Category')->body($tree);
     }
 
     /**

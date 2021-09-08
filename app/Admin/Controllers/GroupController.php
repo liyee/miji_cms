@@ -21,7 +21,7 @@ class GroupController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Group';
+    protected $title = 'Project';
 
     public function index(Content $content)
     {
@@ -43,7 +43,7 @@ class GroupController extends AdminController
             }
 
         });
-        return $content->header('分组管理')->body($tree);
+        return $content->header('Project')->body($tree);
     }
 
     /**

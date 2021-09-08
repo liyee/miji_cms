@@ -24,7 +24,7 @@ class Status
                 return [2 => 'TEST COMPLETE', 4 => 'REQUIRE TEST AGIN'];
                 break;
             case 3:
-                return [2 => 'TEST COMPLETE', 3 => 'TEST FAILURE'];
+                return [0 => 'OFFLINE', 1 => 'ONLINE'];
                 break;
             case 4:
                 return [4 => 'PUBLISH', 5 => 'UNPUBLISH'];

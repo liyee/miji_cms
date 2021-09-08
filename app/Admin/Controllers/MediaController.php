@@ -203,7 +203,7 @@ class MediaController extends AdminController
         })->tab('Images', function ($form) {
             $form->hasMany('imgs', function ($form) {
                 $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2)->required();
-                $form->select('act', 'Type')->options([1 => 'General', 2 => 'Activity'])->setWidth(2)->required();
+                $form->select('act', 'Type')->options([0 => 'General', 1 => 'Activity'])->setWidth(2)->required();
                 $form->image('f_16x9', 'Foreground(16x9)')->removable()->setWidth(3);
                 $form->image('b_16x9', 'Background(16x9)')->removable()->setWidth(3);
                 $form->image('f_7x10', 'Foreground(7x10)')->removable()->setWidth(3);

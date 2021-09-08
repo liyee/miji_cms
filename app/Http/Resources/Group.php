@@ -43,7 +43,7 @@ class Group extends JsonResource
         } else {
             $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
             $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-            $data['medias'] = Media::collection(\App\Models\Media::getListByGroup($id, $iosCode, $media_num, $customer_id, $memory, $act));
+            $data['medias'] = MediaSingle::collection(\App\Models\Media::getListByGroup($id, $iosCode, $media_num, $customer_id, $memory, $act));
         }
 
         return $data;

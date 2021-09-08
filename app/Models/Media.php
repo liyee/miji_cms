@@ -174,7 +174,7 @@ class Media extends Model
     public static function getListByGroup($groupid = 0, $iosCode = 'US', $limit = 999, $customer_id = 0, $memory = 1, $act = 0, $status = 2)
     {
         $additional = "$act as act";
-        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url'])->selectRaw($additional)
+        $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url', 'M.url_jump'])->selectRaw($additional)
             ->rightJoin('m_media_group as G', 'G.media_id', '=', 'M.id')
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([

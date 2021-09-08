@@ -7,12 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class Media extends JsonResource
 {
-    protected $use = 0;
+    private $fomType;
 
-    public function __construct($resource, $use = 0)
+    public function __construct($resource, $fomType = 0)
     {
-        $this->use = $use;
         parent::__construct($resource);
+        $this->resource = $resource;
+        $this->fomType = $fomType;
     }
 
     /**
@@ -34,7 +35,7 @@ class Media extends JsonResource
         $act = $this->act ?? $act;
 
         $addition = [];
-        switch ($this->use) {
+        switch ($this->fomType) {
             case 1://媒资详情
                 $addition = [
                     'updatetime' => $this->updatetime,

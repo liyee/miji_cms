@@ -95,6 +95,7 @@ class MediaController extends AdminController
         $grid->column('intro', __('Intro'))->hide();//->popover('bottom');
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
+        $grid->column('url_jump', __('Url Jump'))->hide();
         $grid->column('tag', __('Tag'))->hide();
         $grid->column('keyword', __('Keyword'))->hide();
         $grid->column('area', __('Area'))->hide()->display(function ($val) {
@@ -193,6 +194,7 @@ class MediaController extends AdminController
             $form->image('img_original', __('Img original'))->removable();
             $form->number('sort', __('Sort'))->default(0);
             $form->text('url', __('Url'))->required();
+            $form->text('url_jump', __('Url Jump'));
             $form->text('tag', __('Tag'));
             $form->text('keyword', __('Keyword'));
             $form->listbox('area', __('Area'))->options(Region::select())->required();

@@ -91,12 +91,11 @@ class Media extends Model
      */
     public static function getOne($id, $type = 0, $status = 2, $parent_id = 0)
     {
-        $where = [
-            'status' => $status,
-            'parent_id' => $parent_id,
-            'type' => $type
-        ];
-        return self::query()->where($where)->find($id);
+        $data = self::query()->where([
+            'status' => $status
+        ])->find($id);
+
+        return $data;
     }
 
     /**

@@ -68,6 +68,7 @@ Route::get('/recommend/{id}', function (Request $request, $id) {
     $pt = $request->input('pt', 0);
     $memory = $request->input('memory', 1);
     $one = \App\Models\Media::getOne($id);
+    if (!$one) return ['data' => []];
     $sub = $one->class_sub;
     $childIds = \App\Models\Category::getDepth($sub);
     $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());

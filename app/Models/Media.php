@@ -112,9 +112,9 @@ class Media extends Model
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
                 'M.id' => $id,
-                'M.type' => $type,
+//                'M.type' => $type,
                 'M.status' => $status,
-                'M.parent_id' => $parent_id,
+//                'M.parent_id' => $parent_id,
                 'A.customer_id' => $customer_id,
             ])
             ->where('M.memory', '<=', $memory)
@@ -151,12 +151,13 @@ class Media extends Model
      * @return mixed
      * 获取连续剧具体媒资id
      */
-    public static function getListBySerie($parent_id = 0, $customer_id = 0, $memory = 1)
+    public static function getListBySerie($parent_id = 0, $customer_id = 0, $memory = 1, $status = 2)
     {
         $data = self::query()->from('m_media as M')
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
                 'M.parent_id' => $parent_id,
+                'M.status' => $status,
                 'A.customer_id' => $customer_id
             ])
             ->where('M.memory', '<=', $memory)

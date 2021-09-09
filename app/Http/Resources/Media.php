@@ -51,6 +51,7 @@ class Media extends JsonResource
             case 2://剧集详情
                 $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
                 $addition = [
+                    'intro' => $this->intro,
                     'serie_end' => $this->serie_end,
                     'series' => \App\Models\Media::getListBySerie($this->id, $customer_id, $memory)
                 ];

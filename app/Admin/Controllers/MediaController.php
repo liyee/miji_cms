@@ -43,6 +43,7 @@ class MediaController extends AdminController
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
         });
+        $grid->disableCreateButton();
 
         $grid->actions(function ($actions) {
             $actions->disableDelete(); // 去掉删除
@@ -133,7 +134,6 @@ class MediaController extends AdminController
         $show->field('updatetime', __('Updatetime'));
         $show->field('publishtime', __('Publishtime'));
         $show->field('cp_id', __('Cp id'));
-        $show->field('score', __('Score'));
         $show->field('click_num', __('Click num'));
         $show->field('language', __('Language'));
         $show->field('class', __('Class'));
@@ -141,7 +141,6 @@ class MediaController extends AdminController
         $show->field('intro', __('Intro'));
         $show->field('img_original', __('Img original'))->image();
         $show->field('title_original', __('Title original'));
-        $show->field('sort', __('Sort'));
         $show->field('url', __('Url'));
         $show->field('area', __('Area'))->as(function ($val){
             if (!$val) return '';
@@ -189,10 +188,10 @@ class MediaController extends AdminController
             $form->select('language', __('Language'))->options(Config::select(1))->required();
             $form->hidden('class');
             $form->hidden('uuid');
-            $form->select('class_sub', 'Class sub')->options(Category::selectOptions());
+            $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
             $form->textarea('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
-            $form->number('sort', __('Sort'))->default(0);
+            $form->image('img_original', __('Img original'))->removable();
             $form->text('url', __('Url'))->required();
             $form->text('url_jump', __('Url Jump'));
             $form->text('tag', __('Tag'));

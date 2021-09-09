@@ -37,9 +37,9 @@ class GroupController extends AdminController
             $id = $branch['id'];
             $num = MediaGroup::getNumById($branch['id']);
             if ($num > 0) {
-                return "<a href='publish?group_id={$id}' class='dd-nodrag'>{$branch['title']}</a> <span class='label label-info'>{$num}</span> <span class=\"label label-success\">{$activity_name}</span>";
+                return "<a href='publish2?group_id={$id}' class='dd-nodrag'>{$branch['title']}</a> <span class='label label-info'>{$num}</span> <span class=\"label label-success\">{$activity_name}</span>";
             } else {
-                return "<a href='publish?group_id={$id}' class='dd-nodrag'>{$branch['title']}</a> <span class='label label-success'>{$activity_name}</span>";
+                return "<a href='publish2?group_id={$id}' class='dd-nodrag'>{$branch['title']}</a> <span class='label label-success'>{$activity_name}</span>";
             }
 
         });

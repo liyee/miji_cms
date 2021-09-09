@@ -3,7 +3,12 @@
 namespace App\Admin\Controllers;
 
 use App\Libraries\Status;
+use App\Models\Category;
+use App\Models\Config;
+use App\Models\Cp;
+use App\Models\Group;
 use App\Models\Media;
+use App\Models\Region;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -32,6 +37,12 @@ class PublishController extends AdminController
         $grid->batchActions(function ($batch) {
             $batch->disableDelete();
         });
+
+//        $grid->tools(function ($tools) {
+//            $tools->batch(function ($batch) {
+//                $batch->disableDelete();
+//            });
+//        });
 
         $grid->model()->from('m_media as M')->rightJoin('m_media_group as G', 'M.id', '=', 'G.media_id')->where(['G.status' => 1, 'G.group_id' => $id])->whereIn('M.status', [2])->select(['M.*','G.status']);
 
@@ -135,7 +146,6 @@ class PublishController extends AdminController
         $show->field('memory', __('Memory'));
         $show->field('type', __('Type'));
         $show->field('parent_id', __('Parent id'));
-        $show->field('sort', __('Sort'));
         $show->field('expand', __('Expand'));
         $show->field('remark', __('Remark'));
         $show->field('status', __('Status'));
@@ -154,6 +164,7 @@ class PublishController extends AdminController
     {
         $form = new Form(new Media());
 
+
         $form->text('title', __('Title'));
         $form->text('title_sub', __('Title sub'));
         $form->number('duration', __('Duration'));
@@ -161,36 +172,31 @@ class PublishController extends AdminController
         $form->switch('serie_end', __('Serie end'))->default(1);
         $form->date('updatetime', __('Updatetime'))->default(date('Y-m-d'));
         $form->date('publishtime', __('Publishtime'))->default(date('Y-m-d'));
-        $form->number('cp_id', __('Cp id'));
-        $form->decimal('score', __('Score'));
+
+        $form->select('cp_id', __('Cp'))->options(Cp::select())->readOnly();
+        $form->decimal('score', __('Score'))->pattern('\d(\.\d)?|10(\.0)?')->help('The score cannot be greater than 10!');
         $form->number('click_num', __('Click num'));
-        $form->text('language', __('Language'));
-        $form->number('class', __('Class'));
-        $form->number('class_sub', __('Class sub'));
+        $form->select('language', __('Language'))->options(Config::select(1))->required();
+        $form->select('class', __('Class'))->options(Category::selectOptions())->readOnly();
+        $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->readOnly();
         $form->textarea('intro', __('Intro'));
-        $form->text('pay_mark', __('Pay mark'));
-        $form->text('con_mark', __('Con mark'));
-        $form->text('cla_mark', __('Cla mark'));
-        $form->text('ope_mark', __('Ope mark'));
+
         $form->url('url', __('Url'));
         $form->text('url_jump', __('Url jump'));
         $form->text('img_original', __('Img original'));
         $form->text('title_original', __('Title original'));
-        $form->text('uuid', __('Uuid'));
-        $form->text('tag', __('Tag'));
-        $form->text('keyword', __('Keyword'));
-        $form->text('area', __('Area'));
-        $form->text('region', __('Region'));
+        $form->listbox('region', __('Region'))->options(function () {
+            return Region::selectByCode($this->area);
+        });
+
         $form->switch('is_adv', __('Is adv'))->default(1);
         $form->switch('is_direction', __('Is direction'));
         $form->number('adv_freq', __('Adv freq'));
-        $form->number('memory', __('Memory'));
-        $form->switch('type', __('Type'));
-        $form->number('parent_id', __('Parent id'));
-        $form->number('sort', __('Sort'));
-        $form->text('expand', __('Expand'));
-        $form->text('remark', __('Remark'));
-        $form->switch('status', __('Status'))->default(1);
+        $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->readOnly();
+        $form->radio('status', __('Status'))->options(Status::getList(3));
+
+
+        $form->multipleSelect('groups', 'Group')->options(Group::all()->pluck('status', 'id'));
 
         return $form;
     }

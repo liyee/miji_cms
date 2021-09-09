@@ -22,14 +22,18 @@ class MediaSingle extends JsonResource
         $clarity = $request->input('clarity', '720p');
         $act = $request->input('act', 0);
         $act = $this->act ?? $act;
+        $pn = $request->input('pn', 0);
+        $pt = $request->input('pt', 0);
+        $memory = $request->input('memory', 1);
 
-        return [
+        $data = [
             'id' => $this->id,
             'title' => $this->title,
             'title_sub' => $this->title_sub,
             'is_direction' => $this->is_direction,
             'duration' => $this->duration,
             'type' => $this->type,
+            'updatetime' => $this->updatetime,
             'publishtime' => $this->publishtime,
             'cp' => $this->cp->name,
             'score' => $this->score,
@@ -39,6 +43,14 @@ class MediaSingle extends JsonResource
             'url_jump' => $this->url_jump,
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
+
+        if ($this->type == 1) {
+            $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
+            $data['serie_end'] = $this->serie_end;
+            $data['series'] = \App\Models\Media::getListBySerie($this->id, $customer_id, $memory);
+        }
+
+        return  $data;
     }
 
     /**

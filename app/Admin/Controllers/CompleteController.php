@@ -137,7 +137,6 @@ class CompleteController extends AdminController
         $show->field('adv_freq', __('Adv freq'));
         $show->field('memory', __('Memory'));
         $show->field('parent_id', __('Parent id'));
-        $show->field('sort', __('Sort'));
         $show->field('status', __('Status'));
         $show->field('updated_at', __('Updated at'));
         $show->field('created_at', __('Created at'));
@@ -166,7 +165,7 @@ class CompleteController extends AdminController
         $form->date('updatetime', __('Updatetime'))->default(date('Y-m-d'));
         $form->date('publishtime', __('Publishtime'))->default(date('Y-m-d'));
         $form->select('cp_id', __('Cp'))->options(Cp::select())->readOnly();
-        $form->decimal('score', __('Score'));
+        $form->decimal('score', __('Score'))->pattern('\d(\.\d)?|10(\.0)?')->help('The score cannot be greater than 10!');
         $form->number('click_num', __('Click num'));
         $form->select('language', __('Language'))->options(Config::select(1))->required();
         $form->hidden('class');
@@ -187,7 +186,6 @@ class CompleteController extends AdminController
         $form->switch('is_direction', __('Is direction'));
         $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->readOnly();
         $form->number('parent_id', __('Parent id'));
-        $form->number('sort', __('Sort'));
         $form->text('remark', __('Remark'));
         $form->radio('status', __('Status'))->options(Status::getList(2));
 

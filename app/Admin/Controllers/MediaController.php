@@ -191,7 +191,6 @@ class MediaController extends AdminController
             $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
             $form->textarea('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
-            $form->image('img_original', __('Img original'))->removable();
             $form->text('url', __('Url'))->required();
             $form->text('url_jump', __('Url Jump'));
             $form->text('tag', __('Tag'));

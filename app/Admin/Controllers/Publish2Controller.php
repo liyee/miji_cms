@@ -27,15 +27,25 @@ class Publish2Controller extends AdminController
     {
         $group_id = request('group_id', 0);
         $grid = new Grid(new MediaGroup());
-        $grid->model()->where('group_id', $group_id);
+        $grid->disableCreateButton();
+        $grid->disableActions();
+
+
+        $grid->model()->from('m_media_group as MG')
+            ->leftJoin('m_media as M', 'MG.media_id', '=', 'M.id')
+            ->leftJoin('m_group as G', 'MG.group_id', '=', 'G.id')
+            ->where(['group_id' => $group_id])
+            ->select(['MG.*', 'M.title', 'G.title as g_title'])
+            ->orderBy('updated_at', 'desc');
 
 //        $grid->column('id', __('Id'));
-        $grid->column('media_id', __('Media id'));
-        $grid->column('group_id', __('Group id'));
+        $grid->column('media_id', __('ID'));
+        $grid->column('title', __('Title'));
+        $grid->column('g_title', __('Group Name'));
         $grid->column('sort', __('Sort'))->editable();
         $grid->column('status', __('Status'))->switch([
-            'ON' => ['value' => 1, 'text' => '打开', 'color' => 'default'],
-            'OFF' => ['value' => 0, 'text' => '关闭', 'color' => 'primary']
+            'ONLINE' => ['value' => 1, 'color' => 'default'],
+            'OFFLINE' => ['value' => 0, 'color' => 'primary']
         ]);
         $grid->column('updated_at', __('Updated at'));
         $grid->column('created_at', __('Created at'));

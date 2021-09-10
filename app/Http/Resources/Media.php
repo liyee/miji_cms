@@ -40,7 +40,7 @@ class Media extends JsonResource
                 $addition = [
                     'updatetime' => $this->updatetime,
                     'click_num' => $this->click_num,
-                    'language' => $this->languages->name,
+                    'language' => $this->languages ? $this->languages->name : '',
                     'intro' => $this->intro,
                     'url' => $this->url,
                     'adv_freq' => $this->adv_freq,
@@ -76,7 +76,7 @@ class Media extends JsonResource
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
 
-        if (isset($addition['url'])){
+        if (isset($addition['url'])) {
             if (strstr($this->url, '?')) {
                 $addition['url'] = $this->url . '&metax_mode=' . $this->mode;
             } else {

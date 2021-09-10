@@ -66,6 +66,7 @@ class Media extends JsonResource
             'is_direction' => $this->is_direction,
             'duration' => $this->duration,
             'type' => $this->type,
+            'updatetime' => $this->updatetime,
             'publishtime' => $this->publishtime,
             'cp' => $this->cp->name,
             'score' => $this->score,

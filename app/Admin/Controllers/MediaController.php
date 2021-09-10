@@ -46,6 +46,9 @@ class MediaController extends AdminController
             $filter->column(1/3, function ($filter) {
                 $filter->equal('cp_id', 'CP')->select(Cp::select());
             });
+            $filter->column(1/3, function ($filter) {
+                $filter->like('title', 'Title');
+            });
         });
         $grid->disableCreateButton();
 

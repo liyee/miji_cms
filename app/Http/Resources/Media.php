@@ -40,7 +40,7 @@ class Media extends JsonResource
                 $addition = [
                     'updatetime' => $this->updatetime,
                     'click_num' => $this->click_num,
-                    'language' => $this->language,
+                    'language' => $this->languages->name,
                     'intro' => $this->intro,
                     'url' => $this->url,
                     'adv_freq' => $this->adv_freq,

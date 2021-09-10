@@ -25,5 +25,4 @@ Route::group([
     $router->resource('activities', ActivityController::class);
     $router->resource('complete', CompleteController::class);
     $router->resource('publish', PublishController::class);
-    $router->resource('publish2', Publish2Controller::class);
 });

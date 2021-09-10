@@ -43,6 +43,14 @@ class CompleteController extends AdminController
             $batch->disableDelete();
         });
 
+        $grid->expandFilter();
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter(); // 去掉默认的id过滤器
+            $filter->column(1/3, function ($filter) {
+                $filter->equal('cp_id', 'CP')->select(Cp::select());
+            });
+        });
+
         $grid->column('id', __('Id'));
         $grid->column('title', __('Title'))->display(function ($title) {
             return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;

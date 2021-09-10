@@ -89,7 +89,7 @@ class Media extends Model
      * @param array $where
      * 获取媒资详情
      */
-    public static function getOne($id, $type = 0, $status = 2, $parent_id = 0)
+    public static function getOne($id, $status = 2)
     {
         $data = self::query()->where([
             'status' => $status
@@ -105,15 +105,13 @@ class Media extends Model
      * @param int $parent_id
      * 获取单条媒资信息
      */
-    public static function getOne2($id, $type = 0, $status = 2, $parent_id = 0, $customer_id = 0, $memory = 1)
+    public static function getOne2($id, $status = 2, $customer_id = 0, $memory = 1)
     {
         $one = self::query()->from('m_media as M')->select(['M.*', 'A.customer_id', 'A.mode'])
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
                 'M.id' => $id,
-//                'M.type' => $type,
                 'M.status' => $status,
-//                'M.parent_id' => $parent_id,
                 'A.customer_id' => $customer_id,
             ])
             ->where('M.memory', '<=', $memory)
@@ -140,6 +138,7 @@ class Media extends Model
             ])
             ->where('M.memory', '<=', $memory)
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
+            ->orderBy('M.sort')
             ->get(['M.*', 'act']);
 
         return $data;
@@ -185,7 +184,7 @@ class Media extends Model
             ])
             ->where('M.memory', '<=', $memory)
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
-            ->orderBy('M.sort')
+            ->orderBy('G.sort')
             ->orderBy('M.id')
             ->limit($limit)
             ->get();

@@ -23,23 +23,41 @@ class Group extends Model
     }
 
     /**
+     * @param $id
+     * @param int $status
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
+     * 获取单条信息
+     */
+    public static function getOne($id, $status = 1)
+    {
+        return self::query()->where(['status' => $status])->find($id);
+    }
+
+    /**
      * @param array $fields
      * @param array $where
-     * 获取数据列表
+     * 获取数据列表-分页
      */
-    public static function getList($where = []){
-        return self::query()->where($where);
+    public static function getList($size, $where = [])
+    {
+        return self::query()->where($where)->paginate($size);
+    }
+
+    public static function getListByNav($parent_id = 0, $status = 1){
+        return self::query()->where(['parent_id' => $parent_id, 'status' => $status])->get(['id', 'title', 'sort', 'parent_id', 'depth', 'activity_id']);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      * 对应多条媒资
      */
-    public function medias(){
+    public function medias()
+    {
         return $this->belongsToMany(Media::class, 'm_media_group');
     }
 
-    public function activity(){
+    public function activity()
+    {
         return $this->hasOne(Activity::class);
     }
 }

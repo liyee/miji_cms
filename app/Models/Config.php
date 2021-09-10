@@ -15,7 +15,7 @@ class Config extends Model
     public static function select($type = 1)
     {
         $key = config('cacheKey.config_select') . '_' . $type;
-        $value = Cache::remember($key, 3600, function () use ($type) {
+        $value = Cache::remember($key, 5, function () use ($type) {
             $select = [];
             $data = self::where('type', $type)->get(['name', 'value'])->toArray();
             array_walk($data, function ($val) use (&$select) {

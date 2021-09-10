@@ -40,8 +40,12 @@ class MediaController extends AdminController
         $childIds = Category::getchild($class);
 
         $grid->model()->whereIn('class', $childIds)->where('parent_id', 0)->whereIn('status', [1, 3, 4])->orderBy('updated_at', 'desc');
+        $grid->expandFilter();
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
+            $filter->column(1/3, function ($filter) {
+                $filter->equal('cp_id', 'CP')->select(Cp::select());
+            });
         });
         $grid->disableCreateButton();
 

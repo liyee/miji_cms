@@ -39,7 +39,7 @@ class Group extends JsonResource
         if ($this->title_show) $data['title_show'] = $this->title_show;
         if ($this->img) $data['img'] = $this->img;
         if ($this->depth == 1) {
-            $data['groups'] = Group::collection(\App\Models\Group::getListByNav($id));
+            $data['groups'] = Group::collection(\App\Models\Group::getListByNav($id, $group_num));
         } else {
             $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
             $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);

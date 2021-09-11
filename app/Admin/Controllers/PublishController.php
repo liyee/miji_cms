@@ -33,7 +33,7 @@ class PublishController extends AdminController
         $grid->model()->from('m_media_group as MG')
             ->leftJoin('m_media as M', 'MG.media_id', '=', 'M.id')
             ->leftJoin('m_group as G', 'MG.group_id', '=', 'G.id')
-            ->where(['G.group_id' => $group_id, 'M.status' => 2])
+            ->where(['G.id' => $group_id, 'M.status' => 2])
             ->select(['MG.*', 'M.title', 'G.title as g_title'])
             ->orderBy('updated_at', 'desc');
 

@@ -40,7 +40,7 @@ class Group extends Model
      */
     public static function getList($size, $where = [])
     {
-        return self::query()->where($where)->paginate($size);
+        return self::query()->where($where)->orderBy('sort')->orderBy('id')->paginate($size);
     }
 
     public static function getListByPro($parent_id = 0, $group_num = 999, $status = 1)

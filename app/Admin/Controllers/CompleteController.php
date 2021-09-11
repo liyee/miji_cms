@@ -46,8 +46,11 @@ class CompleteController extends AdminController
         $grid->expandFilter();
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
-            $filter->column(1/3, function ($filter) {
+            $filter->column(1 / 3, function ($filter) {
                 $filter->equal('cp_id', 'CP')->select(Cp::select());
+            });
+            $filter->column(1 / 3, function ($filter) {
+                $filter->like('title', 'Title');
             });
         });
 

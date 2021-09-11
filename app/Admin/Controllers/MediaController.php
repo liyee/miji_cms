@@ -229,7 +229,11 @@ class MediaController extends AdminController
         $form->saving(function (Form $form) {
             $class_sub = $form->class_sub;
             $form->class = Category::getTop(Category::getList(), $class_sub);
-            if (!$form->parent_id) $form->parent_id = 0;
+            if (!$form->parent_id) {
+                $form->parent_id = 0;
+            }else{
+                $form->type = 0;
+            }
             if (!$form->uuid) $form->uuid = uniqid();
         });
 

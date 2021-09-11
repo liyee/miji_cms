@@ -43,8 +43,14 @@ class Group extends Model
         return self::query()->where($where)->paginate($size);
     }
 
-    public static function getListByNav($parent_id = 0, $status = 1){
-        return self::query()->where(['parent_id' => $parent_id, 'status' => $status])->get(['id', 'title', 'sort', 'parent_id', 'depth', 'activity_id']);
+    public static function getListByPro($parent_id = 0, $status = 1, $group_num = 999)
+    {
+        return self::query()->where(['parent_id' => $parent_id, 'status' => $status])->orderBy('sort')->limit($group_num)->get(['id', 'title', 'sort', 'parent_id', 'depth', 'activity_id']);
+    }
+
+    public static function getListByNav($parent_id = 0, $status = 1, $group_num = 999)
+    {
+        return self::query()->where(['parent_id' => $parent_id, 'status' => $status])->orderBy('sort')->limit($group_num)->get();
     }
 
     /**

@@ -59,7 +59,7 @@ Route::get('/activity/{id}', function (Request $request, $id = 0) {
 
 //6.首屏数据
 Route::get('/home/{projectid}', function ($projectid) {
-    return \App\Http\Resources\Group::collection(\App\Models\Group::getListByNav($projectid));
+    return \App\Http\Resources\Group::collection(\App\Models\Group::getListByPro($projectid));
 });
 
 //7.推荐媒资

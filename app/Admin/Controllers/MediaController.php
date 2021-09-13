@@ -43,10 +43,13 @@ class MediaController extends AdminController
         $grid->expandFilter();
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
-            $filter->column(1/3, function ($filter) {
+            $filter->column(1 / 3, function ($filter) {
+                $filter->equal('id', 'ID');
+            });
+            $filter->column(1 / 3, function ($filter) {
                 $filter->equal('cp_id', 'CP')->select(Cp::select());
             });
-            $filter->column(1/3, function ($filter) {
+            $filter->column(1 / 3, function ($filter) {
                 $filter->like('title', 'Title');
             });
         });
@@ -64,7 +67,7 @@ class MediaController extends AdminController
             $tools->append(new NewForm());
         });
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->column('title', __('Title'))->display(function ($title) {
             return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;
         })->expand(function () {
@@ -104,8 +107,7 @@ class MediaController extends AdminController
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
         $grid->column('url_jump', __('Url Jump'))->hide();
-        $grid->column('tag', __('Tag'))->hide();
-        $grid->column('keyword', __('Keyword'))->hide();
+        $grid->column('memory', __('Memory'))->using(array_merge([0 => 'Unknown'], Config::select(8)));
         $grid->column('area', __('Area'))->hide()->display(function ($val) {
             $valNew = implode(',', $val);
             $valArr = str_split($valNew, '63');
@@ -149,7 +151,7 @@ class MediaController extends AdminController
         $show->field('img_original', __('Img original'))->image();
         $show->field('title_original', __('Title original'));
         $show->field('url', __('Url'));
-        $show->field('area', __('Area'))->as(function ($val){
+        $show->field('area', __('Area'))->as(function ($val) {
             if (!$val) return '';
             return implode(',', $val);
         });
@@ -203,7 +205,7 @@ class MediaController extends AdminController
             $form->text('tag', __('Tag'));
             $form->text('keyword', __('Keyword'));
             $form->listbox('area', __('Area'))->options(Region::select())->required();
-            $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->required();
+            $form->select('memory', __('Memory'))->options(array_merge([0 => 'Unknown'], Config::select(8)))->required();
             $form->radio('status', __('Status'))->options(Status::getList(1))->default(1);
         })->tab('Images', function ($form) {
             $form->hasMany('imgs', function ($form) {
@@ -231,7 +233,7 @@ class MediaController extends AdminController
             $form->class = Category::getTop(Category::getList(), $class_sub);
             if (!$form->parent_id) {
                 $form->parent_id = 0;
-            }else{
+            } else {
                 $form->type = 0;
             }
             if (!$form->uuid) $form->uuid = uniqid();

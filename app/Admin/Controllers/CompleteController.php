@@ -34,7 +34,7 @@ class CompleteController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Media());
-        $grid->model()->whereIn('status', [2])->orderBy('updated_at', 'desc');
+        $grid->model()->where(['parent_id' => 0])->whereIn('status', [2])->orderBy('updated_at', 'desc');
         $grid->disableCreateButton();
         $grid->actions(function ($actions) {
             $actions->disableDelete(); // 去掉删除
@@ -47,6 +47,9 @@ class CompleteController extends AdminController
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
             $filter->column(1 / 3, function ($filter) {
+                $filter->equal('id', 'ID');
+            });
+            $filter->column(1 / 3, function ($filter) {
                 $filter->equal('cp_id', 'CP')->select(Cp::select());
             });
             $filter->column(1 / 3, function ($filter) {
@@ -54,9 +57,9 @@ class CompleteController extends AdminController
             });
         });
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->column('title', __('Title'))->display(function ($title) {
-            return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;
+            return $this->type > 0 ? $title . '[More]' : $title;
         })->expand(function () {
             if ($this->type > 0) {
                 $child = Media::query()->where(['parent_id' => $this->id])->get(['id', 'title', 'title_sub'])->toArray();
@@ -101,7 +104,10 @@ class CompleteController extends AdminController
         $grid->column('title_original', __('Title original'))->hide();
         $grid->column('url', __('Url'))->hide();
         $grid->column('region', __('Region'))->hide()->display(function ($val) {
-            return implode(',', $val);
+            $valNew = implode(',', $val);
+            $valArr = str_split($valNew, '63');
+            return implode('<br/>', $valArr);
+
         });
         $grid->column('status', __('Status'))->using(Status::getList(2));
         $grid->column('updated_at', __('Updated at'))->hide();

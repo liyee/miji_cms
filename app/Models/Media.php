@@ -206,8 +206,10 @@ class Media extends Model
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
                 'A.customer_id' => $customer_id,
-                'M.status' => $status
+                'M.status' => $status,
+                'M.parent_id' => 0
             ])
+            ->where('M.type', '<>', 2)
             ->where('M.memory', '<=', $memory)
             ->whereIn('class_sub', $sub)
             ->where('M.id', '!=', $id)

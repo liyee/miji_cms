@@ -66,7 +66,7 @@ class CompleteController extends AdminController
                 $child = Media::query()->where(['parent_id' => $this->id])->get(['id', 'title', 'title_sub'])->toArray();
                 $childNew = array_map(function ($value) {
                     $id = $value['id'];
-                    $value['action'] = '<a href="medias/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
+                    $value['action'] = '<a href="complete/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
                     return $value;
                 }, $child);
 

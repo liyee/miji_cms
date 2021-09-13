@@ -86,7 +86,7 @@ class MediaController extends AdminController
 
         $grid->column('title_sub', __('Title sub'))->hide();
         $grid->column('img_original', __('Img original'))->image();
-        $grid->column('serie_num', __('Serie num'));
+        $grid->column('serie_num', __('Serie num'))->sortable();
         $grid->column('duration', __('Duration'));
         $grid->column('serie_end', __('Serie end'))->display(function ($serie_end) {
             return $serie_end ? 'Yes' : 'No';

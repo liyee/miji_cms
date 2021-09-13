@@ -76,7 +76,7 @@ class CompleteController extends AdminController
         $grid->column('img_original', __('Img original'))->image();
         $grid->column('title_sub', __('Title sub'))->hide();
         $grid->column('duration', __('Duration'))->hide();
-        $grid->column('serie_num', __('Serie num'));
+        $grid->column('serie_num', __('Serie num'))->sortable();
         $grid->column('serie_end', __('Serie end'))->display(function ($serie_end) {
             return $serie_end ? 'Yes' : 'No';
         })->hide();

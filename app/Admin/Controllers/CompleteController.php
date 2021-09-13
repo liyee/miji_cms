@@ -25,6 +25,7 @@ class CompleteController extends AdminController
      * @var string
      */
     protected $title = 'Test Complete';
+    protected $type = [0 => 'Default', 1 => 'Serie', 2 => 'Activity'];
 
     /**
      * Make a grid builder.
@@ -176,6 +177,12 @@ class CompleteController extends AdminController
         $form->text('title', __('Title'));
         $form->text('title_sub', __('Title sub'));
         $form->multipleSelect('groups', 'Group')->options(Group::selectOptions());
+        $form->radio('type', __('Type'))->options($this->type)->default(0);
+        $form->select('parent_id', 'Parent Name')->groups([
+            ['label' => 'Default', 'options' => [0 => 'None']],
+            ['label' => 'Serie', 'options' => Media::selectBytype(1)],
+            ['label' => 'Activity', 'options' => Media::selectBytype(2)],
+        ])->default(0);
         $form->number('duration', __('Duration'));
         $form->number('serie_num', __('Serie num'))->default(1);
         $form->switch('serie_end', __('Serie end'))->default(1);
@@ -202,7 +209,6 @@ class CompleteController extends AdminController
         })->default(1);
         $form->switch('is_direction', __('Is direction'));
         $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->readOnly();
-        $form->number('parent_id', __('Parent id'));
         $form->text('remark', __('Remark'));
         $form->radio('status', __('Status'))->options(Status::getList(2));
 

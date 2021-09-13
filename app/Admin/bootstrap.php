@@ -21,9 +21,12 @@ use Encore\Admin\Grid\Column;
 use App\Admin\Extensions\Popover;
 
 Encore\Admin\Form::forget(['map', 'editor']);
+
 Column::extend('sub', function ($model, $color){
     $aa = $model;
     return "<span style='color: $color'></span>";
 });
 Column::extend('popover', Popover::class);
+
+
 

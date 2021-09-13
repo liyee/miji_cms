@@ -180,11 +180,12 @@ class MediaController extends AdminController
             $form->text('title', __('Title'));
             $form->text('title_sub', __('Title sub'));
             $form->text('title_original', __('Title original'))->required();
-            $form->radio('type', __('Type'))->options($this->type)->when(1, function (Form $form) {
-                $form->select('parent_id', 'Serie')->options(Media::selectBytype(1));
-            })->when(2, function (Form $form) {
-                $form->select('parent_id', 'Activity')->options(Media::selectBytype(2));
-            })->default(0);
+            $form->radio('type', __('Type'))->options($this->type)->default(0);
+            $form->select('parent_id', 'Parent Name')->groups([
+                ['label' => 'Default', 'options' => [0 => 'None']],
+                ['label' => 'Serie', 'options' => Media::selectBytype(1)],
+                ['label' => 'Activity', 'options' => Media::selectBytype(2)],
+            ])->default(0);
             $form->number('duration', __('Duration'))->default(60)->required();
             $form->number('serie_num', __('Serie num'))->default(1)->required();
             $form->switch('serie_end', __('Serie end'))->states([

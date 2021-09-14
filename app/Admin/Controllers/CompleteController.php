@@ -178,6 +178,7 @@ class CompleteController extends AdminController
         $form->text('title', __('Title'));
         $form->text('title_sub', __('Title sub'));
         $form->datetime('onlinetime', __('Onlinetime'));
+        $form->datetime('offlinetime', __('Offlinetime'));
         $form->multipleSelect('groups', 'Group')->options(Group::selectOptions());
         $form->radio('type', __('Type'))->options($this->type)->default(0);
         $form->select('parent_id', 'Parent Name')->groups([

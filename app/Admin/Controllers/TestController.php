@@ -33,6 +33,7 @@ class TestController extends AdminController
         $grid->column('serie_num', __('Serie num'));
         $grid->column('serie_end', __('Serie end'));
         $grid->column('onlinetime', __('Onlinetime'));
+        $grid->column('offlinetime', __('Offlinetime'));
         $grid->column('updatetime', __('Updatetime'));
         $grid->column('publishtime', __('Publishtime'));
         $grid->column('cp_id', __('Cp id'));
@@ -88,6 +89,7 @@ class TestController extends AdminController
         $show->field('serie_num', __('Serie num'));
         $show->field('serie_end', __('Serie end'));
         $show->field('onlinetime', __('Onlinetime'));
+        $show->field('offlinetime', __('Offlinetime'));
         $show->field('updatetime', __('Updatetime'));
         $show->field('publishtime', __('Publishtime'));
         $show->field('cp_id', __('Cp id'));
@@ -141,6 +143,7 @@ class TestController extends AdminController
         $form->number('serie_num', __('Serie num'))->default(1);
         $form->switch('serie_end', __('Serie end'))->default(1);
         $form->datetime('onlinetime', __('Onlinetime'))->default(date('Y-m-d H:i:s'));
+        $form->datetime('offlinetime', __('Offlinetime'))->default(date('Y-m-d H:i:s'));
         $form->date('updatetime', __('Updatetime'))->default(date('Y-m-d'));
         $form->date('publishtime', __('Publishtime'))->default(date('Y-m-d'));
         $form->number('cp_id', __('Cp id'));

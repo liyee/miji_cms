@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Form\NewForm;
 use App\Libraries\Status;
+use App\Models\Activity;
 use App\Models\Category;
 use App\Models\Config;
 use App\Models\Cp;
@@ -41,7 +42,7 @@ class MediaController extends AdminController
         $class = $_GET['class'] ?? 0;
         $childIds = Category::getchild($class);
 
-        $grid->model()->whereIn('class', $childIds)->where('parent_id', 0)->whereIn('status', [1, 3, 4])->orderBy('updated_at', 'desc');
+        $grid->model()->whereIn('class', $childIds)->whereIn('status', [1, 3, 4])->orderBy('updated_at', 'desc');
         $grid->expandFilter();
         $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // 去掉默认的id过滤器
@@ -213,7 +214,7 @@ class MediaController extends AdminController
         })->tab('Images', function ($form) {
             $form->hasMany('imgs', function ($form) {
                 $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2)->required();
-                $form->select('act', 'Type')->options([0 => 'General', 1 => 'Activity'])->setWidth(2)->required();
+                $form->select('act', 'Type')->options(array_merge([0 => 'General'], Activity::select()))->setWidth(2)->required();
                 $form->image('f_16x9', 'Foreground(16x9)')->removable()->setWidth(3);
                 $form->image('b_16x9', 'Background(16x9)')->removable()->setWidth(3);
                 $form->image('f_7x10', 'Foreground(7x10)')->removable()->setWidth(3);

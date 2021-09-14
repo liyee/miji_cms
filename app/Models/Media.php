@@ -91,9 +91,12 @@ class Media extends Model
      */
     public static function getOne($id, $status = 2)
     {
-        $data = self::query()->where([
-            'status' => $status
-        ])->find($id);
+        $d = date('Y-m-d H:i:s', time());
+        $data = self::query()
+            ->where('status', $status)
+            ->where('M.onlinetime', '<=', $d)
+            ->where('M.offlinetime', '>=', $d)
+            ->find($id);
 
         return $data;
     }
@@ -107,6 +110,7 @@ class Media extends Model
      */
     public static function getOne2($id, $status = 2, $customer_id = 0, $memory = 1)
     {
+        $d = date('Y-m-d H:i:s', time());
         $one = self::query()->from('m_media as M')->select(['M.*', 'A.customer_id', 'A.mode'])
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
@@ -115,8 +119,9 @@ class Media extends Model
                 'A.customer_id' => $customer_id,
             ])
             ->where('M.memory', '<=', $memory)
-            ->where('M.onlinetime', '<=', date('Y-m-d H:i:s', time()))
-            ->first();
+            ->where('M.onlinetime', '<=', $d)
+            ->where('M.offlinetime', '>=', $d)
+        ->first();
 
         return $one;
     }
@@ -129,6 +134,7 @@ class Media extends Model
      */
     public static function getList($parent_id = 0, $iosCode = 'US', $customer_id = 0, $memory = 1, $act = 0, $status = 2)
     {
+        $d = date('Y-m-d H:i:s', time());
         $additional = "$act as act";
         $data = self::query()->select('*')->selectRaw($additional)->from('m_media as M')
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
@@ -138,6 +144,8 @@ class Media extends Model
                 'A.customer_id' => $customer_id
             ])
             ->where('M.memory', '<=', $memory)
+            ->where('M.onlinetime', '<=', $d)
+            ->where('M.offlinetime', '>=', $d)
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
             ->orderBy('M.sort')
             ->get(['M.*', 'act']);
@@ -173,6 +181,7 @@ class Media extends Model
      */
     public static function getListByGroup($groupid = 0, $iosCode = 'US', $limit = 999, $customer_id = 0, $memory = 1, $act = 0, $status = 2)
     {
+        $d = date('Y-m-d h:i:s');
         $additional = "$act as act";
         $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url', 'M.url_jump', 'M.serie_end'])->selectRaw($additional)
             ->rightJoin('m_media_group as G', 'G.media_id', '=', 'M.id')
@@ -184,6 +193,8 @@ class Media extends Model
                 'M.status' => $status
             ])
             ->where('M.memory', '<=', $memory)
+            ->where('M.onlinetime', '<=', $d)
+            ->where('M.offlinetime', '>=', $d)
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
             ->orderBy('G.sort')
             ->orderBy('M.id')

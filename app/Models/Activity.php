@@ -44,9 +44,10 @@ class Activity extends Model
     public static function select($type = 1)
     {
         $key = config('cacheKey.activity_select');
-        $value = Cache::remember($key, 3600, function () use ($type) {
+        $value = Cache::remember($key, 10, function () use ($type) {
             $select = [];
-            $data = self::where('type', $type)->where('end', '>=', time())->get(['id', 'name'])->toArray();
+            $d = date('Y-m-d H:i:s');
+            $data = self::where('type', $type)->where('start', '<=', $d)->where('end', '>=', $d)->get(['id', 'name'])->toArray();
             array_walk($data, function ($val) use (&$select) {
                 $select[$val['id']] = $val['name'];
             });

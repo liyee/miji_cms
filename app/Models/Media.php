@@ -136,7 +136,7 @@ class Media extends Model
     {
         $d = date('Y-m-d H:i:s', time());
         $additional = "$act as act";
-        $data = self::query()->select('*')->selectRaw($additional)->from('m_media as M')
+        $data = self::query()->select('M.*')->selectRaw($additional)->from('m_media as M')
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
                 'M.parent_id' => $parent_id,
@@ -238,11 +238,10 @@ class Media extends Model
         $key = config('cacheKey.media_select') . $type;
 
         $value = Cache::remember($key, 0, function () use ($type) {
-            $data = self::where(['type' => $type, 'parent_id' => 0])->get(['id', 'title'])->toArray();
+            $data = self::where(['type' => $type, 'parent_id' => 0])->get(['id', 'title_original'])->toArray();
             $list = [];
             array_walk($data, function ($val) use (&$list) {
-                $list[$val['id']] = $val['title'];
-
+                $list[$val['id']] = $val['title_original'];
             });
 
             return $list;

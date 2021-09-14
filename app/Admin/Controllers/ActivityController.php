@@ -25,6 +25,7 @@ class ActivityController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Activity());
+        $grid->disableExport();
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));

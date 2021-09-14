@@ -36,6 +36,8 @@ class MediaController extends AdminController
     {
         $grid = new Grid(new Media());
 
+        $grid->disableExport();
+
         $class = $_GET['class'] ?? 0;
         $childIds = Category::getchild($class);
 

@@ -32,6 +32,7 @@ class TestController extends AdminController
         $grid->column('duration', __('Duration'));
         $grid->column('serie_num', __('Serie num'));
         $grid->column('serie_end', __('Serie end'));
+        $grid->column('onlinetime', __('Onlinetime'));
         $grid->column('updatetime', __('Updatetime'));
         $grid->column('publishtime', __('Publishtime'));
         $grid->column('cp_id', __('Cp id'));
@@ -60,9 +61,9 @@ class TestController extends AdminController
         $grid->column('memory', __('Memory'));
         $grid->column('type', __('Type'));
         $grid->column('parent_id', __('Parent id'));
-        $grid->column('sort', __('Sort'));
         $grid->column('expand', __('Expand'));
         $grid->column('remark', __('Remark'));
+        $grid->column('sort', __('Sort'));
         $grid->column('status', __('Status'));
         $grid->column('updated_at', __('Updated at'));
         $grid->column('created_at', __('Created at'));
@@ -86,6 +87,7 @@ class TestController extends AdminController
         $show->field('duration', __('Duration'));
         $show->field('serie_num', __('Serie num'));
         $show->field('serie_end', __('Serie end'));
+        $show->field('onlinetime', __('Onlinetime'));
         $show->field('updatetime', __('Updatetime'));
         $show->field('publishtime', __('Publishtime'));
         $show->field('cp_id', __('Cp id'));
@@ -114,9 +116,9 @@ class TestController extends AdminController
         $show->field('memory', __('Memory'));
         $show->field('type', __('Type'));
         $show->field('parent_id', __('Parent id'));
-        $show->field('sort', __('Sort'));
         $show->field('expand', __('Expand'));
         $show->field('remark', __('Remark'));
+        $show->field('sort', __('Sort'));
         $show->field('status', __('Status'));
         $show->field('updated_at', __('Updated at'));
         $show->field('created_at', __('Created at'));
@@ -138,6 +140,7 @@ class TestController extends AdminController
         $form->number('duration', __('Duration'));
         $form->number('serie_num', __('Serie num'))->default(1);
         $form->switch('serie_end', __('Serie end'))->default(1);
+        $form->datetime('onlinetime', __('Onlinetime'))->default(date('Y-m-d H:i:s'));
         $form->date('updatetime', __('Updatetime'))->default(date('Y-m-d'));
         $form->date('publishtime', __('Publishtime'))->default(date('Y-m-d'));
         $form->number('cp_id', __('Cp id'));
@@ -159,16 +162,16 @@ class TestController extends AdminController
         $form->text('tag', __('Tag'));
         $form->text('keyword', __('Keyword'));
         $form->textarea('area', __('Area'));
-        $form->text('region', __('Region'));
+        $form->textarea('region', __('Region'));
         $form->switch('is_adv', __('Is adv'))->default(1);
         $form->switch('is_direction', __('Is direction'));
         $form->number('adv_freq', __('Adv freq'));
         $form->number('memory', __('Memory'));
         $form->switch('type', __('Type'));
         $form->number('parent_id', __('Parent id'));
-        $form->number('sort', __('Sort'));
         $form->text('expand', __('Expand'));
         $form->text('remark', __('Remark'));
+        $form->number('sort', __('Sort'));
         $form->switch('status', __('Status'))->default(1);
 
         return $form;

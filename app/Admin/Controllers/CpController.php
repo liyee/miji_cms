@@ -27,6 +27,8 @@ class CpController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Cp());
+
+        $grid->disableExport();
         $grid->disableFilter();
         $grid->disableBatchActions(); // 去掉批量操作
         $grid->actions(function ($actions) {

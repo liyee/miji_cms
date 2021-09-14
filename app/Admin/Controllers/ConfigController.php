@@ -30,6 +30,7 @@ class ConfigController extends AdminController
     {
         $grid = new Grid(new Config());
 
+        $grid->disableExport();
         $grid->disableFilter();
         $grid->selector(function (Grid\Tools\Selector $selector) {
             $selector->select('type', 'Type', $this->type);

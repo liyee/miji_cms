@@ -64,6 +64,7 @@ class CategoryController extends AdminController
     protected function form()
     {
         $form = new Form(new Category());
+        $grid->disableExport();
 
         $form->text('title', __('Title'));
         $form->select('parent_id', __('Parent'))->options(Category::selectOptions());

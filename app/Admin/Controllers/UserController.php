@@ -25,6 +25,8 @@ class UserController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new User());
+
+        $grid->disableExport();
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();

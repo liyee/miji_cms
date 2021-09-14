@@ -28,6 +28,8 @@ class RegionController extends AdminController
     {
         $grid = new Grid(new Region());
 
+        $grid->disableExport();
+
         $grid->column('id', __('Id'));
         $grid->column('code', __('Code'));
         $grid->column('code3', __('Code3'));

@@ -115,6 +115,7 @@ class Media extends Model
                 'A.customer_id' => $customer_id,
             ])
             ->where('M.memory', '<=', $memory)
+            ->where('M.onlinetime', '<=', date('Y-m-d H:i:s', time()))
             ->first();
 
         return $one;

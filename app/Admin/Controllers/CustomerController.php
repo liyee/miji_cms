@@ -26,7 +26,9 @@ class CustomerController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Customer());
+
         $grid->disableBatchActions();
+        $grid->disableExport();
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));

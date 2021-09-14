@@ -26,9 +26,11 @@ class PublishController extends AdminController
     protected function grid()
     {
         $group_id = request('group_id', 0);
+
         $grid = new Grid(new MediaGroup());
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableExport();
 
         $grid->model()->from('m_media_group as MG')
             ->leftJoin('m_media as M', 'MG.media_id', '=', 'M.id')

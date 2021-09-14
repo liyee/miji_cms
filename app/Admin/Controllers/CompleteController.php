@@ -35,6 +35,7 @@ class CompleteController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Media());
+        $grid->disableExport();
         $grid->model()->where(['parent_id' => 0])->whereIn('status', [2])->orderBy('updated_at', 'desc');
         $grid->disableCreateButton();
         $grid->actions(function ($actions) {
@@ -176,6 +177,7 @@ class CompleteController extends AdminController
 
         $form->text('title', __('Title'));
         $form->text('title_sub', __('Title sub'));
+        $form->datetime('onlinetime', __('Onlinetime'));
         $form->multipleSelect('groups', 'Group')->options(Group::selectOptions());
         $form->radio('type', __('Type'))->options($this->type)->default(0);
         $form->select('parent_id', 'Parent Name')->groups([

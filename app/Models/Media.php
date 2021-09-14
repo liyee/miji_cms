@@ -94,8 +94,8 @@ class Media extends Model
         $d = date('Y-m-d H:i:s', time());
         $data = self::query()
             ->where('status', $status)
-            ->where('M.onlinetime', '<=', $d)
-            ->where('M.offlinetime', '>=', $d)
+            ->where('onlinetime', '<=', $d)
+            ->where('offlinetime', '>=', $d)
             ->find($id);
 
         return $data;

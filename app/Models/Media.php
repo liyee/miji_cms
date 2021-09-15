@@ -110,20 +110,43 @@ class Media extends Model
      */
     public static function getOne2($id, $status = 2, $customer_id = 0, $memory = 1)
     {
-        $d = date('Y-m-d H:i:s', time());
-        $one = self::query()->from('m_media as M')->select(['M.*', 'A.customer_id', 'A.mode'])
-            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
-            ->where([
-                'M.id' => $id,
-                'M.status' => $status,
-                'A.customer_id' => $customer_id,
-            ])
-            ->where('M.memory', '<=', $memory)
-            ->where('M.onlinetime', '<=', $d)
-            ->where('M.offlinetime', '>=', $d)
-        ->first();
+        $params = ['id' => $id, 'status' => $status, 'customer_id' => $customer_id, 'memory' => $memory];
+        $key = config('cacheKey.media_one2') . '_' . implode('_', array_values($params));
 
-        return $one;
+        $value = Cache::remember($key, 3600, function () use ($params) {
+            $d = date('Y-m-d H:i:s', time());
+            $one = self::query()->from('m_media as M')->select(['M.*', 'A.customer_id', 'A.mode'])
+                ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+                ->where([
+                    'M.id' => $params['id'],
+                    'M.status' => $params['status'],
+                    'A.customer_id' => $params['customer_id'],
+                ])
+                ->where('M.memory', '<=', $params['memory'])
+                ->where('M.onlinetime', '<=', $d)
+                ->where('M.offlinetime', '>=', $d)
+                ->first();
+
+            return $one;
+        });
+
+        return $value;
+
+
+//        $d = date('Y-m-d H:i:s', time());
+//        $one = self::query()->from('m_media as M')->select(['M.*', 'A.customer_id', 'A.mode'])
+//            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+//            ->where([
+//                'M.id' => $id,
+//                'M.status' => $status,
+//                'A.customer_id' => $customer_id,
+//            ])
+//            ->where('M.memory', '<=', $memory)
+//            ->where('M.onlinetime', '<=', $d)
+//            ->where('M.offlinetime', '>=', $d)
+//        ->first();
+//
+//        return $one;
     }
 
     /**

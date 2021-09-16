@@ -38,7 +38,10 @@ Route::get('/group/{group_id}', function (Request $request, $group_id = 0) {
 
 //3.媒资分组列表
 Route::get('/nav/{nav}/{size?}', function ($nav = 0, $size = 3) {
-    return \App\Http\Resources\Group::collection(\App\Models\Group::getList($size, ['parent_id' => $nav, 'status' => 1]));
+    return \App\Http\Resources\Group::collection(\App\Models\Group::getList([
+        'size' => $size,
+        'where' => ['parent_id' => $nav, 'status' => 1]
+    ]));
 });
 
 //4.剧集详情
@@ -54,12 +57,12 @@ Route::get('/activity/{id}', function (Request $request, $id = 0) {
     $act = $request->input('act', 0);
     $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-    return \App\Http\Resources\Media::collection(\App\Models\Media::getList($id, $iosCode, $customer_id, $memory, $act));
+    return \App\Http\Resources\MediaSingle::collection(\App\Models\Media::getList($id, $iosCode, $customer_id, $memory, $act));
 });
 
 //6.首屏数据
 Route::get('/home/{projectid}', function ($projectid) {
-    return \App\Http\Resources\Group::collection(\App\Models\Group::getListByPro($projectid));
+    return \App\Http\Resources\Group::collection(\App\Models\Group::getListByPid($projectid));
 });
 
 //7.推荐媒资
@@ -73,7 +76,7 @@ Route::get('/recommend/{id}', function (Request $request, $id) {
     $childIds = \App\Models\Category::getDepth($sub);
     $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-    return \App\Http\Resources\Media::collection(\App\Models\Media::getRecommend($id, array_merge($childIds, [$sub]), $iosCode, $customer_id, $memory));
+    return \App\Http\Resources\MediaSingle::collection(\App\Models\Media::getRecommend($id, array_merge($childIds, [$sub]), $iosCode, $customer_id, $memory));
 });
 
 //1-1.媒资详情-测试

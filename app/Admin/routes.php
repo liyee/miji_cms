@@ -11,7 +11,7 @@ Route::group([
     'as'            => config('admin.route.prefix') . '.',
 ], function (Router $router) {
     $router->get('/', 'HomeController@index')->name('home');
-    $router->get('/test', 'HomeController@test')->name('test');
+    $router->get('/clearCache', 'HomeController@clearCache')->name('clearCache');
     $router->get('api/class_sub', 'CategoryController@classSub');
 
     $router->resource('users', UserController::class);

@@ -43,7 +43,7 @@ class CpController extends AdminController
         $grid->column('des', __('Des'));
         $grid->column('country', __('Country'));
         $grid->column('status', __('Status'))->editable('select',[0 => 'OFF', 1 => 'ON']);
-        $grid->column('start', __('Start'))->editable('date')->date('Y-m-d');
+        $grid->column('start', __('Start'))->editable('date');
         $grid->column('end', __('End'))->date('Y-m-d');
         $grid->column('created_at', __('Created at'))->hide();
         $grid->column('updated_at', __('Updated at'))->hide();

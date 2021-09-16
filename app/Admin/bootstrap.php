@@ -21,6 +21,9 @@ use Encore\Admin\Grid\Column;
 use App\Admin\Extensions\Popover;
 
 Encore\Admin\Form::forget(['map', 'editor']);
+\Encore\Admin\Facades\Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar){
+    $navbar->right(view('clearCache'));
+});
 
 Column::extend('sub', function ($model, $color){
     $aa = $model;

@@ -91,14 +91,21 @@ class Media extends Model
      */
     public static function getOne($id, $status = 2)
     {
-        $d = date('Y-m-d H:i:s', time());
-        $data = self::query()
-            ->where('status', $status)
-            ->where('onlinetime', '<=', $d)
-            ->where('offlinetime', '>=', $d)
-            ->find($id);
+        $params = ['id' => $id, 'status' => $status];
+        $key = config('cacheKey.media_one') . '_' . $id . '_' . $status;
 
-        return $data;
+        $value = Cache::remember($key, 3600, function () use ($params) {
+            $d = date('Y-m-d H:i:s', time());
+            $data = self::query()
+                ->where('status', $params['status'])
+                ->where('onlinetime', '<=', $d)
+                ->where('offlinetime', '>=', $d)
+                ->find($params['id']);
+
+            return $data;
+        });
+
+        return $value;
     }
 
     /**
@@ -131,22 +138,6 @@ class Media extends Model
         });
 
         return $value;
-
-
-//        $d = date('Y-m-d H:i:s', time());
-//        $one = self::query()->from('m_media as M')->select(['M.*', 'A.customer_id', 'A.mode'])
-//            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
-//            ->where([
-//                'M.id' => $id,
-//                'M.status' => $status,
-//                'A.customer_id' => $customer_id,
-//            ])
-//            ->where('M.memory', '<=', $memory)
-//            ->where('M.onlinetime', '<=', $d)
-//            ->where('M.offlinetime', '>=', $d)
-//        ->first();
-//
-//        return $one;
     }
 
     /**
@@ -183,17 +174,24 @@ class Media extends Model
      */
     public static function getListBySerie($parent_id = 0, $customer_id = 0, $memory = 1, $status = 2)
     {
-        $data = self::query()->from('m_media as M')
-            ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
-            ->where([
-                'M.parent_id' => $parent_id,
-                'M.status' => $status,
-                'A.customer_id' => $customer_id
-            ])
-            ->where('M.memory', '<=', $memory)
-            ->orderBy('M.sort')->pluck('M.id');
+        $params = ['parent_id' => $parent_id, 'customer_id' => $customer_id, 'memory' => $memory, 'status' => $status];
+        $key = config('cacheKey.media_serie') . '_' . md5(json_encode($params));
 
-        return $data;
+        $value = Cache::remember($key, 3600, function () use ($params) {
+            $data = self::query()->from('m_media as M')
+                ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+                ->where([
+                    'M.parent_id' => $params['parent_id'],
+                    'M.status' => $params['status'],
+                    'A.customer_id' => $params['customer_id']
+                ])
+                ->where('M.memory', '<=', $params['memory'])
+                ->orderBy('M.sort')->pluck('M.id');
+
+            return $data;
+        });
+
+        return $value;
     }
 
     /**

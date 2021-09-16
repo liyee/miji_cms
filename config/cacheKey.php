@@ -15,6 +15,8 @@ return [
     'media_one' => 'media_one', // _, 单条媒资
     'media_one2' => 'media_one2', // _, 单条媒资
     'media_serie' => 'media_serie', // _, 剧集列表
+    'media_recommend' => 'media_recommend', // _, 推荐位
+    'media_list_by_group' => 'media_list_by_group', // _, 推荐位
     'group_pid' => 'group_pid', // 分组列表
     'group_list' => 'group_list', // 分组列表
     'group_list_page' => 'group_list_page', // 分组列表

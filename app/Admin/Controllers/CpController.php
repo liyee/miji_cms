@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CpController extends AdminController
 {
@@ -89,6 +90,10 @@ class CpController extends AdminController
         $form->text('des', __('Des'));
         $form->text('country', __('Country'));
         $form->switch('status', __('Status'))->default(1);
+
+        $form->saved(function (){
+            Cache::flush();
+        });
 
         return $form;
     }

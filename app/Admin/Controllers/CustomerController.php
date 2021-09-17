@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CustomerController extends AdminController
 {
@@ -75,6 +76,10 @@ class CustomerController extends AdminController
         $form->text('tag', __('Tag'));
         $form->text('des', __('Des'));
         $form->switch('sort', __('Sort'));
+
+        $form->saved(function (){
+            Cache::flush();
+        });
 
         return $form;
     }

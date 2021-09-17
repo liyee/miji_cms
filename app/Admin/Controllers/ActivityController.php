@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Cache;
 
 class ActivityController extends AdminController
 {
@@ -75,6 +76,10 @@ class ActivityController extends AdminController
         $form->datetime('end', __('End'))->default(date('Y-m-d H:i:s'));
         $form->text('des', __('Des'));
         $form->switch('status', __('Status'))->default(1);
+
+        $form->saved(function (){
+            Cache::flush();
+        });
 
         return $form;
     }

@@ -79,6 +79,10 @@ class RegionController extends AdminController
         $form->text('name_zh', __('Name zh'));
         $form->switch('status', __('Status'))->default(1);
 
+        $form->saved(function (){
+            Cache::flush();
+        });
+
         return $form;
     }
 }

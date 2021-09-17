@@ -9,6 +9,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class ConfigController extends AdminController
 {
@@ -84,6 +85,10 @@ class ConfigController extends AdminController
         $form->textarea('description', __('Description'));
         $form->select('type', __('Type'))->options($this->type)->default(1);
         $form->switch('status', __('Status'))->default(1);
+
+        $form->saved(function (){
+            Cache::flush();
+        });
 
         return $form;
     }

@@ -10,6 +10,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Tree;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends AdminController
 {
@@ -80,6 +81,10 @@ class CategoryController extends AdminController
                 $parentInfo = Category::query()->find($parent_id);
                 $form->depth = $parentInfo->depth + 1;
             }
+        });
+
+        $form->saved(function (){
+            Cache::flush();
         });
 
         return $form;

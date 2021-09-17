@@ -16,6 +16,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class CompleteController extends AdminController
 {
@@ -214,6 +215,10 @@ class CompleteController extends AdminController
         $form->select('memory', __('Memory'))->options([0 => 'unknown', 1 => 'Low', 2 => 'Medium', 3 => 'High'])->readOnly();
         $form->text('remark', __('Remark'));
         $form->radio('status', __('Status'))->options(Status::getList(2));
+
+        $form->saved(function (){
+            Cache::flush();
+        });
 
         return $form;
     }

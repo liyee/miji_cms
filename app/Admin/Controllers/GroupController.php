@@ -13,6 +13,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Tab;
+use Illuminate\Support\Facades\Cache;
 
 class GroupController extends AdminController
 {
@@ -105,6 +106,10 @@ class GroupController extends AdminController
             }
 
             if (!$form->activity_id) $form->activity_id = 0;
+        });
+
+        $form->saved(function (){
+            Cache::flush();
         });
 
         return $form;

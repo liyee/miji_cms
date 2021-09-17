@@ -17,6 +17,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class MediaController extends AdminController
 {
@@ -245,6 +246,11 @@ class MediaController extends AdminController
                 $form->type = 0;
             }
             if (!$form->uuid) $form->uuid = uniqid();
+        });
+
+        //保存后回调
+        $form->saved(function () {
+            Cache::flush();
         });
 
         return $form;

@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Cache;
 
 class PublishController extends AdminController
 {
@@ -87,6 +88,10 @@ class PublishController extends AdminController
         $form->number('group_id', __('Group id'));
         $form->number('sort', __('Sort'));
         $form->switch('status', __('Status'))->default(1);
+
+        $form->saved(function (){
+            Cache::flush();
+        });
 
         return $form;
     }

@@ -16,7 +16,12 @@ class MediaGroup extends Model
     {
         $key = config('cacheKey.group_num');
         $value = Cache::remember($key, 60, function () {
-            $list = self::selectRaw('group_id,COUNT(media_id) num')->where(['status' => 1])->groupBy('group_id')->get()->toArray();
+            $list = self::query()->from('m_media_group as G')
+                ->selectRaw('G.group_id,COUNT(G.media_id) num')
+                ->leftJoin('m_media as M', 'M.id', '=', 'G.media_id')
+                ->where(['G.status' => 1, 'M.status' => 2])
+                ->groupBy('group_id')
+                ->get()->toArray();
             $group = array_column($list, 'group_id');
             $num = array_column($list, 'num');
 

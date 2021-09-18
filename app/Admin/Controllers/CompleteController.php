@@ -3,6 +3,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Tools\TestAgain;
 use App\Libraries\Status;
 use App\Models\Category;
 use App\Models\Config;
@@ -16,6 +17,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class CompleteController extends AdminController
@@ -44,6 +46,12 @@ class CompleteController extends AdminController
         });
         $grid->batchActions(function ($batch) {
             $batch->disableDelete();
+        });
+
+        $grid->tools(function ($tools){
+            $tools->batch(function ($batch){
+                $batch->add('Test Again', new TestAgain(4));
+            });
         });
 
         $grid->expandFilter();
@@ -221,5 +229,10 @@ class CompleteController extends AdminController
         });
 
         return $form;
+    }
+
+    protected function testAgain(Request $request){
+        $ids = $request->get('ids');
+        return json_encode($ids);
     }
 }

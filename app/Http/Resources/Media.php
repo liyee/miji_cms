@@ -77,11 +77,11 @@ class Media extends JsonResource
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
 
-        if (isset($addition['url'])) {
-            if (strstr($this->url, '?')) {
-                $addition['url'] = $this->url . '&metax_mode=' . $this->mode;
+        if (isset($this->mode) && $base['url_jump']) {
+            if (strstr($this->url_jump, '?')) {
+                $base['url_jump'] .= '&metax_mode=' . $this->mode;
             } else {
-                $addition['url'] = $this->url . '?metax_mode=' . $this->mode;
+                $base['url_jump'] .= '?metax_mode=' . $this->mode;
             }
         }
 

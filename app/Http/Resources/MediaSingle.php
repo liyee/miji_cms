@@ -50,7 +50,15 @@ class MediaSingle extends JsonResource
             $data['series'] = \App\Models\Media::getListBySerie($this->id, $customer_id, $memory);
         }
 
-        return  $data;
+        if (isset($this->mode) && $data['url_jump']) {
+            if (strstr($data['url_jump'], '?')) {
+                $data['url_jump'] .= '&metax_mode=' . $this->mode;
+            } else {
+                $data['url_jump'] .= '?metax_mode=' . $this->mode;
+            }
+        }
+
+        return $data;
     }
 
     /**

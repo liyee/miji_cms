@@ -50,7 +50,7 @@ class CompleteController extends AdminController
 
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
-                $batch->add('Test Again', new TestAgain(4));
+                $batch->add('Test Again', new TestAgain(2, 4));
             });
         });
 
@@ -231,13 +231,14 @@ class CompleteController extends AdminController
         return $form;
     }
 
-    protected function testAgain(Request $request)
+    protected function reStatus(Request $request)
     {
         $ids = $request->get('ids', 0);
+        $from = $request->post('from', 4);
         $action = $request->post('action', 4);
         if ($ids) {
             $ids = explode(',', $ids);
-            Media::query()->whereIn('id', $ids)->where(['status' => 2])->update(['status' => $action]);
+            Media::query()->whereIn('id', $ids)->where(['status' => $from])->update(['status' => $action]);
             Cache::flush();
         }
 

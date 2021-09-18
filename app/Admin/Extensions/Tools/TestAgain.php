@@ -7,14 +7,16 @@ namespace App\Admin\Extensions\Tools;
 class TestAgain extends \Encore\Admin\Grid\Tools\BatchAction
 {
 
+    protected $from;
     protected $action;
 
     /**
      * TestAgain constructor.
      * @param $action
      */
-    public function __construct($action = 1)
+    public function __construct($from = 2, $action = 4)
     {
+        $this->from = $from;
         $this->action = $action;
     }
 
@@ -31,15 +33,16 @@ $('{$this->getElementClass()}').on('click', function() {
 
     $.ajax({
         method: 'post',
-        url: '{$this->resource}/test_again',
+        url: '{$this->resource}/re_status',
         data: {
             _token:LA.token,
             ids: $.admin.grid.selected().join(),
+            from: {$this->from},
             action: {$this->action}
         },
         success: function () {
             $.pjax.reload('#pjax-container');
-            toastr.success('操作成功');
+            toastr.success('Succeed');
         }
     });
 });

@@ -31,10 +31,10 @@ $('{$this->getElementClass()}').on('click', function() {
 
     $.ajax({
         method: 'post',
-        url: '{$this->resource}/testAgain',
+        url: '{$this->resource}/test_again',
         data: {
             _token:LA.token,
-            ids: $("input[name='grid-row-checkbox']").attr("checked", true),
+            ids: $.admin.grid.selected().join(),
             action: {$this->action}
         },
         success: function () {

@@ -246,7 +246,9 @@ class Media extends Model
         $key = config('cacheKey.media_recommend') . '_' . md5(json_encode($params));
 
         $value = Cache::remember($key, 5, function () use ($params) {
-            $data = self::query()->from('m_media as M')->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url_jump', 'A.customer_id', 'A.mode'])
+            $data = self::query()
+                ->from('m_media as M')
+                ->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url_jump', 'A.customer_id', 'A.mode'])
                 ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
                 ->where([
                     'A.customer_id' => $params['customer_id'],

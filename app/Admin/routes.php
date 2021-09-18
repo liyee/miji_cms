@@ -13,6 +13,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->get('/clearCache', 'HomeController@clearCache')->name('clearCache');
     $router->get('api/class_sub', 'CategoryController@classSub');
+    $router->POST('complete/test_again', 'CompleteController@testAgain');
 
     $router->resource('users', UserController::class);
     $router->resource('cps', CpController::class);

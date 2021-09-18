@@ -48,8 +48,8 @@ class CompleteController extends AdminController
             $batch->disableDelete();
         });
 
-        $grid->tools(function ($tools){
-            $tools->batch(function ($batch){
+        $grid->tools(function ($tools) {
+            $tools->batch(function ($batch) {
                 $batch->add('Test Again', new TestAgain(4));
             });
         });
@@ -224,15 +224,23 @@ class CompleteController extends AdminController
         $form->text('remark', __('Remark'));
         $form->radio('status', __('Status'))->options(Status::getList(2));
 
-        $form->saved(function (){
+        $form->saved(function () {
             Cache::flush();
         });
 
         return $form;
     }
 
-    protected function testAgain(Request $request){
-        $ids = $request->get('ids');
-        return json_encode($ids);
+    protected function testAgain(Request $request)
+    {
+        $ids = $request->get('ids', 0);
+        $action = $request->post('action', 4);
+        if ($ids) {
+            $ids = explode(',', $ids);
+            Media::query()->whereIn('id', $ids)->where(['status' => 2])->update(['status' => $action]);
+            Cache::flush();
+        }
+
+        return json_encode(['status' => 1]);
     }
 }

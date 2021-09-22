@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/msg/push', [\App\Http\Controllers\MsgController::class, 'push']);
+Route::get('/msg/push', [\App\Http\Controllers\MsgController::class, 'push'])->middleware(['throttle:10,1']);

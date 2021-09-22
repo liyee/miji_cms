@@ -16,13 +16,13 @@ class IpHelp
      * @throws \MaxMind\Db\Reader\InvalidDatabaseException
      * 获取国家iosCode
      */
-    public static function getCountryCode($ip)
+    public static function getCountryCode($ip, $default = 'US')
     {
-        $iosCode = 'US';
-        $key = 'iosCode_' . md5($ip);
+        $iosCode = $default;
+        $key = 'iosCode_' . md5($ip . $default);
         if (Cache::has($key)) {
             return Cache::get($key);
-        }else{
+        } else {
             $reader = new Reader(resource_path('file/GeoLite2-Country.mmdb'));
             try {
                 $contry = $reader->country($ip);

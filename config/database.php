@@ -125,35 +125,30 @@ return [
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
+            'parameters' => [
+                'scheme' => env('REDIS_SCHEME', 'tcp'),
+            ],
         ],
 
         'clusters' => [
             'default' => [
                 [
-//                    'url' => 'tls://metaxplaycms-0001-001.metaxplaycms.qv3f0j.memorydb.us-east-1.amazonaws.com:6379?database=0',
-                    'scheme' => env('REDIS_SCHEME', 'tcp'),
-                    'host' => env('REDIS_HOST_DEFAULT', '127.0.0.1'),
+                    'host' => env('REDIS_HOST', '127.0.0.1'),
                     'password' => env('REDIS_PASSWORD', null),
                     'port' => env('REDIS_PORT', '6379'),
                     'database' => env('REDIS_DB', '0'),
+                    'read_write_timeout' => 10,
                 ],
-//                [
-//                    'url' => 'tls://metaxplaycms-0001-002.metaxplaycms.qv3f0j.memorydb.us-east-1.amazonaws.com:6379?database=0',
-//                ]
             ],
 
             'cache' => [
                 [
-//                    'url' => 'tls://clustercfg.metaxplaycms.qv3f0j.memorydb.us-east-1.amazonaws.com:6379?database=0',
-                    'scheme' => env('REDIS_SCHEME', 'tcp'),
                     'host' => env('REDIS_CACHE_HOST', '127.0.0.1'),
                     'password' => env('REDIS_PASSWORD', null),
                     'port' => env('REDIS_PORT', '6379'),
                     'database' => env('REDIS_CACHE_DB', '0'),
+                    'read_write_timeout' => 10,
                 ],
-//                [
-//                    'url' => 'tls://metaxplaycms-0001-002.metaxplaycms.qv3f0j.memorydb.us-east-1.amazonaws.com:6379?database=0',
-//                ]
             ],
         ],
     ],

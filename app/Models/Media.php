@@ -84,6 +84,23 @@ class Media extends Model
     }
 
     /**
+     * @param $value
+     * @return false|string[]
+     * parent_id-ParentId
+     */
+    public function getParentIdAttribute($value)
+    {
+        $res = explode(',', $value);
+        return $res;
+    }
+
+    public function setParentIdAttribute($value)
+    {
+        $val = implode(',', array_filter($value));
+        $this->attributes['parent_id'] = $val;
+    }
+
+    /**
      * @param $id
      * @param array $fields
      * @param array $where
@@ -150,7 +167,7 @@ class Media extends Model
     {
         $d = date('Y-m-d H:i:s', time());
         $additional = "$act as act";
-        $data = self::query()->select('M.*', 'A.customer_id', 'A.mode' )->selectRaw($additional)->from('m_media as M')
+        $data = self::query()->select('M.*', 'A.customer_id', 'A.mode')->selectRaw($additional)->from('m_media as M')
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
                 'M.parent_id' => $parent_id,
@@ -181,10 +198,10 @@ class Media extends Model
             $data = self::query()->from('m_media as M')
                 ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
                 ->where([
-                    'M.parent_id' => $params['parent_id'],
                     'M.status' => $params['status'],
                     'A.customer_id' => $params['customer_id']
                 ])
+                ->whereRaw('find_in_set(\'' . $params['parent_id'] . '\', `M`.`parent_id`)')
                 ->where('M.memory', '<=', $params['memory'])
                 ->orderBy('M.sort')->pluck('M.id');
 
@@ -270,15 +287,16 @@ class Media extends Model
         return $value;
     }
 
-    public static function selectBytype($type = 1)
+    public static function selectBytype()
     {
-        $key = config('cacheKey.media_select') . $type;
+        $key = config('cacheKey.media_select');
 
-        $value = Cache::remember($key, 0, function () use ($type) {
-            $data = self::where(['type' => $type, 'parent_id' => 0])->get(['id', 'title_original'])->toArray();
+        $value = Cache::remember($key, 0, function () {
+            $data = self::query()->where(['parent_id' => 0])->whereIn('type', [1, 2])->get(['id', 'type', 'title_original'])->sortBy('type')->toArray();
             $list = [];
             array_walk($data, function ($val) use (&$list) {
-                $list[$val['id']] = $val['title_original'];
+                $type_name = $val['type'] == 1 ? 'Serie' : 'Activity';
+                $list[$val['id']] = '[' . $type_name . '] ' . $val['title_original'];
             });
 
             return $list;

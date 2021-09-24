@@ -22,7 +22,7 @@ class Download
      */
     public function init()
     {
-        $media_list = $this->getList();
+        $this->getList();
     }
 
     /**

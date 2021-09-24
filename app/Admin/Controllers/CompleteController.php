@@ -73,7 +73,7 @@ class CompleteController extends AdminController
             return $this->type > 0 ? $title . '[More]' : $title;
         })->expand(function () {
             if ($this->type > 0) {
-                $child = Media::query()->where(['parent_id' => $this->id])->get(['id', 'title', 'title_sub'])->toArray();
+                $child = Media::query()->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['id', 'title', 'title_sub'])->toArray();
                 $childNew = array_map(function ($value) {
                     $id = $value['id'];
                     $value['action'] = '<a href="complete/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
@@ -190,11 +190,7 @@ class CompleteController extends AdminController
         $form->datetime('offlinetime', __('Offlinetime'));
         $form->multipleSelect('groups', 'Group')->options(Group::selectOptions());
         $form->radio('type', __('Type'))->options($this->type)->default(0);
-        $form->select('parent_id', 'Parent Name')->groups([
-            ['label' => 'Default', 'options' => [0 => 'None']],
-            ['label' => 'Serie', 'options' => Media::selectBytype(1)],
-            ['label' => 'Activity', 'options' => Media::selectBytype(2)],
-        ])->default(0);
+        $form->multipleSelect('parent_id', 'Parent Name')->options(Media::selectBytype());
         $form->number('duration', __('Duration'));
         $form->number('serie_num', __('Serie num'))->default(1);
         $form->switch('serie_end', __('Serie end'))->default(1);

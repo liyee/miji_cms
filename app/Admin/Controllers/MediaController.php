@@ -80,7 +80,7 @@ class MediaController extends AdminController
             return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;
         })->expand(function () {
             if ($this->type > 0) {
-                $child = Media::query()->where(['parent_id' => $this->id])->get(['id', 'title', 'title_sub'])->toArray();
+                $child = Media::query()->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['id', 'title', 'title_sub'])->toArray();
                 $childNew = array_map(function ($value) {
                     $id = $value['id'];
                     $value['action'] = '<a href="medias/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
@@ -189,11 +189,7 @@ class MediaController extends AdminController
             $form->text('title_sub', __('Title sub'));
             $form->text('title_original', __('Title original'))->required();
             $form->radio('type', __('Type'))->options($this->type)->default(0);
-            $form->select('parent_id', 'Parent Name')->groups([
-                ['label' => 'Default', 'options' => [0 => 'None']],
-                ['label' => 'Serie', 'options' => Media::selectBytype(1)],
-                ['label' => 'Activity', 'options' => Media::selectBytype(2)],
-            ])->default(0);
+            $form->multipleSelect('parent_id', 'Parent Name')->options(Media::selectBytype());
             $form->number('duration', __('Duration'))->default(60)->required();
             $form->number('serie_num', __('Serie num'))->default(1)->required();
             $form->switch('serie_end', __('Serie end'))->states([

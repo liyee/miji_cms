@@ -38,6 +38,7 @@ class yesAuto
         $url_list = $info['url'] . '/data/page/metax_query_contentlist_by_catagory';
         $data = [];
         $categories = Category::getList();
+        $date = date('Y-m-d H:i:s');
         if ($category) {
             foreach ($category['category_list'] as $item) {
                 $isContinue = true;
@@ -58,7 +59,7 @@ class yesAuto
                     $catagroy_name = strtr($item['catagroy_name'], ' ', '_');
                     $class_sub = $categoryNew[$catagroy_name]['id'];
                     $class = Category::getTop($categories, $class_sub);
-                    $video_list_filter = array_filter(array_map(function ($val) use ($class, $class_sub) {
+                    $video_list_filter = array_filter(array_map(function ($val) use ($class, $class_sub, $date) {
                         if ($val['busy_type'] == 2 && isset($val['video_url'])) {//接入视频
                             $language = 'en';
                             switch ($val['video_region']){
@@ -83,6 +84,8 @@ class yesAuto
                                 'class' => $class,
                                 'class_sub' => $class_sub,
                                 'remark' => $val['video_region'],
+                                'updated_at' => $date,
+                                'created_at' => $date,
                             ];
                             return $valNew;
                         }

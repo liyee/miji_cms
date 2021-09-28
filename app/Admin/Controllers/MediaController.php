@@ -202,7 +202,7 @@ class MediaController extends AdminController
             $form->select('language', __('Language'))->options(Config::select(1))->required();
             $form->hidden('class');
             $form->hidden('uuid');
-            $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
+            $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class)->required();
             $form->textarea('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
             $form->text('url', __('Url'))->required();
@@ -229,7 +229,7 @@ class MediaController extends AdminController
             $form->hasMany('modes', function ($form) {
                 $form->select('customer_id', 'Customer')->options(array_flip(Customer::getCustomerId()))->required();
                 $form->select('mode', 'Mode')->options(Config::select(7))->required()->default(5);
-                $form->switch('status', 'Status');
+                $form->radio('status', 'Status')->options([1=> 'ON', 0 => 'OFF'])->default(1);
             });
         });
 

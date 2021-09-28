@@ -3,6 +3,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Form\Recommend;
 use App\Admin\Extensions\Tools\TestAgain;
 use App\Libraries\Status;
 use App\Models\Category;
@@ -49,6 +50,7 @@ class CompleteController extends AdminController
         });
 
         $grid->tools(function ($tools) {
+            $tools->append(new Recommend());
             $tools->batch(function ($batch) {
                 $batch->add('Test Again', new TestAgain(2, 4));
             });

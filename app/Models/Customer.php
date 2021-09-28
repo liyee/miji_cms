@@ -36,4 +36,21 @@ class Customer extends Model
 
         return isset($value[$pn . '_' . $pt]) ? $value[$pn . '_' . $pt] : $value;
     }
+
+    /**
+     * 客户下拉列表
+     */
+    public static function selectPn(){
+        $key = config('cacheKey.customer_select_pn');
+        $value = Cache::remember($key, 3600, function () {
+            $data = self::query()->where('status', 1)->distinct()->get(['name'])->toArray();
+            $select = [];
+            array_walk($data, function ($val) use (&$select){
+                $select[strtolower($val['name'])] = $val['name'];
+            });
+            return $select;
+        });
+
+        return $value;
+    }
 }

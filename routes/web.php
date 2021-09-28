@@ -28,7 +28,7 @@ Route::get('/media/{id}', function (Request $request, $id = 0) {
     $pt = $request->input('pt', 0);
     $memory = $request->input('memory', 1);
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-    return new \App\Http\Resources\Media(\App\Models\Media::getOne2($id,2, $customer_id, $memory), 1);
+    return new \App\Http\Resources\Media(\App\Models\Media::getOne2($id, 2, $customer_id, $memory), 1);
 });
 
 //2.更多媒资
@@ -78,6 +78,14 @@ Route::get('/recommend/{id}', function (Request $request, $id) {
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
     return \App\Http\Resources\MediaSingle::collection(\App\Models\Media::getRecommend($id, array_merge($childIds, [$sub]), $iosCode, $customer_id, $memory));
 });
+
+//8.推荐媒资-渠道
+Route::get('/recommend/pn/{pn}/pt/{pt}', function (Request $request, $pn, $pt) {
+    $memory = $request->input('memory', 1);
+    $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
+    $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
+    return \App\Http\Resources\MediaSingle::collection(\App\Models\Recommend::getList($pn, $iosCode, $customer_id, $memory));
+})->middleware(['throttle:10,1']);
 
 //1-1.媒资详情-测试
 Route::get('/media-test/{id}', function ($id = 0) {

@@ -170,13 +170,13 @@ class Media extends Model
         $data = self::query()->select('M.*', 'A.customer_id', 'A.mode')->selectRaw($additional)->from('m_media as M')
             ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
             ->where([
-                'M.parent_id' => $parent_id,
                 'M.status' => $status,
                 'A.customer_id' => $customer_id
             ])
             ->where('M.memory', '<=', $memory)
             ->where('M.onlinetime', '<=', $d)
             ->where('M.offlinetime', '>=', $d)
+            ->whereRaw('find_in_set(\'' . $parent_id . '\', `M`.`parent_id`)')
             ->whereRaw('find_in_set(\'' . $iosCode . '\', `M`.`region`)')
             ->orderBy('M.sort')
             ->get(['M.*', 'act']);

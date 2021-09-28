@@ -44,7 +44,7 @@ class MediaSingle extends JsonResource
             'img' => MediaImg::collection($this->getImg($this->imgs->where('config', $clarity)->wherein('act', [0, $act]), $act))
         ];
 
-        if ($this->type == 1) {
+        if (in_array($this->type, [1, 2])) {
             $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
             $data['serie_end'] = $this->serie_end;
             $data['series'] = \App\Models\Media::getListBySerie($this->id, $customer_id, $memory);

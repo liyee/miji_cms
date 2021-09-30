@@ -85,7 +85,7 @@ Route::get('/recommend/pn/{pn}/pt/{pt}', function (Request $request, $pn, $pt) {
     $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
     return \App\Http\Resources\MediaSingle::collection(\App\Models\Recommend::getList($pn, $iosCode, $customer_id, $memory));
-})->middleware(['throttle:10,1']);
+})->middleware(['throttle:10,1', 'secret']);
 
 //1-1.媒资详情-测试
 Route::get('/media-test/{id}', function ($id = 0) {

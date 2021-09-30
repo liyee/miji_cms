@@ -17,6 +17,11 @@ class Recommend extends Model
         return $this->belongsTo(Media::class);
     }
 
+    public function imgs()
+    {
+        return $this->hasMany(MediaImg::class, 'media_id');
+    }
+
     /**
      * @param string $iosCode
      * @param $customer_id
@@ -27,15 +32,16 @@ class Recommend extends Model
      */
     public static function getList($pn, $iosCode = 'US', $customer_id, $memory = 1, $status = 2)
     {
-        $params = ['iosCode' => $iosCode, 'customer_id' => $customer_id, 'memory' => $memory, 'status' => $status, 'pn' => strtolower($pn)];
+        $pn = strtolower($pn);
+        $params = ['iosCode' => $iosCode, 'customer_id' => $customer_id, 'memory' => $memory, 'status' => $status, 'pn' => $pn];
         $key = config('cacheKey.recommend_list') . '_' . md5(json_encode($params));
 
         $value = Cache::remember($key, 5, function () use ($params) {
             $data = self::query()
                 ->from('m_media_recommend as R')
                 ->select(['M.id', 'M.title', 'M.title_sub', 'M.class', 'M.class_sub', 'M.cp_id', 'M.duration', 'M.type', 'M.is_direction', 'M.publishtime', 'M.score', 'M.url_jump', 'A.customer_id', 'A.mode'])
-                ->rightJoin('m_media as M', 'M.media_id', '=', 'R.media_id')
-                ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'R.media_id')
+                ->leftJoin('m_media as M', 'M.id', '=', 'R.media_id')
+                ->leftJoin('m_media_attr as A', 'A.media_id', '=', 'R.media_id')
                 ->where([
                     'A.customer_id' => $params['customer_id'],
                     'M.status' => $params['status'],

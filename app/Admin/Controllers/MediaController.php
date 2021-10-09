@@ -10,6 +10,7 @@ use App\Models\Config;
 use App\Models\Cp;
 use App\Models\Customer;
 use App\Models\Media;
+use App\Models\MediaSerie;
 use App\Models\Region;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -80,7 +81,8 @@ class MediaController extends AdminController
             return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;
         })->expand(function () {
             if ($this->type > 0) {
-                $child = Media::query()->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['id', 'title', 'title_sub'])->toArray();
+//                $child = Media::query()->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['id', 'title', 'title_sub', 'sort'])->toArray();
+                $child = MediaSerie::query()->from('m_media_serie AS S')->rightJoin('m_media AS M', 'M.id', '=', 'S.media_id')->whereRaw('find_in_set(\'' . $this->id . '\', M.`parent_id`)')->get(['M.id2', 'M.title', 'M.title_sub', 'S.sort'])->toArray();
                 $childNew = array_map(function ($value) {
                     $id = $value['id'];
                     $value['action'] = '<a href="medias/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
@@ -229,7 +231,7 @@ class MediaController extends AdminController
             $form->hasMany('modes', function ($form) {
                 $form->select('customer_id', 'Customer')->options(array_flip(Customer::getCustomerId()))->required();
                 $form->select('mode', 'Mode')->options(Config::select(7))->required()->default(5);
-                $form->radio('status', 'Status')->options([1=> 'ON', 0 => 'OFF'])->default(1);
+                $form->radio('status', 'Status')->options([1 => 'ON', 0 => 'OFF'])->default(1);
             });
         });
 

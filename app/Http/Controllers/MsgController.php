@@ -24,7 +24,10 @@ class MsgController extends Controller
         if ($email) {
             $pattern = '/^[a-z0-9]+([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/i';
             if (preg_match($pattern, $email) == 0) {
-                return response('The email format is not supported!', 412);
+                return response([
+                    'code' => 412,
+                    'msg' => 'The email format is not supported!'
+                ]);
             }
         }
 

@@ -203,7 +203,7 @@ class Media extends Model
                 ])
                 ->whereRaw('find_in_set(\'' . $params['parent_id'] . '\', `M`.`parent_id`)')
                 ->where('M.memory', '<=', $params['memory'])
-                ->orderBy('M.sort')->pluck('M.id');
+                ->orderBy('M.sort')->get(['M.id', 'M.url_jump']);
 
             return $data;
         });

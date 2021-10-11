@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class MediaSerieController extends AdminController
 {
@@ -68,8 +69,6 @@ class MediaSerieController extends AdminController
     {
         $form = new Form(new MediaSerie());
         $isCreate = $form->isCreating();
-        $media_id = 0;
-
         if ($isCreate) {
             $media_id = $_REQUEST['media_id'];
             $serie_id = $_REQUEST['serie_id'];
@@ -84,6 +83,7 @@ class MediaSerieController extends AdminController
         $form->hidden('status', __('Status'))->value(1);
 
         $form->saved(function (Form $form) {
+            Cache::flush();
             $media_id = $form->model()->media_id;
             return redirect('admin/complete' . '?id=' . $media_id);
         });

@@ -11,6 +11,7 @@ use App\Models\Config;
 use App\Models\Cp;
 use App\Models\Group;
 use App\Models\Media;
+use App\Models\MediaSerie;
 use App\Models\Region;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -75,14 +76,25 @@ class CompleteController extends AdminController
             return $this->type > 0 ? $title . '[More]' : $title;
         })->expand(function () {
             if ($this->type > 0) {
-                $child = Media::query()->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['id', 'title', 'title_sub'])->toArray();
-                $childNew = array_map(function ($value) {
-                    $id = $value['id'];
-                    $value['action'] = '<a href="complete/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
-                    return $value;
-                }, $child);
+                $id = $this->id;
+                $child = MediaSerie::query()->from('m_media_serie AS S')->rightJoin('m_media AS M', 'M.id', '=', 'S.serie_id')->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['M.id', 'M.title', 'M.title_sub', 'S.sort', 'S.media_id', 'S.id AS sid'])->toArray();
+                $childNew = array_map(function ($value) use ($id) {
+                    $media_id = $value['media_id'];
+                    if ($media_id == $id || $media_id == null) {
+                        if ($value['sort'] == null) $value['sort'] = 0;
+                        $sid = $value['sid'];
+                        unset($value['media_id']);
+                        unset($value['sid']);
+                        if ($sid) {
+                            $value['action'] = '<a href="media-series/' . $sid . '/edit">Sort</a>|<a href="complete/' . $id . '/edit">Edit</a>';
+                        } else {
+                            $value['action'] = '<a href="media-series/create?media_id=' . $id . '&serie_id=' . $value['id'] . '">Sort</a>|<a href="complete/' . $id . '/edit">Edit</a>';
+                        }
 
-                return new Table(['Id', 'Title', 'title_sub', 'Action'], $childNew);
+                        return $value;
+                    }
+                }, $child);
+                return new Table(['Id', 'Title', 'title_sub', 'Sort', 'Action'], $childNew);
             }
             return new Table();
         });

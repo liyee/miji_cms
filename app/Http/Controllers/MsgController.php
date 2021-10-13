@@ -18,19 +18,8 @@ class MsgController extends Controller
      */
     public function push(Request $request)
     {
-        $email = $request->input('email');
+        $email = $request->input('email', '');
         $content = $request->input('content');
-
-        if ($email) {
-            $pattern = '/^[a-z0-9]+([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/i';
-            if (preg_match($pattern, $email) == 0) {
-                return response([
-                    'data' => '',
-                    'code' => 412,
-                    'msg' => 'The email format is not supported!'
-                ]);
-            }
-        }
 
         $ip = $request->ip();
         $msg = new Msg();

@@ -25,6 +25,7 @@ class MsgController extends Controller
             $pattern = '/^[a-z0-9]+([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/i';
             if (preg_match($pattern, $email) == 0) {
                 return response([
+                    'data' => '',
                     'code' => 412,
                     'msg' => 'The email format is not supported!'
                 ]);
@@ -38,10 +39,13 @@ class MsgController extends Controller
         $msg->ip = $ip;
         $msg->region = IpHelp::getCountryCode($ip, null);
 
-        return response([
-            'data' => $msg->save(),
-            'code' => 200,
-            'msg' => 'success'
-        ]);
+        try {
+            $msg->save();
+        } catch (\Throwable $e) {
+            report($e);
+            return response(['data' => '', 'code' => 500, 'msg' => $e->getMessage()]);
+        }
+
+        return response(['data' => '', 'code' => 200, 'msg' => 'success']);
     }
 }

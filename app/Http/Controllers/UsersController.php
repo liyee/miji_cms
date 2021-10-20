@@ -33,6 +33,7 @@ class UsersController extends Controller
      */
     public function index()
     {
+        echo 99;die;
         $data = [
             [
                 'id' => 1,

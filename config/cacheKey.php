@@ -21,5 +21,6 @@ return [
     'group_pid' => 'group_pid', // 分组列表
     'group_list' => 'group_list', // 分组列表
     'group_list_page' => 'group_list_page', // 分组列表
-    'recommend_list' => 'recommend_list'
+    'recommend_list' => 'recommend_list',
+    'collection_list' => 'collection_list',
 ];

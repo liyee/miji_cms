@@ -51,12 +51,12 @@ class Group extends Model
     {
         $key = config('cacheKey.group_list_page') . '_' . md5(json_encode($params));
         $value = Cache::remember($key, 3600, function () use ($params) {
-            return self::query()->where($params['where'])->orderBy('sort')->orderBy('id')->paginate($params['size']);;
+            return self::query()->where($params['where'])->orderBy('sort')->orderBy('id')->paginate($params['size'], ['*'], 'page', $params['page']);
         });
 
         return $value;
 
-//        return self::query()->where($where)->orderBy('sort')->orderBy('id')->paginate($size);
+//        return self::query()->where($params['where'])->orderBy('sort')->orderBy('id')->paginate($params['size'], ['*'], 'page', $params['page']);
     }
 
     /**

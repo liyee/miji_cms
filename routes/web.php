@@ -37,9 +37,11 @@ Route::get('/group/{group_id}', function (Request $request, $group_id = 0) {
 });
 
 //3.媒资分组列表
-Route::get('/nav/{nav}/{size?}', function ($nav = 0, $size = 3) {
+Route::get('/nav/{nav}/{size?}', function (Request $request, $nav = 0, $size = 3) {
+    $page = $request->input('page', 1);
     return \App\Http\Resources\Group::collection(\App\Models\Group::getList([
         'size' => $size,
+        'page' => $page,
         'where' => ['parent_id' => $nav, 'status' => 1]
     ]));
 });

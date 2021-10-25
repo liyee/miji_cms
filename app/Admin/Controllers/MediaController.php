@@ -10,6 +10,7 @@ use App\Models\Config;
 use App\Models\Cp;
 use App\Models\Customer;
 use App\Models\Media;
+use App\Models\MediaSerie;
 use App\Models\Region;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -80,14 +81,25 @@ class MediaController extends AdminController
             return $this->type > 0 ? $title . '&nbsp;&nbsp;&nbsp;&nbsp;[More]' : $title;
         })->expand(function () {
             if ($this->type > 0) {
-                $child = Media::query()->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['id', 'title', 'title_sub'])->toArray();
-                $childNew = array_map(function ($value) {
-                    $id = $value['id'];
-                    $value['action'] = '<a href="medias/' . $id . '/edit">Edit</a>|<a href="medias/' . $id . '">Show</a>';
-                    return $value;
-                }, $child);
+                $id = $this->id;
+                $child = MediaSerie::query()->from('m_media_serie AS S')->rightJoin('m_media AS M', 'M.id', '=', 'S.serie_id')->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['M.id', 'M.title', 'M.title_sub', 'S.sort', 'S.media_id', 'S.id AS sid'])->toArray();
+                $childNew = array_map(function ($value) use ($id) {
+                    $media_id = $value['media_id'];
+                    if ($media_id == $id || $media_id == null) {
+                        if ($value['sort'] == null) $value['sort'] = 0;
+                        $sid = $value['sid'];
+                        unset($value['media_id']);
+                        unset($value['sid']);
+                        if ($sid) {
+                            $value['action'] = '<a href="media-series/' . $sid . '/edit">Sort</a>|<a href="medias/' . $id . '/edit">Edit</a>';
+                        } else {
+                            $value['action'] = '<a href="media-series/create?media_id=' . $id . '&serie_id=' . $value['id'] . '">Sort</a>|<a href="medias/' . $id . '/edit">Edit</a>';
+                        }
 
-                return new Table(['Id', 'Title', 'title_sub', 'Action'], $childNew);
+                        return $value;
+                    }
+                }, $child);
+                return new Table(['Id', 'Title', 'title_sub', 'Sort', 'Action'], $childNew);
             }
             return new Table();
         });
@@ -202,7 +214,7 @@ class MediaController extends AdminController
             $form->select('language', __('Language'))->options(Config::select(1))->required();
             $form->hidden('class');
             $form->hidden('uuid');
-            $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class);
+            $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class)->required();
             $form->textarea('intro', __('Intro'));
             $form->image('img_original', __('Img original'))->removable();
             $form->text('url', __('Url'))->required();
@@ -227,9 +239,9 @@ class MediaController extends AdminController
             });
         })->tab('Mode', function ($form) {
             $form->hasMany('modes', function ($form) {
-                $form->select('customer_id', 'Customer')->options(array_flip(Customer::getCustomerId()))->required();
+                $form->select('customer_id', 'Customer')->options(array_flip(Customer::getList()))->required();
                 $form->select('mode', 'Mode')->options(Config::select(7))->required()->default(5);
-                $form->switch('status', 'Status');
+                $form->radio('status', 'Status')->options([1 => 'ON', 0 => 'OFF'])->default(1);
             });
         });
 

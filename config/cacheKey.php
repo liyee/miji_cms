@@ -1,10 +1,11 @@
 <?php
 return [
     'cp_list' => 'cp_list', // CP列表
+    'cp_select' => 'cp_select', // CP下拉框
     'customer_list' => 'customer_list', // 客户列表
+    'customer_select_pn' => 'customer_select_pn', // 客户下拉列表
     'config_select' => 'config_select_', // type类别
     'config_list' => 'config_list', // type类别
-    'cp_select' => 'cp_select', // CP下拉框
     'region_select' => 'region_select', // 区域下拉框
     'activities' => 'activities', // 活动列表 activities
     'activity_select' => 'activity_select', // 活动下拉列表
@@ -20,4 +21,6 @@ return [
     'group_pid' => 'group_pid', // 分组列表
     'group_list' => 'group_list', // 分组列表
     'group_list_page' => 'group_list_page', // 分组列表
+    'recommend_list' => 'recommend_list',
+    'collection_list' => 'collection_list',
 ];

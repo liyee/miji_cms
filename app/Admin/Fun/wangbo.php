@@ -79,6 +79,7 @@ class wangbo
         $category_insert = $this->insertCategory($category_new);
         $categories = Category::getList();
         $url_list = $info['url'] . '/api/channel/mediaListSrf';
+        $date = date('Y-m-d H:i:s');
         foreach ($category_new as $item) {
             $page_num = 20;
             $num = 1;
@@ -98,7 +99,7 @@ class wangbo
                         $class_sub = $category_insert[$category_name]['id'];
                         $class = Category::getTop($categories, $class_sub);
                         $video_list = [];
-                        array_walk($movie_sub['video_list'], function ($val, $key) use (&$video_list, $class_sub, $class) {
+                        array_walk($movie_sub['video_list'], function ($val, $key) use (&$video_list, $class_sub, $class, $date) {
                             $item = [
                                 'title' => $val['video_name'],
                                 'title_original' => $val['video_name'],
@@ -113,6 +114,8 @@ class wangbo
                                 'class' => $class,
                                 'class_sub' => $class_sub,
                                 'remark' => $val['video_language'],
+                                'updated_at' => $date,
+                                'created_at' => $date,
                             ];
                             $video_list[] = $item;
                         });

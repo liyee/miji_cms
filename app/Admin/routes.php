@@ -27,4 +27,6 @@ Route::group([
     $router->resource('complete', CompleteController::class);
     $router->resource('publish', PublishController::class);
     $router->resource('msgs', MsgController::class);
+    $router->resource('recommends', RecommendController::class);
+    $router->resource('media-series', MediaSerieController::class);
 });

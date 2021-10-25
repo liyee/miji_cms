@@ -197,13 +197,14 @@ class Media extends Model
         $value = Cache::remember($key, 3600, function () use ($params) {
             $data = self::query()->from('m_media as M')
                 ->rightJoin('m_media_attr as A', 'A.media_id', '=', 'M.id')
+                ->leftJoin('m_media_serie as S', 'M.id', '=', 'S.serie_id')
                 ->where([
                     'M.status' => $params['status'],
                     'A.customer_id' => $params['customer_id']
                 ])
                 ->whereRaw('find_in_set(\'' . $params['parent_id'] . '\', `M`.`parent_id`)')
                 ->where('M.memory', '<=', $params['memory'])
-                ->orderBy('M.sort')->pluck('M.id');
+                ->orderBy('S.sort')->get(['M.id', 'M.url_jump']);
 
             return $data;
         });

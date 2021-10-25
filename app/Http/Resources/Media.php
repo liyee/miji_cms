@@ -7,13 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class Media extends JsonResource
 {
-    private $fomType;
 
-    public function __construct($resource, $fomType = 0)
+    public function __construct($resource)
     {
         parent::__construct($resource);
         $this->resource = $resource;
-        $this->fomType = $fomType;
     }
 
     /**
@@ -35,8 +33,9 @@ class Media extends JsonResource
         $act = $this->act ?? $act;
 
         $addition = [];
-        switch ($this->fomType) {
-            case 1://媒资详情
+        $type = $this->type ?? 0;
+        switch ($type) {
+            case 0://媒资详情
                 $addition = [
                     'updatetime' => $this->updatetime,
                     'click_num' => $this->click_num,
@@ -48,7 +47,7 @@ class Media extends JsonResource
                     'mode' => $this->mode,
                 ];
                 break;
-            case 2://剧集详情
+            case 1://剧集详情
                 $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
                 $addition = [
                     'intro' => $this->intro,

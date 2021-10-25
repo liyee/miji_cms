@@ -16,16 +16,10 @@ class MsgController extends Controller
      * @throws \MaxMind\Db\Reader\InvalidDatabaseException
      * 反馈消息上报功能
      */
-    public function push(Request $request){
-        $email = $request->input('email');
+    public function push(Request $request)
+    {
+        $email = $request->input('email', '');
         $content = $request->input('content');
-
-        if ($email){
-            $pattern = '/^[a-z0-9]+([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/i';
-            if (preg_match($pattern, $email) == 0){
-                return response('The email format is not supported!', 412);
-            }
-        }
 
         $ip = $request->ip();
         $msg = new Msg();
@@ -34,6 +28,13 @@ class MsgController extends Controller
         $msg->ip = $ip;
         $msg->region = IpHelp::getCountryCode($ip, null);
 
-        return response($msg->save());
+        try {
+            $msg->save();
+        } catch (\Throwable $e) {
+            report($e);
+            return response(['data' => '', 'code' => 500, 'msg' => $e->getMessage()]);
+        }
+
+        return response(['data' => '', 'code' => 200, 'msg' => 'success']);
     }
 }

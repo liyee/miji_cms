@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Category;
+use App\Models\Cp;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MediaSingle extends JsonResource
@@ -26,6 +27,13 @@ class MediaSingle extends JsonResource
         $pt = $request->input('pt', 0);
         $memory = $request->input('memory', 1);
 
+        $cp = '';
+        if (!$this->cp){
+            $cp = Cp::select($this->cp_id);
+        }else{
+            $cp = $this->cp->name;
+        }
+
         $data = [
             'id' => $this->id,
             'title' => $this->title,
@@ -35,7 +43,7 @@ class MediaSingle extends JsonResource
             'type' => $this->type,
             'updatetime' => $this->updatetime,
             'publishtime' => $this->publishtime,
-            'cp' => $this->cp->name,
+            'cp' => $cp,
             'score' => $this->score,
             'is_adv' => $this->is_adv,
             'class' => Category::getNameById($this->class),

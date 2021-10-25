@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use http\Client\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -38,5 +39,11 @@ class Handler extends ExceptionHandler
             //
             $aa = $e;
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        $code = $e->getStatusCode();
+        return \response($e->getMessage(), $code);
     }
 }

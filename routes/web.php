@@ -19,16 +19,16 @@ Route::get('/', function () {
 });
 
 Route::get('/users/test', [\App\Http\Controllers\UsersController::class, 'test']);
-Route::get('/users/index', [\App\Http\Controllers\UsersController::class, 'index']);
+Route::get('/us/index', [\App\Http\Controllers\UsersController::class, 'index']);
 Route::get('/users/store', [\App\Http\Controllers\UsersController::class, 'store']);
 
-//1.媒资详情
+//1.媒资详情|剧集
 Route::get('/media/{id}', function (Request $request, $id = 0) {
     $pn = $request->input('pn', 0);
     $pt = $request->input('pt', 0);
     $memory = $request->input('memory', 1);
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
-    return new \App\Http\Resources\Media(\App\Models\Media::getOne2($id,2, $customer_id, $memory), 1);
+    return new \App\Http\Resources\Media(\App\Models\Media::getOne2($id, 2, $customer_id, $memory));
 });
 
 //2.更多媒资
@@ -37,16 +37,23 @@ Route::get('/group/{group_id}', function (Request $request, $group_id = 0) {
 });
 
 //3.媒资分组列表
-Route::get('/nav/{nav}/{size?}', function ($nav = 0, $size = 3) {
+Route::get('/nav/{nav}/{size?}', function (Request $request, $nav = 0, $size = 3) {
+    $page = $request->input('page', 1);
     return \App\Http\Resources\Group::collection(\App\Models\Group::getList([
         'size' => $size,
+        'page' => $page,
         'where' => ['parent_id' => $nav, 'status' => 1]
     ]));
 });
 
 //4.剧集详情
-Route::get('/serie/{id}', function ($id = 0) {
-    return new \App\Http\Resources\Media(\App\Models\Media::getOne($id), 2);
+Route::get('/serie/{id}', function (Request $request, $id = 0) {
+    $pn = $request->input('pn', 0);
+    $pt = $request->input('pt', 0);
+    $memory = $request->input('memory', 1);
+    $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
+    return new \App\Http\Resources\Media(\App\Models\Media::getOne2($id, 2, $customer_id, $memory));
+//    return new \App\Http\Resources\Media(\App\Models\Media::getOne($id), 2);
 });
 
 //5.活动列表
@@ -77,6 +84,20 @@ Route::get('/recommend/{id}', function (Request $request, $id) {
     $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
     $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
     return \App\Http\Resources\MediaSingle::collection(\App\Models\Media::getRecommend($id, array_merge($childIds, [$sub]), $iosCode, $customer_id, $memory));
+});
+
+//8.推荐媒资-渠道
+//Route::get('/recommend/pn/{pn}/pt/{pt}', function (Request $request, $pn, $pt) {
+//    $memory = $request->input('memory', 1);
+//    $iosCode = \App\Libraries\IpHelp::getCountryCode($request->ip());
+//    $customer_id = \App\Models\Customer::getCustomerId($pn, $pt);
+//    return \App\Http\Resources\MediaSingle::collection(\App\Models\Recommend::getList($pn, $iosCode, $customer_id, $memory));
+//})->middleware(['throttle:10,1', 'secret']);
+
+//8.推荐媒资-渠道
+Route::prefix('v1')->group(function (){
+    Route::post('googleRecommend', [\App\Http\Controllers\RecommendController::class, 'channle']);
+    Route::get('test', [\App\Http\Controllers\RecommendController::class, 'test']);
 });
 
 //1-1.媒资详情-测试

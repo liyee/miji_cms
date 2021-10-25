@@ -18,9 +18,10 @@ class Customer extends Model
     ];
 
     /**
-     * 获取项目列表数据
+     * @return mixed
+     * 获取渠道列表信息
      */
-    public static function getCustomerId($pn = 0, $pt = 0)
+    public static function getList()
     {
         $key = config('cacheKey.customer_list');
 
@@ -34,18 +35,31 @@ class Customer extends Model
             return $list;
         });
 
-        return isset($value[$pn . '_' . $pt]) ? $value[$pn . '_' . $pt] : $value;
+        return $value;
+    }
+
+    /**
+     * @param int $pn
+     * @param int $pt
+     * @return int|mixed
+     * 获取项目id
+     */
+    public static function getCustomerId($pn = 0, $pt = 0)
+    {
+        $list = self::getList();
+        return isset($list[$pn . '_' . $pt]) ? $list[$pn . '_' . $pt] : 0;
     }
 
     /**
      * 客户下拉列表
      */
-    public static function selectPn(){
+    public static function selectPn()
+    {
         $key = config('cacheKey.customer_select_pn');
         $value = Cache::remember($key, 3600, function () {
             $data = self::query()->where('status', 1)->distinct()->get(['name'])->toArray();
             $select = [];
-            array_walk($data, function ($val) use (&$select){
+            array_walk($data, function ($val) use (&$select) {
                 $select[strtolower($val['name'])] = $val['name'];
             });
             return $select;

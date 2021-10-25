@@ -20,15 +20,15 @@ class Collection extends Model
      * @return \Illuminate\Database\Eloquent\Builder
      * 推荐数据列表
      */
-    public static function getList($product_id = 13)
+    public static function getList($product = 'ob')
     {
-        $key = config('cacheKey.collection_list') . '_' . $product_id;
+        $key = config('cacheKey.collection_list') . '_' . $product;
 
-        $value = Cache::remember($key, 3600, function () use ($product_id) {
+        $value = Cache::remember($key, 3600, function () use ($product) {
             $data = self::query()
                 ->select(['id as mId', 'title', 'description', 'art_uri'])
                 ->where([
-                    'product_id'  => $product_id,
+                    'product'  => $product,
                     'status' =>  1
                 ])
                 ->get()

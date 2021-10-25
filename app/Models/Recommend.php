@@ -25,9 +25,11 @@ class Recommend extends Model
         $params = ['collection_id' => $collection_id, 'iosCode' => $iosCode, 'customer_id' => $customer_id, 'memory' => $memory, 'status' => $status];
         $key = config('cacheKey.recommend_list') . '_' . md5(json_encode($params));
 
-        $value = Cache::remember($key, 3600, function () use ($params) {
+        $pre = env('APP_URL') . '/uploads/';
+
+        $value = Cache::remember($key, 3600, function () use ($params, $pre) {
             $data = self::query()
-                ->select(['id AS mId', 'intent_uri', 'poster_art_aspect_ratio', 'poster_art_img', 'title', 'start_time_utc_millis'
+                ->select(['id AS mId', 'collection_id', 'intent_uri', 'poster_art_aspect_ratio', 'poster_art_uri', 'title', 'start_time_utc_millis'
                     , 'end_time_utc_millis', 'season_display_number', 'episode_number', 'durationmillis', 'type', 'deeplink_type',
                     'back_url', 'intent_uri_key', 'back_key', 'sort AS weight'])
                 ->where('status', 1)
@@ -37,11 +39,10 @@ class Recommend extends Model
                 ->get()
                 ->toArray();
 
-            $dataNew = array_map(function ($v){
-                $poster_art_img = json_decode($v['poster_art_img'],true);
-                $v['img'] = $poster_art_img['img'];
+            $dataNew = array_map(function ($v) use ($pre) {
                 $v['mId'] = (string)$v['mId'];
-                unset($v['poster_art_img']);
+                $poster_art_uri = $v['poster_art_uri'];
+                $v['poster_art_uri'] = $poster_art_uri ? ($pre . $poster_art_uri) : '';
                 return $v;
             }, $data);
 

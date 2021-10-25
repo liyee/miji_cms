@@ -239,7 +239,7 @@ class MediaController extends AdminController
             });
         })->tab('Mode', function ($form) {
             $form->hasMany('modes', function ($form) {
-                $form->select('customer_id', 'Customer')->options(array_flip(Customer::getCustomerId()))->required();
+                $form->select('customer_id', 'Customer')->options(array_flip(Customer::getList()))->required();
                 $form->select('mode', 'Mode')->options(Config::select(7))->required()->default(5);
                 $form->radio('status', 'Status')->options([1 => 'ON', 0 => 'OFF'])->default(1);
             });

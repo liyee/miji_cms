@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Libraries\Aes;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -23,9 +24,7 @@ class Secret
         $tmp = $request->input('tmp');
         try {
             $now = time();
-            $AES_KEY = env('AES_KEY');
-            $AES_IV = env('AES_IV');
-            $decrypted = openssl_decrypt(base64_decode($secret), 'AES-256-CBC', $AES_KEY, OPENSSL_RAW_DATA, $AES_IV);
+            $decrypted = Aes::decrypt($secret);
             if (!$decrypted || $tmp < $now - 300 || $tmp > $now) {
                 abort(203, 'Signature failure!');
                 return false;

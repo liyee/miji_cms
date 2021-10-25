@@ -95,6 +95,7 @@ Route::get('/recommend/{id}', function (Request $request, $id) {
 //8.推荐媒资-渠道
 Route::prefix('v1')->group(function (){
     Route::post('googleRecommend', [\App\Http\Controllers\RecommendController::class, 'channle']);
+    Route::get('test', [\App\Http\Controllers\RecommendController::class, 'test']);
 });
 
 //1-1.媒资详情-测试

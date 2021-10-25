@@ -33,7 +33,7 @@ class Media extends JsonResource
         $act = $this->act ?? $act;
 
         $addition = [];
-        $type = $this->type ?? 1;
+        $type = $this->type ?? 0;
         switch ($type) {
             case 0://媒资详情
                 $addition = [

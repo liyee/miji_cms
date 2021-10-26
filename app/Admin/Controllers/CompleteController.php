@@ -77,7 +77,12 @@ class CompleteController extends AdminController
         })->expand(function () {
             if ($this->type > 0) {
                 $id = $this->id;
-                $child = MediaSerie::query()->from('m_media_serie AS S')->rightJoin('m_media AS M', 'M.id', '=', 'S.serie_id')->whereRaw('find_in_set(\'' . $this->id . '\', `parent_id`)')->get(['M.id', 'M.title', 'M.title_sub', 'S.sort', 'S.media_id', 'S.id AS sid'])->toArray();
+                $child = MediaSerie::query()->from('m_media_serie AS S')
+                    ->rightJoin('m_media AS M', 'M.id', '=', 'S.serie_id')
+                    ->where('M.status', 2)
+                    ->whereRaw('find_in_set(\'' . $id . '\', `parent_id`)')
+                    ->get(['M.id', 'M.title', 'M.title_sub', 'S.sort', 'S.media_id', 'S.id AS sid'])
+                    ->toArray();
                 $childNew = array_map(function ($value) use ($id) {
                     $media_id = $value['media_id'];
                     if ($media_id == $id || $media_id == null) {
@@ -86,9 +91,9 @@ class CompleteController extends AdminController
                         unset($value['media_id']);
                         unset($value['sid']);
                         if ($sid) {
-                            $value['action'] = '<a href="media-series/' . $sid . '/edit">Sort</a>|<a href="complete/' . $id . '/edit">Edit</a>';
+                            $value['action'] = '<a href="media-series/' . $sid . '/edit">Sort</a>|<a href="complete/' . $value['id'] . '/edit">Edit</a>';
                         } else {
-                            $value['action'] = '<a href="media-series/create?media_id=' . $id . '&serie_id=' . $value['id'] . '">Sort</a>|<a href="complete/' . $id . '/edit">Edit</a>';
+                            $value['action'] = '<a href="media-series/create?media_id=' . $id . '&serie_id=' . $value['id'] . '">Sort</a>|<a href="complete/' . $value['id'] . '/edit">Edit</a>';
                         }
 
                         return $value;

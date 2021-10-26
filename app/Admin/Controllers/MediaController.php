@@ -216,7 +216,7 @@ class MediaController extends AdminController
             $form->hidden('uuid');
             $form->select('class_sub', 'Class sub')->options(Category::selectOptions())->default($class)->required();
             $form->textarea('intro', __('Intro'));
-            $form->image('img_original', __('Img original'))->removable();
+            $form->image('img_original', __('Img original'))->uniqueName()->removable();
             $form->text('url', __('Url'))->required();
             $form->text('url_jump', __('Url Jump'));
             $form->text('tag', __('Tag'));
@@ -228,14 +228,14 @@ class MediaController extends AdminController
             $form->hasMany('imgs', function ($form) {
                 $form->select('config', 'Clarity')->options(Config::select(4))->setWidth(2)->required();
                 $form->select('act', 'Type')->options(array_merge([0 => 'General'], Activity::select()))->setWidth(2)->required();
-                $form->image('f_16x9', 'Foreground(16x9)')->removable()->setWidth(3);
-                $form->image('b_16x9', 'Background(16x9)')->removable()->setWidth(3);
-                $form->image('f_7x10', 'Foreground(7x10)')->removable()->setWidth(3);
-                $form->image('b_7x10', 'Background(7x10)')->removable()->setWidth(3);
-                $form->image('f_1x1', 'Foreground(1x1)')->removable()->setWidth(3);
-                $form->image('b_1x1', 'Background(1x1)')->removable()->setWidth(3);
-                $form->image('f_4x1', 'Foreground(4x1)')->removable()->setWidth(3);
-                $form->image('b_4x1', 'Background(4x1)')->removable()->setWidth(3);
+                $form->image('f_16x9', 'Foreground(16x9)')->uniqueName()->removable()->setWidth(3);
+                $form->image('b_16x9', 'Background(16x9)')->uniqueName()->removable()->setWidth(3);
+                $form->image('f_7x10', 'Foreground(7x10)')->uniqueName()->removable()->setWidth(3);
+                $form->image('b_7x10', 'Background(7x10)')->uniqueName()->removable()->setWidth(3);
+                $form->image('f_1x1', 'Foreground(1x1)')->uniqueName()->removable()->setWidth(3);
+                $form->image('b_1x1', 'Background(1x1)')->uniqueName()->removable()->setWidth(3);
+                $form->image('f_4x1', 'Foreground(4x1)')->uniqueName()->removable()->setWidth(3);
+                $form->image('b_4x1', 'Background(4x1)')->uniqueName()->removable()->setWidth(3);
             });
         })->tab('Mode', function ($form) {
             $form->hasMany('modes', function ($form) {
@@ -248,11 +248,6 @@ class MediaController extends AdminController
         $form->saving(function (Form $form) {
             $class_sub = $form->class_sub;
             $form->class = Category::getTop(Category::getList(), $class_sub);
-            if (!$form->parent_id) {
-                $form->parent_id = 0;
-            } else {
-                $form->type = 0;
-            }
             if (!$form->uuid) $form->uuid = uniqid();
         });
 
